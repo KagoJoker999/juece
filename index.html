@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>方案利润计算器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', 'Noto Sans SC', sans-serif;
+            background-color: #f8f9fa;
+            color: #202124;
+            line-height: 1.6;
+            padding: 16px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+            overflow: hidden;
+        }
+
+        .section {
+            padding: 24px;
+            border-bottom: 1px solid #e8eaed;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 16px;
+            color: #1a73e8;
+        }
+
+        /* 售价输入区 */
+        .price-input-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .input-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .price-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #dadce0;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border-color 0.2s;
+        }
+
+        .price-input:focus {
+            outline: none;
+            border-color: #1a73e8;
+        }
+
+        .compensation-display {
+            background: #e8f0fe;
+            padding: 16px;
+            border-radius: 4px;
+            text-align: center;
+            min-width: 200px;
+        }
+
+        .compensation-label {
+            font-size: 14px;
+            color: #5f6368;
+            margin-bottom: 4px;
+        }
+
+        .compensation-amount {
+            font-size: 20px;
+            font-weight: 500;
+            color: #1a73e8;
+        }
+
+        /* 结果选择区 */
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .option-card {
+            background: #f8f9fa;
+            border: 2px solid #dadce0;
+            border-radius: 8px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .option-card:hover {
+            border-color: #1a73e8;
+            background: #e8f0fe;
+        }
+
+        .option-card.selected {
+            border-color: #1a73e8;
+            background: #e8f0fe;
+        }
+
+        .option-name {
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .option-loss {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .profit {
+            color: #137333;
+        }
+
+        .loss {
+            color: #d93025;
+        }
+
+        /* 结果执行方法区 */
+        .method-content {
+            background: #f8f9fa;
+            border-radius: 4px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+
+        .method-textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 12px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+        }
+
+        .save-btn {
+            background: #1a73e8;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 12px;
+            transition: background-color 0.2s;
+        }
+
+        .save-btn:hover {
+            background: #1557b0;
+        }
+
+        @media (max-width: 600px) {
+            .price-input-section {
+                flex-direction: column;
+            }
+            
+            .options-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 售价输入区 -->
+        <div class="section">
+            <h2 class="section-title">售价输入</h2>
+            <div class="price-input-section">
+                <div class="input-group">
+                    <label class="input-label" for="priceInput">输入售价</label>
+                    <input type="number" id="priceInput" class="price-input" 
+                           placeholder="请输入售价" step="0.01" min="0">
+                </div>
+                <div class="compensation-display">
+                    <div class="compensation-label">最高补偿金额</div>
+                    <div class="compensation-amount" id="compensationAmount">¥0.00</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 结果选择区 -->
+        <div class="section">
+            <h2 class="section-title">方案选择</h2>
+            <div class="options-grid" id="optionsGrid">
+                <!-- 动态生成选项卡片 -->
+            </div>
+        </div>
+
+        <!-- 结果执行方法区 -->
+        <div class="section">
+            <h2 class="section-title">执行方法与注意事项</h2>
+            <div class="method-content">
+                <textarea id="methodTextarea" class="method-textarea" 
+                          placeholder="请选择上方的处理方案查看执行方法..."></textarea>
+                <button class="save-btn" id="saveBtn">保存修改</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 默认执行方法内容
+        const defaultMethods = {
+            '退货退款': '执行方法：\n1. 联系客户确认退货意愿\n2. 提供退货地址和流程说明\n3. 收到退货后检查商品状态\n4. 确认无误后处理退款\n\n注意事项：\n- 退货商品需保持原包装完整\n- 退款将在3-5个工作日内到账\n- 运费由客户承担',
+            '补发': '执行方法：\n1. 确认客户收货地址\n2. 重新发货并提供物流单号\n3. 跟踪物流状态\n4. 确认客户收货\n\n注意事项：\n- 补发商品与原订单商品一致\n- 物流费用由公司承担\n- 建议选择快递保价服务',
+            '仅退款': '执行方法：\n1. 核实订单信息和问题原因\n2. 计算退款金额\n3. 处理退款申请\n4. 通知客户退款结果\n\n注意事项：\n- 退款金额不超过订单总额\n- 退款到账时间3-5个工作日\n- 保留相关沟通记录',
+            '换货': '执行方法：\n1. 确认换货商品规格和库存\n2. 安排客户寄回原商品\n3. 收到退货后发出新商品\n4. 跟踪换货流程完成情况\n\n注意事项：\n- 换货商品价值不得超过原商品+10元\n- 换货运费双方各承担一半\n- 换货时效一般为7-10个工作日'
+        };
+
+        // 从localStorage加载保存的方法内容
+        function loadMethods() {
+            const saved = localStorage.getItem('methods');
+            if (saved) {
+                return JSON.parse(saved);
+            }
+            return { ...defaultMethods };
+        }
+
+        // 保存方法内容到localStorage
+        function saveMethods(methods) {
+            localStorage.setItem('methods', JSON.stringify(methods));
+        }
+
+        let currentMethods = loadMethods();
+        let selectedOption = null;
+
+        // 计算各方案损失
+        function calculateLoss(price) {
+            const x = parseFloat(price) || 0;
+            return {
+                '退货退款': 0 - (x / 2) - 7,
+                '补发': 0,
+                '仅退款': 0 - (x / 2),
+                '换货': x - (x / 2 + 10)
+            };
+        }
+
+        // 更新补偿金额显示
+        function updateCompensation(price) {
+            const compensation = (parseFloat(price) || 0) / 2;
+            document.getElementById('compensationAmount').textContent = `¥${compensation.toFixed(2)}`;
+        }
+
+        // 渲染选项卡片
+        function renderOptions(losses) {
+            const optionsGrid = document.getElementById('optionsGrid');
+            
+            // 按损失金额排序（损失越小越靠前）
+            const sortedOptions = Object.entries(losses).sort((a, b) => b[1] - a[1]);
+            
+            optionsGrid.innerHTML = '';
+            
+            sortedOptions.forEach(([name, loss]) => {
+                const card = document.createElement('div');
+                card.className = 'option-card';
+                card.dataset.option = name;
+                
+                const lossClass = loss >= 0 ? 'profit' : 'loss';
+                const lossText = loss >= 0 ? `+¥${loss.toFixed(2)}` : `-¥${Math.abs(loss).toFixed(2)}`;
+                
+                card.innerHTML = `
+                    <div class="option-name">${name}</div>
+                    <div class="option-loss ${lossClass}">${lossText}</div>
+                `;
+                
+                card.addEventListener('click', () => selectOption(name));
+                optionsGrid.appendChild(card);
+            });
+        }
+
+        // 选择方案
+        function selectOption(optionName) {
+            // 更新选中状态
+            document.querySelectorAll('.option-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            document.querySelector(`[data-option="${optionName}"]`).classList.add('selected');
+            
+            // 更新执行方法内容
+            selectedOption = optionName;
+            document.getElementById('methodTextarea').value = currentMethods[optionName] || '';
+        }
+
+        // 保存修改
+        function saveMethod() {
+            if (!selectedOption) {
+                alert('请先选择一个处理方案');
+                return;
+            }
+            
+            const content = document.getElementById('methodTextarea').value;
+            currentMethods[selectedOption] = content;
+            saveMethods(currentMethods);
+            alert('保存成功！');
+        }
+
+        // 初始化
+        function init() {
+            const priceInput = document.getElementById('priceInput');
+            const saveBtn = document.getElementById('saveBtn');
+            
+            // 监听价格输入
+            priceInput.addEventListener('input', (e) => {
+                const price = e.target.value;
+                updateCompensation(price);
+                const losses = calculateLoss(price);
+                renderOptions(losses);
+            });
+            
+            // 保存按钮事件
+            saveBtn.addEventListener('click', saveMethod);
+            
+            // 初始渲染
+            updateCompensation(0);
+            renderOptions(calculateLoss(0));
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
