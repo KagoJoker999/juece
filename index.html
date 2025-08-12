@@ -4,15 +4,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>方案利润计算器</title>
+    <title>售后工具箱</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="apple-touch-icon" href="logo.png">
-    <meta name="description" content="方案利润计算器 - 智能决策工具，帮助快速计算不同处理方案的利润损失">
-    <meta name="keywords" content="利润计算,决策工具,方案分析,售后处理">
-    <meta property="og:title" content="方案利润计算器">
-    <meta property="og:description" content="智能决策工具，帮助快速计算不同处理方案的利润损失">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <meta name="description" content="售后工具箱 - 专业的售后处理工具集合，提供方案计算、停发货管理、售后方法等功能">
+    <meta name="keywords" content="售后工具,利润计算,停发货,售后方法,决策工具">
+    <meta property="og:title" content="售后工具箱">
+    <meta property="og:description" content="专业的售后处理工具集合，提供方案计算、停发货管理、售后方法等功能">
     <meta property="og:image" content="logo.png">
     <style>
+        :root {
+            --md-primary: #1976d2;
+            --md-primary-variant: #1565c0;
+            --md-secondary: #03dac6;
+            --md-background: #f5f5f5;
+            --md-surface: #ffffff;
+            --md-error: #d32f2f;
+            --md-success: #388e3c;
+            --md-on-primary: #ffffff;
+            --md-on-secondary: #000000;
+            --md-on-background: #212121;
+            --md-on-surface: #212121;
+            --md-on-error: #ffffff;
+            --md-outline: #e0e0e0;
+            --md-surface-variant: #f8f9fa;
+            --md-on-surface-variant: #616161;
+            --md-shadow: rgba(0, 0, 0, 0.12);
+            --md-elevation-1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+            --md-elevation-2: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+            --md-elevation-3: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -20,52 +44,77 @@
         }
 
         body {
-            font-family: 'Roboto', 'Noto Sans SC', sans-serif;
-            background-color: #f8f9fa;
-            color: #202124;
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--md-on-background);
             line-height: 1.6;
             padding: 16px;
             max-width: 800px;
             margin: 0 auto;
+            min-height: 100vh;
         }
 
         .header {
             text-align: center;
-            padding: 20px 24px;
-            background: white;
-            border-bottom: 1px solid #e8eaed;
+            padding: 32px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 16px 16px 0 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .header>* {
+            position: relative;
+            z-index: 1;
         }
 
         .logo {
-            width: 60px;
-            height: 60px;
-            margin: 0 auto 12px;
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 16px;
             display: block;
+            border-radius: 50%;
+            box-shadow: var(--md-elevation-2);
         }
 
         .app-title {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 500;
-            color: #202124;
             margin: 0;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .app-subtitle {
-            font-size: 14px;
-            color: #5f6368;
-            margin-top: 4px;
+            font-size: 16px;
+            opacity: 0.9;
+            margin-top: 8px;
+            font-weight: 300;
         }
 
         .container {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+            background: var(--md-surface);
+            border-radius: 16px;
+            box-shadow: var(--md-elevation-2);
             overflow: hidden;
+            backdrop-filter: blur(10px);
         }
 
         .section {
             padding: 24px;
-            border-bottom: 1px solid #e8eaed;
+            border-bottom: 1px solid var(--md-outline);
+            position: relative;
         }
 
         .section:last-child {
@@ -73,10 +122,21 @@
         }
 
         .section-title {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 500;
-            margin-bottom: 16px;
-            color: #1a73e8;
+            margin-bottom: 20px;
+            color: var(--md-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(135deg, var(--md-primary), var(--md-primary-variant));
+            border-radius: 2px;
         }
 
         /* 售价输入区 */
@@ -100,36 +160,44 @@
 
         .price-input {
             width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #dadce0;
-            border-radius: 4px;
-            font-size: 16px;
-            transition: border-color 0.2s;
+            padding: 16px 20px;
+            border: 2px solid var(--md-outline);
+            border-radius: 12px;
+            font-size: 18px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--md-surface);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
         .price-input:focus {
             outline: none;
-            border-color: #1a73e8;
+            border-color: var(--md-primary);
+            box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.12);
+            transform: translateY(-1px);
         }
 
         .compensation-display {
-            background: #e8f0fe;
-            padding: 16px;
-            border-radius: 4px;
+            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+            padding: 20px;
+            border-radius: 16px;
             text-align: center;
             min-width: 200px;
+            box-shadow: var(--md-elevation-1);
+            border: 1px solid rgba(25, 118, 210, 0.12);
         }
 
         .compensation-label {
             font-size: 14px;
-            color: #5f6368;
-            margin-bottom: 4px;
+            color: var(--md-on-surface-variant);
+            margin-bottom: 8px;
+            font-weight: 500;
         }
 
         .compensation-amount {
-            font-size: 20px;
-            font-weight: 500;
-            color: #1a73e8;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--md-primary);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         }
 
         /* 结果选择区 */
@@ -141,136 +209,420 @@
         }
 
         .option-card {
-            background: #f8f9fa;
-            border: 2px solid #dadce0;
-            border-radius: 8px;
-            padding: 12px 8px;
+            background: var(--md-surface);
+            border: 2px solid var(--md-outline);
+            border-radius: 16px;
+            padding: 20px 16px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             text-align: center;
             flex: 1;
             min-width: 0;
+            box-shadow: var(--md-elevation-1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-card::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(25, 118, 210, 0.1);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+        }
+
+        .option-card:hover::before {
+            width: 200%;
+            height: 200%;
         }
 
         .option-card:hover {
-            border-color: #1a73e8;
-            background: #e8f0fe;
+            border-color: var(--md-primary);
+            background: #e3f2fd;
+            transform: translateY(-2px);
+            box-shadow: var(--md-elevation-2);
         }
 
         .option-card.selected {
-            border-color: #1a73e8;
-            background: #e8f0fe;
+            border-color: var(--md-primary);
+            background: #e3f2fd;
+            transform: translateY(-2px);
+            box-shadow: var(--md-elevation-3);
+        }
+
+        .option-card.selected::before {
+            width: 200%;
+            height: 200%;
         }
 
         .option-name {
             font-weight: 500;
-            margin-bottom: 6px;
-            font-size: 14px;
+            margin-bottom: 8px;
+            font-size: 16px;
+            position: relative;
+            z-index: 1;
         }
 
         .option-loss {
-            font-size: 16px;
-            font-weight: 600;
+            font-size: 18px;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
         }
 
         .profit {
-            color: #137333;
+            color: var(--md-success);
         }
 
         .loss {
-            color: #d93025;
+            color: var(--md-error);
         }
 
-        /* 结果执行方法区 */
-        .method-content {
-            background: #f8f9fa;
-            border-radius: 4px;
-            padding: 16px;
-            margin-top: 16px;
+        /* 选中方案详情 */
+        .selected-option-info {
+            background: linear-gradient(135deg, #e8f5e8 0%, #f0f8ff 100%);
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 20px;
+            text-align: center;
+            box-shadow: var(--md-elevation-2);
+            border: 1px solid rgba(25, 118, 210, 0.12);
+            position: relative;
+            overflow: hidden;
         }
 
-        .method-display {
-            background: white;
-            border: 1px solid #dadce0;
-            border-radius: 4px;
-            padding: 12px;
-            min-height: 150px;
-            font-size: 14px;
+        .selected-option-info::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .selected-option-info>* {
+            position: relative;
+            z-index: 1;
+        }
+
+        .selected-option-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--md-primary);
+            margin-bottom: 12px;
+        }
+
+        .selected-option-result {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .selected-option-desc {
+            font-size: 15px;
+            color: var(--md-on-surface-variant);
             line-height: 1.5;
-            white-space: pre-wrap;
-            margin-bottom: 12px;
+            font-weight: 400;
         }
 
-        .method-textarea {
-            width: 100%;
-            min-height: 150px;
-            padding: 12px;
-            border: 1px solid #dadce0;
-            border-radius: 4px;
-            font-family: inherit;
-            font-size: 14px;
-            resize: vertical;
-            margin-bottom: 12px;
+        /* 标签页样式 */
+        .tabs-container {
+            background: var(--md-surface);
+            border-bottom: 1px solid var(--md-outline);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .tabs-nav {
+            display: flex;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .tabs-nav::-webkit-scrollbar {
             display: none;
         }
 
-        .method-buttons {
-            display: flex;
-            gap: 8px;
-        }
-
-        .edit-btn,
-        .save-btn,
-        .cancel-btn {
+        .tab-button {
+            flex: 1;
+            min-width: 120px;
+            padding: 16px 20px;
             border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
+            background: transparent;
+            color: var(--md-on-surface-variant);
             font-size: 14px;
-            transition: background-color 0.2s;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            white-space: nowrap;
+            text-align: center;
         }
 
-        .edit-btn {
-            background: #f8f9fa;
-            color: #1a73e8;
-            border: 1px solid #dadce0;
+        .tab-button:hover {
+            background: rgba(25, 118, 210, 0.08);
+            color: var(--md-primary);
         }
 
-        .edit-btn:hover {
-            background: #e8f0fe;
+        .tab-button.active {
+            color: var(--md-primary);
+            background: rgba(25, 118, 210, 0.12);
         }
 
-        .save-btn {
-            background: #1a73e8;
-            color: white;
+        .tab-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--md-primary);
+            border-radius: 3px 3px 0 0;
         }
 
-        .save-btn:hover {
-            background: #1557b0;
+        .tab-content {
+            display: none;
+            animation: fadeInUp 0.4s ease-out;
         }
 
-        .cancel-btn {
-            background: #f8f9fa;
-            color: #5f6368;
-            border: 1px solid #dadce0;
+        .tab-content.active {
+            display: block;
         }
 
-        .cancel-btn:hover {
-            background: #e8eaed;
+        /* 占位内容样式 */
+        .placeholder-content {
+            text-align: center;
+            padding: 60px 24px;
+            color: var(--md-on-surface-variant);
         }
 
-        @media (max-width: 600px) {
+        .placeholder-icon {
+            font-size: 64px;
+            color: var(--md-outline);
+            margin-bottom: 16px;
+        }
+
+        .placeholder-title {
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--md-on-surface);
+        }
+
+        .placeholder-desc {
+            font-size: 14px;
+            line-height: 1.5;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        /* 页面加载动画 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .container {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .tab-content .section {
+            animation: fadeInUp 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .tab-content .section:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .tab-content .section:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .tab-content .section:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        /* 触摸优化 */
+        .option-card {
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+
+        .price-input {
+            -webkit-appearance: none;
+            -moz-appearance: textfield;
+        }
+
+        .price-input::-webkit-outer-spin-button,
+        .price-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* 移动端响应式优化 */
+        @media (max-width: 768px) {
+            body {
+                padding: 12px;
+            }
+
+            .container {
+                border-radius: 20px;
+                box-shadow: var(--md-elevation-3);
+            }
+
+            .section {
+                padding: 24px 20px;
+            }
+
+            .header {
+                padding: 32px 20px;
+                border-radius: 20px 20px 0 0;
+            }
+
+            .logo {
+                width: 56px;
+                height: 56px;
+            }
+
+            .app-title {
+                font-size: 24px;
+            }
+
+            .section-title {
+                font-size: 18px;
+                margin-bottom: 16px;
+            }
+
+            .tab-button {
+                min-width: 100px;
+                padding: 14px 16px;
+                font-size: 13px;
+            }
+
             .price-input-section {
                 flex-direction: column;
+                gap: 16px;
+            }
+
+            .input-group {
+                min-width: unset;
+            }
+
+            .price-input {
+                padding: 18px 20px;
+                font-size: 18px;
+                border-radius: 12px;
+            }
+
+            .compensation-display {
+                padding: 24px;
+                border-radius: 16px;
+                min-width: unset;
+            }
+
+            .compensation-amount {
+                font-size: 28px;
             }
 
             .options-grid {
-                flex-wrap: wrap;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+                margin-top: 16px;
             }
 
             .option-card {
-                flex: 1 1 calc(50% - 4px);
-                min-width: calc(50% - 4px);
+                padding: 20px 16px;
+                border-radius: 16px;
+                min-width: unset;
+                flex: unset;
+            }
+
+            .option-name {
+                font-size: 15px;
+                margin-bottom: 10px;
+            }
+
+            .option-loss {
+                font-size: 18px;
+                font-weight: 700;
+            }
+
+            .selected-option-info {
+                margin-top: 16px;
+                padding: 28px 20px;
+                border-radius: 20px;
+            }
+
+            .selected-option-title {
+                font-size: 16px;
+            }
+
+            .selected-option-result {
+                font-size: 36px;
+            }
+
+            .placeholder-content {
+                padding: 40px 20px;
+            }
+
+            .placeholder-icon {
+                font-size: 48px;
+            }
+
+            .placeholder-title {
+                font-size: 18px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 8px;
+            }
+
+            .tab-button {
+                min-width: 80px;
+                padding: 12px 8px;
+                font-size: 12px;
+            }
+
+            .options-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .option-card {
+                padding: 24px 20px;
+            }
+
+            .option-name {
+                font-size: 16px;
+            }
+
+            .option-loss {
+                font-size: 20px;
+            }
+
+            .selected-option-result {
+                font-size: 32px;
             }
         }
     </style>
@@ -280,76 +632,120 @@
     <div class="container">
         <!-- 网站标识 -->
         <div class="header">
-            <img src="logo.png" alt="方案利润计算器" class="logo">
-            <h1 class="app-title">方案利润计算器</h1>
-            <p class="app-subtitle">智能决策，精准计算</p>
+            <img src="logo.png" alt="售后工具箱" class="logo">
+            <h1 class="app-title">售后工具箱</h1>
+            <p class="app-subtitle">专业售后处理工具集合</p>
         </div>
 
-        <!-- 售价输入区 -->
-        <div class="section">
-            <h2 class="section-title">售价输入</h2>
-            <div class="price-input-section">
-                <div class="input-group">
-                    <label class="input-label" for="priceInput">输入售价</label>
-                    <input type="number" id="priceInput" class="price-input" placeholder="请输入售价" step="0.01" min="0">
+        <!-- 标签页导航 -->
+        <div class="tabs-container">
+            <div class="tabs-nav">
+                <button class="tab-button active" data-tab="profit-calculator">方案利润计算器</button>
+                <button class="tab-button" data-tab="shipping-control">停发货工具</button>
+                <button class="tab-button" data-tab="service-methods">拒绝售后方法</button>
+                <button class="tab-button" data-tab="coming-soon">更多工具</button>
+            </div>
+        </div>
+
+        <!-- 方案利润计算器标签页 -->
+        <div id="profit-calculator" class="tab-content active">
+            <!-- 售价输入区 -->
+            <div class="section">
+                <h2 class="section-title">售价输入</h2>
+                <div class="price-input-section">
+                    <div class="input-group">
+                        <label class="input-label" for="priceInput">输入售价</label>
+                        <input type="number" id="priceInput" class="price-input" placeholder="请输入售价" step="0.01"
+                            min="0">
+                    </div>
+                    <div class="compensation-display">
+                        <div class="compensation-label">最高补偿金额</div>
+                        <div class="compensation-amount" id="compensationAmount">¥0.00</div>
+                    </div>
                 </div>
-                <div class="compensation-display">
-                    <div class="compensation-label">最高补偿金额</div>
-                    <div class="compensation-amount" id="compensationAmount">¥0.00</div>
+            </div>
+
+            <!-- 结果选择区 -->
+            <div class="section">
+                <h2 class="section-title">方案选择</h2>
+                <div class="options-grid" id="optionsGrid">
+                    <!-- 动态生成选项卡片 -->
+                </div>
+            </div>
+
+            <!-- 选中方案详情 -->
+            <div class="section">
+                <div id="selectedOptionInfo" class="selected-option-info" style="display: none;">
+                    <div class="selected-option-title" id="selectedOptionTitle">已选择方案</div>
+                    <div class="selected-option-result" id="selectedOptionResult">¥0.00</div>
+                    <div class="selected-option-desc" id="selectedOptionDesc">请在上方选择处理方案</div>
                 </div>
             </div>
         </div>
 
-        <!-- 结果选择区 -->
-        <div class="section">
-            <h2 class="section-title">方案选择</h2>
-            <div class="options-grid" id="optionsGrid">
-                <!-- 动态生成选项卡片 -->
+        <!-- 停发货工具标签页 -->
+        <div id="shipping-control" class="tab-content">
+            <div class="placeholder-content">
+                <div class="placeholder-icon material-icons">local_shipping</div>
+                <div class="placeholder-title">停发货工具</div>
+                <div class="placeholder-desc">快速管理订单发货状态，支持批量停发货操作和发货控制功能</div>
             </div>
         </div>
 
-        <!-- 结果执行方法区 -->
-        <div class="section">
-            <h2 class="section-title">执行方法与注意事项</h2>
-            <div class="method-content">
-                <div id="methodDisplay" class="method-display">请选择上方的处理方案查看执行方法...</div>
-                <textarea id="methodTextarea" class="method-textarea"></textarea>
-                <div class="method-buttons">
-                    <button class="edit-btn" id="editBtn">编辑</button>
-                    <button class="save-btn" id="saveBtn" style="display: none;">保存</button>
-                    <button class="cancel-btn" id="cancelBtn" style="display: none;">取消</button>
-                </div>
+        <!-- 拒绝售后方法标签页 -->
+        <div id="service-methods" class="tab-content">
+            <div class="placeholder-content">
+                <div class="placeholder-icon material-icons">support_agent</div>
+                <div class="placeholder-title">拒绝售后方法</div>
+                <div class="placeholder-desc">提供专业的售后拒绝话术和方法，帮助合理处理各种售后请求</div>
+            </div>
+        </div>
+
+        <!-- 更多工具标签页 -->
+        <div id="coming-soon" class="tab-content">
+            <div class="placeholder-content">
+                <div class="placeholder-icon material-icons">construction</div>
+                <div class="placeholder-title">更多工具开发中</div>
+                <div class="placeholder-desc">我们正在开发更多实用的售后处理工具，敬请期待</div>
             </div>
         </div>
     </div>
 
     <script>
-        // 默认执行方法内容
-        const defaultMethods = {
-            '退货退款': '执行方法：\n1. 联系客户确认退货意愿\n2. 提供退货地址和流程说明\n3. 收到退货后检查商品状态\n4. 确认无误后处理退款\n\n注意事项：\n- 退货商品需保持原包装完整\n- 退款将在3-5个工作日内到账\n- 运费由客户承担',
-            '补发': '执行方法：\n1. 确认客户收货地址\n2. 重新发货并提供物流单号\n3. 跟踪物流状态\n4. 确认客户收货\n\n注意事项：\n- 补发商品与原订单商品一致\n- 物流费用由公司承担\n- 建议选择快递保价服务',
-            '仅退款': '执行方法：\n1. 核实订单信息和问题原因\n2. 计算退款金额\n3. 处理退款申请\n4. 通知客户退款结果\n\n注意事项：\n- 退款金额不超过订单总额\n- 退款到账时间3-5个工作日\n- 保留相关沟通记录',
-            '换货': '执行方法：\n1. 确认换货商品规格和库存\n2. 安排客户寄回原商品\n3. 收到退货后发出新商品\n4. 跟踪换货流程完成情况\n\n注意事项：\n- 换货商品价值不得超过原商品+10元\n- 换货运费双方各承担一半\n- 换货时效一般为7-10个工作日'
-        };
+        // 标签页管理
+        let currentTab = 'profit-calculator';
 
-        // 从localStorage加载保存的方法内容
-        function loadMethods() {
-            const saved = localStorage.getItem('methods');
-            if (saved) {
-                return JSON.parse(saved);
-            }
-            return { ...defaultMethods };
-        }
-
-        // 保存方法内容到localStorage
-        function saveMethods(methods) {
-            localStorage.setItem('methods', JSON.stringify(methods));
-        }
-
-        let currentMethods = loadMethods();
+        // 方案利润计算器相关变量
         let selectedOption = null;
-        let isEditing = false;
-        let originalContent = '';
+        let currentPrice = 0;
+
+        // 标签页切换功能
+        function switchTab(tabId) {
+            // 隐藏所有标签页内容
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // 移除所有标签按钮的激活状态
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+
+            // 显示选中的标签页内容
+            const targetContent = document.getElementById(tabId);
+            const targetButton = document.querySelector(`[data-tab="${tabId}"]`);
+
+            if (targetContent && targetButton) {
+                targetContent.classList.add('active');
+                targetButton.classList.add('active');
+                currentTab = tabId;
+
+                // 如果切换到方案利润计算器，重新初始化
+                if (tabId === 'profit-calculator') {
+                    initProfitCalculator();
+                }
+            }
+        }
 
         // 计算各方案损失
         function calculateLoss(price) {
@@ -365,12 +761,16 @@
         // 更新补偿金额显示
         function updateCompensation(price) {
             const compensation = (parseFloat(price) || 0) / 2;
-            document.getElementById('compensationAmount').textContent = `¥${compensation.toFixed(2)}`;
+            const compensationElement = document.getElementById('compensationAmount');
+            if (compensationElement) {
+                compensationElement.textContent = `¥${compensation.toFixed(2)}`;
+            }
         }
 
         // 渲染选项卡片
         function renderOptions(losses) {
             const optionsGrid = document.getElementById('optionsGrid');
+            if (!optionsGrid) return;
 
             // 按损失金额排序（损失越小越靠前）
             const sortedOptions = Object.entries(losses).sort((a, b) => b[1] - a[1]);
@@ -397,110 +797,89 @@
 
         // 选择方案
         function selectOption(optionName) {
-            // 如果正在编辑，先取消编辑状态
-            if (isEditing) {
-                cancelEdit();
-            }
-
             // 更新选中状态
             document.querySelectorAll('.option-card').forEach(card => {
                 card.classList.remove('selected');
             });
-            document.querySelector(`[data-option="${optionName}"]`).classList.add('selected');
+            const selectedCard = document.querySelector(`[data-option="${optionName}"]`);
+            if (selectedCard) {
+                selectedCard.classList.add('selected');
+            }
 
-            // 更新执行方法内容
             selectedOption = optionName;
-            const content = currentMethods[optionName] || '';
-            document.getElementById('methodDisplay').textContent = content;
-            document.getElementById('methodTextarea').value = content;
 
-            // 显示编辑按钮
-            document.getElementById('editBtn').style.display = 'inline-block';
+            // 显示选中方案详情
+            updateSelectedOptionInfo(optionName);
         }
 
-        // 进入编辑模式
-        function startEdit() {
-            if (!selectedOption) {
-                alert('请先选择一个处理方案');
-                return;
-            }
+        // 更新选中方案详情显示
+        function updateSelectedOptionInfo(optionName) {
+            const losses = calculateLoss(currentPrice);
+            const loss = losses[optionName];
 
-            isEditing = true;
-            originalContent = document.getElementById('methodTextarea').value;
+            const infoDiv = document.getElementById('selectedOptionInfo');
+            const titleDiv = document.getElementById('selectedOptionTitle');
+            const resultDiv = document.getElementById('selectedOptionResult');
+            const descDiv = document.getElementById('selectedOptionDesc');
 
-            // 切换显示状态
-            document.getElementById('methodDisplay').style.display = 'none';
-            document.getElementById('methodTextarea').style.display = 'block';
-            document.getElementById('editBtn').style.display = 'none';
-            document.getElementById('saveBtn').style.display = 'inline-block';
-            document.getElementById('cancelBtn').style.display = 'inline-block';
+            if (!infoDiv || !titleDiv || !resultDiv || !descDiv) return;
 
-            // 聚焦到文本框
-            document.getElementById('methodTextarea').focus();
+            titleDiv.textContent = `已选择：${optionName}`;
+
+            const lossClass = loss >= 0 ? 'profit' : 'loss';
+            const lossText = loss >= 0 ? `+¥${loss.toFixed(2)}` : `-¥${Math.abs(loss).toFixed(2)}`;
+            resultDiv.textContent = lossText;
+            resultDiv.className = `selected-option-result ${lossClass}`;
+
+            // 根据方案类型显示不同的描述
+            const descriptions = {
+                '退货退款': '客户退回商品并获得全额退款',
+                '补发': '重新发送商品给客户，无需退回原商品',
+                '仅退款': '直接退款给客户，无需退回商品',
+                '换货': '客户退回原商品，发送新商品替换'
+            };
+
+            descDiv.textContent = descriptions[optionName] || '';
+
+            // 显示详情区域
+            infoDiv.style.display = 'block';
         }
 
-        // 保存修改
-        function saveMethod() {
-            if (!selectedOption || !isEditing) {
-                return;
-            }
-
-            const content = document.getElementById('methodTextarea').value;
-            currentMethods[selectedOption] = content;
-            saveMethods(currentMethods);
-
-            // 更新显示内容
-            document.getElementById('methodDisplay').textContent = content;
-
-            // 退出编辑模式
-            exitEditMode();
-            alert('保存成功！');
-        }
-
-        // 取消编辑
-        function cancelEdit() {
-            if (!isEditing) return;
-
-            // 恢复原始内容
-            document.getElementById('methodTextarea').value = originalContent;
-            exitEditMode();
-        }
-
-        // 退出编辑模式
-        function exitEditMode() {
-            isEditing = false;
-
-            // 切换显示状态
-            document.getElementById('methodDisplay').style.display = 'block';
-            document.getElementById('methodTextarea').style.display = 'none';
-            document.getElementById('editBtn').style.display = 'inline-block';
-            document.getElementById('saveBtn').style.display = 'none';
-            document.getElementById('cancelBtn').style.display = 'none';
-        }
-
-        // 初始化
-        function init() {
+        // 初始化方案利润计算器
+        function initProfitCalculator() {
             const priceInput = document.getElementById('priceInput');
-            const editBtn = document.getElementById('editBtn');
-            const saveBtn = document.getElementById('saveBtn');
-            const cancelBtn = document.getElementById('cancelBtn');
+            if (!priceInput) return;
 
             // 监听价格输入
             priceInput.addEventListener('input', (e) => {
-                const price = e.target.value;
-                updateCompensation(price);
-                const losses = calculateLoss(price);
+                currentPrice = parseFloat(e.target.value) || 0;
+                updateCompensation(currentPrice);
+                const losses = calculateLoss(currentPrice);
                 renderOptions(losses);
-            });
 
-            // 按钮事件
-            editBtn.addEventListener('click', startEdit);
-            saveBtn.addEventListener('click', saveMethod);
-            cancelBtn.addEventListener('click', cancelEdit);
+                // 如果已选择方案，更新详情显示
+                if (selectedOption) {
+                    updateSelectedOptionInfo(selectedOption);
+                }
+            });
 
             // 初始渲染
             updateCompensation(0);
             renderOptions(calculateLoss(0));
+        }
+
+        // 页面初始化
+        function init() {
+            // 绑定标签页切换事件
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const tabId = e.target.getAttribute('data-tab');
+                    switchTab(tabId);
+                });
+            });
+
+            // 初始化方案利润计算器（默认激活的标签页）
+            initProfitCalculator();
         }
 
         // 页面加载完成后初始化
