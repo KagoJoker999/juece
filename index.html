@@ -874,7 +874,7 @@
         function calculateLoss(price) {
             const x = parseFloat(price) || 0;
             return {
-                '退货退款': 0 - (x / 2) - 7,
+                '退货退款': 0 - 3 - 3 - 7,
                 '补发': 0,
                 '仅退款': 0 - (x / 2),
                 '换货': x - (x / 2 + 10)
