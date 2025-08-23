@@ -16,25 +16,25 @@
     <meta property="og:image" content="logo.png">
     <style>
         :root {
-            --md-primary: #1976d2;
-            --md-primary-variant: #1565c0;
-            --md-secondary: #03dac6;
-            --md-background: #f5f5f5;
-            --md-surface: #ffffff;
-            --md-error: #d32f2f;
-            --md-success: #388e3c;
-            --md-on-primary: #ffffff;
-            --md-on-secondary: #000000;
-            --md-on-background: #212121;
-            --md-on-surface: #212121;
-            --md-on-error: #ffffff;
-            --md-outline: #e0e0e0;
-            --md-surface-variant: #f8f9fa;
-            --md-on-surface-variant: #616161;
-            --md-shadow: rgba(0, 0, 0, 0.12);
-            --md-elevation-1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-            --md-elevation-2: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-            --md-elevation-3: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+            --primary: #2563eb;
+            --secondary: #64748b;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            
+            /* 固定方案颜色 */
+            --refund-return: #ef4444;    /* 退货退款 - 红色 */
+            --resend: #3b82f6;           /* 补发 - 蓝色 */
+            --refund-only: #10b981;      /* 仅退款 - 绿色 */
+            --exchange: #f59e0b;         /* 换货 - 橙色 */
+            
+            /* 颜色对应的浅色背景 */
+            --refund-return-bg: #fef2f2;
+            --resend-bg: #eff6ff;
+            --refund-only-bg: #f0fdf4;
+            --exchange-bg: #fffbeb;
         }
 
         * {
@@ -44,241 +44,263 @@
         }
 
         body {
-            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            color: var(--md-on-background);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
             line-height: 1.6;
-            padding: 16px;
-            max-width: 800px;
+            padding: 20px 100px;
+            max-width: 1200px;
             margin: 0 auto;
             min-height: 100vh;
         }
 
         .header {
             text-align: center;
-            padding: 32px 24px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 16px 16px 0 0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-        }
-
-        .header>* {
-            position: relative;
-            z-index: 1;
+            padding: 40px 20px;
+            background: var(--surface);
+            color: var(--text-primary);
+            margin-bottom: 24px;
         }
 
         .logo {
-            width: 64px;
-            height: 64px;
-            margin: 0 auto 16px;
+            width: 56px;
+            height: 56px;
+            margin: 0 auto 20px;
             display: block;
-            border-radius: 50%;
-            box-shadow: var(--md-elevation-2);
         }
 
         .app-title {
-            font-size: 28px;
-            font-weight: 500;
-            margin: 0;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            font-size: 32px;
+            font-weight: 700;
+            margin: 0 0 8px 0;
+            color: var(--primary);
         }
 
         .app-subtitle {
-            font-size: 16px;
-            opacity: 0.9;
-            margin-top: 8px;
-            font-weight: 300;
+            font-size: 18px;
+            font-weight: 400;
+            margin: 0;
+            color: var(--text-secondary);
         }
 
         .container {
-            background: var(--md-surface);
-            border-radius: 16px;
-            box-shadow: var(--md-elevation-2);
-            overflow: hidden;
-            backdrop-filter: blur(10px);
+            background: var(--surface);
         }
 
         .section {
-            padding: 24px;
-            border-bottom: 1px solid var(--md-outline);
-            position: relative;
-        }
-
-        .section:last-child {
-            border-bottom: none;
+            padding: 32px 0;
         }
 
         .section-title {
-            font-size: 20px;
-            font-weight: 500;
-            margin-bottom: 20px;
-            color: var(--md-primary);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .section-title::before {
-            content: '';
-            width: 4px;
-            height: 24px;
-            background: linear-gradient(135deg, var(--md-primary), var(--md-primary-variant));
-            border-radius: 2px;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            color: var(--text-primary);
         }
 
         /* 售价输入区 */
         .price-input-section {
             display: flex;
             align-items: center;
-            gap: 16px;
-            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: nowrap;
         }
 
         .input-group {
             flex: 1;
             min-width: 200px;
+            max-width: 300px;
         }
 
         .input-label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-weight: 500;
+            font-size: 14px;
         }
 
         .price-input {
             width: 100%;
-            padding: 16px 20px;
-            border: 2px solid var(--md-outline);
-            border-radius: 12px;
-            font-size: 18px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            background: var(--md-surface);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            padding: 12px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            background: var(--surface);
         }
 
         .price-input:focus {
             outline: none;
-            border-color: var(--md-primary);
-            box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.12);
-            transform: translateY(-1px);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
         .compensation-display {
-            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
-            padding: 20px;
-            border-radius: 16px;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            padding: 12px 16px;
             text-align: center;
-            min-width: 200px;
-            box-shadow: var(--md-elevation-1);
-            border: 1px solid rgba(25, 118, 210, 0.12);
+            min-width: 140px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
         }
 
         .compensation-label {
-            font-size: 14px;
-            color: var(--md-on-surface-variant);
-            margin-bottom: 8px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
             font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .compensation-amount {
-            font-size: 24px;
-            font-weight: 600;
-            color: var(--md-primary);
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
         }
 
-        /* 结果选择区 */
+        /* 结果展示区 */
         .options-grid {
             display: flex;
-            gap: 8px;
-            margin-top: 16px;
+            gap: 12px;
+            margin-top: 20px;
             overflow-x: auto;
         }
 
         .option-card {
-            background: var(--md-surface);
-            border: 2px solid var(--md-outline);
-            border-radius: 16px;
-            padding: 20px 16px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--surface);
+            padding: 28px 24px;
             text-align: center;
             flex: 1;
             min-width: 0;
-            box-shadow: var(--md-elevation-1);
+            min-height: 140px;
             position: relative;
-            overflow: hidden;
-        }
-
-        .option-card::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(25, 118, 210, 0.1);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.3s, height 0.3s;
-        }
-
-        .option-card:hover::before {
-            width: 200%;
-            height: 200%;
+            transition: transform 0.15s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .option-card:hover {
-            border-color: var(--md-primary);
-            background: #e3f2fd;
-            box-shadow: var(--md-elevation-2);
+            transform: translateY(-3px);
         }
 
-        .option-card.selected {
-            border-color: var(--md-primary);
-            background: #e3f2fd;
-            box-shadow: var(--md-elevation-3);
+        /* 固定方案颜色样式 */
+        .option-card[data-option="退货退款"] {
+            background: var(--refund-return-bg);
+            border-left: 4px solid var(--refund-return);
         }
 
-        .option-card.selected::before {
-            width: 200%;
-            height: 200%;
+        .option-card[data-option="补发"] {
+            background: var(--resend-bg);
+            border-left: 4px solid var(--resend);
+        }
+
+        .option-card[data-option="仅退款"] {
+            background: var(--refund-only-bg);
+            border-left: 4px solid var(--refund-only);
+        }
+
+        .option-card[data-option="换货"] {
+            background: var(--exchange-bg);
+            border-left: 4px solid var(--exchange);
         }
 
         .option-name {
-            font-weight: 500;
+            font-weight: 600;
             margin-bottom: 8px;
-            font-size: 16px;
-            position: relative;
-            z-index: 1;
+            font-size: 17px;
+            color: var(--text-primary);
         }
 
         .option-loss {
-            font-size: 18px;
+            font-size: 22px;
             font-weight: 700;
-            position: relative;
-            z-index: 1;
+            margin: 0;
+        }
+
+        /* 固定方案名称颜色 */
+        .option-card[data-option="退货退款"] .option-name {
+            color: var(--refund-return);
+        }
+
+        .option-card[data-option="补发"] .option-name {
+            color: var(--resend);
+        }
+
+        .option-card[data-option="仅退款"] .option-name {
+            color: var(--refund-only);
+        }
+
+        .option-card[data-option="换货"] .option-name {
+            color: var(--exchange);
+        }
+
+        /* 排名样式 */
+        .option-rank {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .rank-number {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            color: white;
+            background: var(--text-secondary);
+        }
+
+        .rank-best .rank-number {
+            background: #059669;
+        }
+
+        .rank-worst .rank-number {
+            background: #dc2626;
+        }
+
+        .rank-label {
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 6px;
+            color: white;
+            letter-spacing: 0.3px;
+        }
+
+        .rank-best .rank-label {
+            background: #059669;
+        }
+
+        .rank-worst .rank-label {
+            background: #dc2626;
+        }
+
+        .option-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
         }
 
         .profit {
-            color: var(--md-success);
+            color: #059669;
         }
 
         .loss {
-            color: var(--md-error);
+            color: #dc2626;
         }
 
         /* 选中方案详情 */
@@ -452,24 +474,24 @@
             padding: 16px 20px;
             border: none;
             background: transparent;
-            color: var(--md-on-surface-variant);
-            font-size: 14px;
+            color: var(--text-secondary);
+            font-size: 15px;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s ease;
             position: relative;
             white-space: nowrap;
             text-align: center;
         }
 
         .tab-button:hover {
-            background: rgba(25, 118, 210, 0.08);
-            color: var(--md-primary);
+            background: var(--background);
+            color: var(--text-primary);
         }
 
         .tab-button.active {
-            color: var(--md-primary);
-            background: rgba(25, 118, 210, 0.12);
+            color: var(--primary);
+            background: var(--background);
         }
 
         .tab-button.active::after {
@@ -478,9 +500,8 @@
             bottom: 0;
             left: 0;
             right: 0;
-            height: 3px;
-            background: var(--md-primary);
-            border-radius: 3px 3px 0 0;
+            height: 2px;
+            background: var(--primary);
         }
 
         .tab-content {
@@ -573,7 +594,7 @@
         /* 移动端响应式优化 */
         @media (max-width: 768px) {
             body {
-                padding: 12px;
+                padding: 12px 40px;
             }
 
             .container {
@@ -613,6 +634,7 @@
             .price-input-section {
                 flex-direction: column;
                 gap: 16px;
+                align-items: center;
             }
 
             .input-group {
@@ -620,19 +642,17 @@
             }
 
             .price-input {
-                padding: 18px 20px;
-                font-size: 18px;
-                border-radius: 12px;
+                padding: 14px 16px;
+                font-size: 16px;
             }
 
             .compensation-display {
-                padding: 24px;
-                border-radius: 16px;
+                padding: 14px 16px;
                 min-width: unset;
             }
 
             .compensation-amount {
-                font-size: 28px;
+                font-size: 20px;
             }
 
             .options-grid {
@@ -643,9 +663,9 @@
             }
 
             .option-card {
-                padding: 20px 16px;
-                border-radius: 16px;
+                padding: 24px 20px;
                 min-width: unset;
+                min-height: 140px;
                 flex: unset;
             }
 
@@ -712,7 +732,7 @@
 
         @media (max-width: 480px) {
             body {
-                padding: 8px;
+                padding: 8px 20px;
             }
 
             .tab-button {
@@ -727,7 +747,8 @@
             }
 
             .option-card {
-                padding: 24px 20px;
+                padding: 28px 24px;
+                min-height: 150px;
             }
 
             .option-name {
@@ -768,7 +789,6 @@
         <div id="profit-calculator" class="tab-content active">
             <!-- 售价输入区 -->
             <div class="section">
-                <h2 class="section-title">售价输入</h2>
                 <div class="price-input-section">
                     <div class="input-group">
                         <label class="input-label" for="priceInput">输入售价</label>
@@ -790,14 +810,7 @@
                 </div>
             </div>
 
-            <!-- 选中方案详情 -->
-            <div class="section">
-                <div id="selectedOptionInfo" class="selected-option-info" style="display: none;">
-                    <div class="selected-option-title" id="selectedOptionTitle">已选择方案</div>
-                    <div class="selected-option-result" id="selectedOptionResult">¥0.00</div>
-                    <div class="selected-option-desc" id="selectedOptionDesc">请在上方选择处理方案</div>
-                </div>
-            </div>
+
         </div>
 
         <!-- 停发货工具标签页 -->
@@ -834,7 +847,6 @@
         let currentTab = 'profit-calculator';
 
         // 方案利润计算器相关变量
-        let selectedOption = null;
         let currentPrice = 0;
 
         // 文本块数据存储
@@ -874,7 +886,7 @@
         function calculateLoss(price) {
             const x = parseFloat(price) || 0;
             return {
-                '退货退款': 0 - (x / 2) - 7,
+                '退货退款': 0 - 3 - 3 - 7,
                 '补发': 0,
                 '仅退款': 0 - (x / 2),
                 '换货': x - (x / 2 + 10)
@@ -895,78 +907,41 @@
             const optionsGrid = document.getElementById('optionsGrid');
             if (!optionsGrid) return;
 
-            // 按损失金额排序（损失越小越靠前）
+            // 根据损失金额排序，损失越小越好（排在左侧）
             const sortedOptions = Object.entries(losses).sort((a, b) => b[1] - a[1]);
 
             optionsGrid.innerHTML = '';
 
-            sortedOptions.forEach(([name, loss]) => {
+            sortedOptions.forEach(([name, loss], index) => {
                 const card = document.createElement('div');
                 card.className = 'option-card';
                 card.dataset.option = name;
 
                 const lossClass = loss >= 0 ? 'profit' : 'loss';
                 const lossText = loss >= 0 ? `+¥${loss.toFixed(2)}` : `-¥${Math.abs(loss).toFixed(2)}`;
+                
+                // 排名：左侧为最佳，右侧为最差
+                const rank = index + 1;
+                const isBest = rank === 1;
+                const isWorst = rank === sortedOptions.length;
 
                 card.innerHTML = `
-                    <div class="option-name">${name}</div>
-                    <div class="option-loss ${lossClass}">${lossText}</div>
+                    <div class="option-rank ${isBest ? 'rank-best' : isWorst ? 'rank-worst' : 'rank-normal'}">
+                        <span class="rank-number">${rank}</span>
+                        ${isBest ? '<span class="rank-label">最佳</span>' : ''}
+                        ${isWorst ? '<span class="rank-label">最差</span>' : ''}
+                    </div>
+                    <div class="option-content">
+                        <div class="option-name">${name}</div>
+                        <div class="option-loss ${lossClass}">${lossText}</div>
+                    </div>
                 `;
 
-                card.addEventListener('click', () => selectOption(name));
                 optionsGrid.appendChild(card);
             });
         }
 
-        // 选择方案
-        function selectOption(optionName) {
-            // 更新选中状态
-            document.querySelectorAll('.option-card').forEach(card => {
-                card.classList.remove('selected');
-            });
-            const selectedCard = document.querySelector(`[data-option="${optionName}"]`);
-            if (selectedCard) {
-                selectedCard.classList.add('selected');
-            }
 
-            selectedOption = optionName;
-
-            // 显示选中方案详情
-            updateSelectedOptionInfo(optionName);
-        }
-
-        // 更新选中方案详情显示
-        function updateSelectedOptionInfo(optionName) {
-            const losses = calculateLoss(currentPrice);
-            const loss = losses[optionName];
-
-            const infoDiv = document.getElementById('selectedOptionInfo');
-            const titleDiv = document.getElementById('selectedOptionTitle');
-            const resultDiv = document.getElementById('selectedOptionResult');
-            const descDiv = document.getElementById('selectedOptionDesc');
-
-            if (!infoDiv || !titleDiv || !resultDiv || !descDiv) return;
-
-            titleDiv.textContent = `已选择：${optionName}`;
-
-            const lossClass = loss >= 0 ? 'profit' : 'loss';
-            const lossText = loss >= 0 ? `+¥${loss.toFixed(2)}` : `-¥${Math.abs(loss).toFixed(2)}`;
-            resultDiv.textContent = lossText;
-            resultDiv.className = `selected-option-result ${lossClass}`;
-
-            // 根据方案类型显示不同的描述
-            const descriptions = {
-                '退货退款': '客户退回商品并获得全额退款',
-                '补发': '重新发送商品给客户，无需退回原商品',
-                '仅退款': '直接退款给客户，无需退回商品',
-                '换货': '客户退回原商品，发送新商品替换'
-            };
-
-            descDiv.textContent = descriptions[optionName] || '';
-
-            // 显示详情区域
-            infoDiv.style.display = 'block';
-        }
 
         // 初始化方案利润计算器
         function initProfitCalculator() {
@@ -979,11 +954,6 @@
                 updateCompensation(currentPrice);
                 const losses = calculateLoss(currentPrice);
                 renderOptions(losses);
-
-                // 如果已选择方案，更新详情显示
-                if (selectedOption) {
-                    updateSelectedOptionInfo(selectedOption);
-                }
             });
 
             // 初始渲染
