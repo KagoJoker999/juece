@@ -9,10 +9,10 @@
     <link rel="apple-touch-icon" href="logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <meta name="description" content="售后工具箱 - 专业的售后处理工具集合，提供方案计算、停发货管理、售后方法等功能">
-    <meta name="keywords" content="售后工具,利润计算,停发货,售后方法,决策工具">
+    <meta name="description" content="售后工具箱 - 专业的售后处理工具集合，提供方案计算、错发包裹处理、恶意买家判断等功能">
+    <meta name="keywords" content="售后工具,利润计算,错发包裹,恶意买家,决策工具">
     <meta property="og:title" content="售后工具箱">
-    <meta property="og:description" content="专业的售后处理工具集合，提供方案计算、停发货管理、售后方法等功能">
+    <meta property="og:description" content="专业的售后处理工具集合，提供方案计算、错发包裹处理、恶意买家判断等功能">
     <meta property="og:image" content="logo.png">
     <style>
         :root {
@@ -728,6 +728,106 @@
                 font-size: 14px;
                 padding: 14px;
             }
+
+            /* 图片查看器样式 */
+            .image-section {
+                margin: 24px 0;
+            }
+
+            .image-container {
+                position: relative;
+                display: inline-block;
+                border-radius: 8px;
+                overflow: hidden;
+                cursor: pointer;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+            }
+
+            .image-container:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            }
+
+            .image-container img {
+                display: block;
+                max-width: 100%;
+                height: auto;
+                border-radius: 8px;
+            }
+
+            .image-overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0,0,0,0.5);
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                opacity: 0;
+                transition: opacity 0.2s ease;
+            }
+
+            .image-container:hover .image-overlay {
+                opacity: 1;
+            }
+
+            /* 模态框样式 */
+            .image-modal {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.9);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 10000;
+                cursor: pointer;
+            }
+
+            .image-modal-content {
+                max-width: 90%;
+                max-height: 90%;
+                object-fit: contain;
+                border-radius: 4px;
+                cursor: default;
+            }
+
+            .image-modal-close {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                color: white;
+                font-size: 30px;
+                cursor: pointer;
+                z-index: 10001;
+                background: rgba(0,0,0,0.5);
+                border-radius: 50%;
+                width: 40px;
+                height: 40px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                transition: background 0.2s ease;
+            }
+
+            .image-modal-close:hover {
+                background: rgba(0,0,0,0.8);
+            }
+
+            /* 自定义内容区域样式 */
+            .custom-content {
+                margin-top: 24px;
+                padding: 20px;
+                background: rgba(0,0,0,0.02);
+                border-radius: 8px;
+                border: 1px solid rgba(0,0,0,0.1);
+            }
         }
 
         @media (max-width: 480px) {
@@ -779,8 +879,8 @@
         <div class="tabs-container">
             <div class="tabs-nav">
                 <button class="tab-button active" data-tab="profit-calculator">方案利润计算器</button>
-                <button class="tab-button" data-tab="shipping-control">停发货工具</button>
-                <button class="tab-button" data-tab="service-methods">拒绝售后方法</button>
+                <button class="tab-button" data-tab="shipping-control">错发包裹处理</button>
+                <button class="tab-button" data-tab="service-methods">恶意买家判断处理</button>
                 <button class="tab-button" data-tab="coming-soon">更多工具</button>
             </div>
         </div>
@@ -813,22 +913,38 @@
 
         </div>
 
-        <!-- 停发货工具标签页 -->
+        <!-- 错发包裹处理标签页 -->
         <div id="shipping-control" class="tab-content">
             <div class="section">
-                <h2 class="section-title">停发货通知模板</h2>
-                <div id="textBlocksContainer" class="text-blocks-container">
-                    <!-- 文本块将通过JavaScript动态加载 -->
+                <h2 class="section-title">错发包裹处理</h2>
+                <div id="shippingProcessContainer" class="text-blocks-container">
+                    <!-- 用户自定义内容将在这里显示 -->
+                    
+                    <!-- 错发流程图片显示区域 -->
+                    <div class="image-section" style="margin: 24px 0;">
+                        <div class="image-container" onclick="openImageViewer('错发流程.png')">
+                            <img src="错发流程.png" alt="错发包裹处理流程" class="process-image" style="max-width: 100%; height: auto; cursor: pointer; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                            <div class="image-overlay">
+                                <span class="material-icons" style="color: white; font-size: 24px;">zoom_in</span>
+                                <p style="color: white; margin: 8px 0 0 0; font-size: 14px;">点击查看大图</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 用户自定义内容区域 - 等待用户提供 -->
+                    <div id="customContent" class="custom-content">
+                        <!-- 内容将在这里动态添加 -->
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- 拒绝售后方法标签页 -->
+        <!-- 恶意买家判断处理标签页 -->
         <div id="service-methods" class="tab-content">
             <div class="placeholder-content">
                 <div class="placeholder-icon material-icons">support_agent</div>
-                <div class="placeholder-title">拒绝售后方法</div>
-                <div class="placeholder-desc">提供专业的售后拒绝话术和方法，帮助合理处理各种售后请求</div>
+                <div class="placeholder-title">恶意买家判断处理</div>
+                <div class="placeholder-desc">提供专业的恶意买家识别和应对策略，帮助合理处理各种售后请求</div>
             </div>
         </div>
 
@@ -878,6 +994,8 @@
                     initProfitCalculator();
                 } else if (tabId === 'shipping-control') {
                     initShippingControl();
+                } else if (tabId === 'service-methods') {
+                    initServiceMethods();
                 }
             }
         }
@@ -1058,13 +1176,84 @@
             }
         }
 
-        // 初始化停发货工具
-        function initShippingControl() {
-            if (textBlocksData.length === 0) {
-                loadTextBlocks();
-            } else {
-                renderTextBlocks();
+        // 图片查看器功能
+        function openImageViewer(imageSrc) {
+            // 创建模态框
+            const modal = document.createElement('div');
+            modal.className = 'image-modal';
+            modal.innerHTML = `
+                <div class="image-modal-close" onclick="closeImageViewer()">&times;</div>
+                <img src="${imageSrc}" alt="错发流程图" class="image-modal-content">
+            `;
+
+            // 添加到页面
+            document.body.appendChild(modal);
+
+            // 点击背景关闭
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeImageViewer();
+                }
+            });
+
+            // ESC键关闭
+            document.addEventListener('keydown', handleEscKey);
+        }
+
+        // 关闭图片查看器
+        function closeImageViewer() {
+            const modal = document.querySelector('.image-modal');
+            if (modal) {
+                modal.remove();
+                document.removeEventListener('keydown', handleEscKey);
             }
+        }
+
+        // 处理ESC键
+        function handleEscKey(e) {
+            if (e.key === 'Escape') {
+                closeImageViewer();
+            }
+        }
+
+        // 添加用户自定义内容的方法
+        function addCustomContent(content) {
+            const customContentDiv = document.getElementById('customContent');
+            if (customContentDiv) {
+                customContentDiv.innerHTML = content;
+            }
+        }
+
+        // 初始化错发包裹处理工具
+        function initShippingControl() {
+            // 移除对配置文件的依赖，不再加载文本块
+            console.log('错发包裹处理工具初始化完成，配置文件功能已取消');
+            
+            // 显示提示信息
+            const container = document.getElementById('shippingProcessContainer');
+            if (container && !document.getElementById('customContent').innerHTML.trim()) {
+                const welcomeMessage = document.createElement('div');
+                welcomeMessage.style.cssText = `
+                    padding: 40px 20px;
+                    text-align: center;
+                    background: rgba(0,0,0,0.02);
+                    border-radius: 12px;
+                    border: 1px dashed rgba(0,0,0,0.2);
+                    margin: 20px 0;
+                `;
+                welcomeMessage.innerHTML = `
+                    <div style="font-size: 24px; margin-bottom: 16px;">📋</div>
+                    <h3 style="margin: 0 0 8px 0; color: #666;">自定义内容区域</h3>
+                    <p style="margin: 0; color: #999; font-size: 14px;">等待添加自定义内容...</p>
+                `;
+                document.getElementById('customContent').appendChild(welcomeMessage);
+            }
+        }
+
+        // 初始化恶意买家判断处理工具
+        function initServiceMethods() {
+            // 该功能正在开发中，暂时无需特殊初始化
+            console.log('恶意买家判断处理功能初始化完成');
         }
 
         // 页面加载完成后初始化

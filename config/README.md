@@ -1,7 +1,7 @@
-# 停发货工具配置说明
+# 错发包裹处理工具配置说明
 
 ## 文件位置
-`config/shipping-texts.json` - 停发货通知模板配置文件
+`config/shipping-texts.json` - 错发包裹处理通知模板配置文件
 
 ## 如何修改文本内容
 
