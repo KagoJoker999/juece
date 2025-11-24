@@ -23,13 +23,17 @@
             --text-primary: #1e293b;
             --text-secondary: #64748b;
             --text-muted: #94a3b8;
-            
+
             /* 固定方案颜色 */
-            --refund-return: #ef4444;    /* 退货退款 - 红色 */
-            --resend: #3b82f6;           /* 补发 - 蓝色 */
-            --refund-only: #10b981;      /* 仅退款 - 绿色 */
-            --exchange: #f59e0b;         /* 换货 - 橙色 */
-            
+            --refund-return: #ef4444;
+            /* 退货退款 - 红色 */
+            --resend: #3b82f6;
+            /* 补发 - 蓝色 */
+            --refund-only: #10b981;
+            /* 仅退款 - 绿色 */
+            --exchange: #f59e0b;
+            /* 换货 - 橙色 */
+
             /* 颜色对应的浅色背景 */
             --refund-return-bg: #fef2f2;
             --resend-bg: #eff6ff;
@@ -729,31 +733,33 @@
                 padding: 14px;
             }
 
-            /* 图片查看器样式 */
+            /* 图片查看器样式 - 优化版 */
             .image-section {
                 margin: 24px 0;
+                text-align: center;
             }
 
             .image-container {
                 position: relative;
                 display: inline-block;
-                border-radius: 8px;
+                border-radius: 12px;
                 overflow: hidden;
-                cursor: pointer;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-                transition: transform 0.2s ease, box-shadow 0.2s ease;
+                cursor: zoom-in;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                max-width: 100%;
             }
 
             .image-container:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+                transform: translateY(-4px);
+                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
             }
 
             .image-container img {
                 display: block;
                 max-width: 100%;
                 height: auto;
-                border-radius: 8px;
+                border-radius: 12px;
             }
 
             .image-overlay {
@@ -762,71 +768,159 @@
                 left: 0;
                 right: 0;
                 bottom: 0;
-                background: rgba(0,0,0,0.5);
+                background: linear-gradient(to top, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3));
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
                 opacity: 0;
-                transition: opacity 0.2s ease;
+                transition: opacity 0.3s ease;
             }
 
             .image-container:hover .image-overlay {
                 opacity: 1;
             }
 
-            /* 模态框样式 */
+            .image-overlay .material-icons {
+                color: white;
+                font-size: 48px;
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+                animation: pulse 2s ease-in-out infinite;
+            }
+
+            @keyframes pulse {
+
+                0%,
+                100% {
+                    transform: scale(1);
+                }
+
+                50% {
+                    transform: scale(1.1);
+                }
+            }
+
+            .image-overlay p {
+                color: white;
+                margin: 12px 0 0 0;
+                font-size: 14px;
+                font-weight: 500;
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            }
+
+            /* 模态框样式 - 优化版 */
             .image-modal {
                 position: fixed;
                 top: 0;
                 left: 0;
                 width: 100%;
                 height: 100%;
-                background: rgba(0,0,0,0.9);
+                background: rgba(0, 0, 0, 0.95);
                 display: flex;
+                flex-direction: column;
                 justify-content: center;
                 align-items: center;
                 z-index: 10000;
-                cursor: pointer;
+                opacity: 0;
+                animation: fadeIn 0.3s ease-out forwards;
+                cursor: zoom-out;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+
+                to {
+                    opacity: 1;
+                }
+            }
+
+            @keyframes fadeOut {
+                from {
+                    opacity: 1;
+                }
+
+                to {
+                    opacity: 0;
+                }
+            }
+
+            @keyframes zoomIn {
+                from {
+                    opacity: 0;
+                    transform: scale(0.5);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+            }
+
+            @keyframes zoomOut {
+                from {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+
+                to {
+                    opacity: 0;
+                    transform: scale(0.5);
+                }
             }
 
             .image-modal-content {
-                max-width: 90%;
-                max-height: 90%;
+                max-width: 95%;
+                max-height: 85%;
                 object-fit: contain;
-                border-radius: 4px;
-                cursor: default;
+                border-radius: 8px;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+                cursor: zoom-out;
+                animation: zoomIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                -webkit-user-select: none;
+                user-select: none;
             }
 
-            .image-modal-close {
+            .image-modal.closing .image-modal-content {
+                animation: zoomOut 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            .image-modal.closing {
+                animation: fadeOut 0.25s ease-out forwards;
+            }
+
+            .image-modal-hint {
                 position: absolute;
-                top: 20px;
-                right: 20px;
+                bottom: 40px;
+                left: 50%;
+                transform: translateX(-50%);
                 color: white;
-                font-size: 30px;
-                cursor: pointer;
-                z-index: 10001;
-                background: rgba(0,0,0,0.5);
-                border-radius: 50%;
-                width: 40px;
-                height: 40px;
+                font-size: 14px;
+                background: rgba(0, 0, 0, 0.6);
+                padding: 12px 24px;
+                border-radius: 24px;
                 display: flex;
-                justify-content: center;
                 align-items: center;
-                transition: background 0.2s ease;
+                gap: 8px;
+                opacity: 0;
+                animation: fadeIn 0.3s ease-out 0.5s forwards;
+                pointer-events: none;
+                backdrop-filter: blur(10px);
             }
 
-            .image-modal-close:hover {
-                background: rgba(0,0,0,0.8);
+            .image-modal-hint .material-icons {
+                font-size: 20px;
             }
 
             /* 自定义内容区域样式 */
             .custom-content {
                 margin-top: 24px;
                 padding: 20px;
-                background: rgba(0,0,0,0.02);
+                background: rgba(0, 0, 0, 0.02);
                 border-radius: 8px;
-                border: 1px solid rgba(0,0,0,0.1);
+                border: 1px solid rgba(0, 0, 0, 0.1);
             }
         }
 
@@ -919,14 +1013,14 @@
                 <h2 class="section-title">错发包裹处理</h2>
                 <div id="shippingProcessContainer" class="text-blocks-container">
                     <!-- 用户自定义内容将在这里显示 -->
-                    
+
                     <!-- 错发流程图片显示区域 -->
-                    <div class="image-section" style="margin: 24px 0;">
+                    <div class="image-section">
                         <div class="image-container" onclick="openImageViewer('错发流程.png')">
-                            <img src="错发流程.png" alt="错发包裹处理流程" class="process-image" style="max-width: 100%; height: auto; cursor: pointer; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                            <img src="错发流程.png" alt="错发包裹处理流程" class="process-image">
                             <div class="image-overlay">
-                                <span class="material-icons" style="color: white; font-size: 24px;">zoom_in</span>
-                                <p style="color: white; margin: 8px 0 0 0; font-size: 14px;">点击查看大图</p>
+                                <span class="material-icons">zoom_in</span>
+                                <p>点击放大查看</p>
                             </div>
                         </div>
                     </div>
@@ -1037,7 +1131,7 @@
 
                 const lossClass = loss >= 0 ? 'profit' : 'loss';
                 const lossText = loss >= 0 ? `+¥${loss.toFixed(2)}` : `-¥${Math.abs(loss).toFixed(2)}`;
-                
+
                 // 排名：左侧为最佳，右侧为最差
                 const rank = index + 1;
                 const isBest = rank === 1;
@@ -1140,20 +1234,20 @@
 
             try {
                 await navigator.clipboard.writeText(block.content);
-                
+
                 // 更新按钮状态
                 const button = document.querySelector(`[data-block-id="${blockId}"] .copy-button`);
                 const originalHTML = button.innerHTML;
-                
+
                 button.classList.add('copied');
                 button.innerHTML = '<span class="material-icons" style="font-size: 16px;">check</span>已复制';
-                
+
                 // 2秒后恢复原状态
                 setTimeout(() => {
                     button.classList.remove('copied');
                     button.innerHTML = originalHTML;
                 }, 2000);
-                
+
             } catch (error) {
                 console.error('复制失败:', error);
                 // 降级方案：选中文本
@@ -1176,36 +1270,69 @@
             }
         }
 
-        // 图片查看器功能
+        // 图片查看器功能 - 优化版
         function openImageViewer(imageSrc) {
+            // 防止重复打开
+            if (document.querySelector('.image-modal')) return;
+
             // 创建模态框
             const modal = document.createElement('div');
             modal.className = 'image-modal';
             modal.innerHTML = `
-                <div class="image-modal-close" onclick="closeImageViewer()">&times;</div>
                 <img src="${imageSrc}" alt="错发流程图" class="image-modal-content">
+                <div class="image-modal-hint">
+                    <span class="material-icons">touch_app</span>
+                    点击图片或背景关闭
+                </div>
             `;
+
+            // 阻止body滚动
+            document.body.style.overflow = 'hidden';
 
             // 添加到页面
             document.body.appendChild(modal);
 
-            // 点击背景关闭
+            // 点击模态框任意位置关闭（包括图片本身）
             modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    closeImageViewer();
-                }
+                closeImageViewer();
+            });
+
+            // 阻止图片上的点击事件冒泡导致其他问题
+            const img = modal.querySelector('.image-modal-content');
+            img.addEventListener('click', (e) => {
+                e.stopPropagation();
+                closeImageViewer();
             });
 
             // ESC键关闭
             document.addEventListener('keydown', handleEscKey);
+
+            // 触摸设备优化：双击关闭
+            let lastTap = 0;
+            modal.addEventListener('touchend', (e) => {
+                const currentTime = new Date().getTime();
+                const tapLength = currentTime - lastTap;
+                if (tapLength < 300 && tapLength > 0) {
+                    closeImageViewer();
+                    e.preventDefault();
+                }
+                lastTap = currentTime;
+            });
         }
 
         // 关闭图片查看器
         function closeImageViewer() {
             const modal = document.querySelector('.image-modal');
             if (modal) {
-                modal.remove();
-                document.removeEventListener('keydown', handleEscKey);
+                // 添加关闭动画
+                modal.classList.add('closing');
+
+                // 等待动画完成后移除元素
+                setTimeout(() => {
+                    modal.remove();
+                    document.body.style.overflow = '';
+                    document.removeEventListener('keydown', handleEscKey);
+                }, 250);
             }
         }
 
@@ -1228,7 +1355,7 @@
         function initShippingControl() {
             // 移除对配置文件的依赖，不再加载文本块
             console.log('错发包裹处理工具初始化完成，配置文件功能已取消');
-            
+
             // 显示提示信息
             const container = document.getElementById('shippingProcessContainer');
             if (container && !document.getElementById('customContent').innerHTML.trim()) {
