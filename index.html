@@ -1190,22 +1190,27 @@
 
                 // 显示提示信息
                 const container = document.getElementById('shippingProcessContainer');
-                if (container && !document.getElementById('customContent').innerHTML.trim()) {
-                    const welcomeMessage = document.createElement('div');
-                    welcomeMessage.style.cssText = `
-                    padding: 40px 20px;
-                    text-align: center;
-                    background: rgba(0,0,0,0.02);
-                    border-radius: 12px;
-                    border: 1px dashed rgba(0,0,0,0.2);
-                    margin: 20px 0;
-                `;
-                    welcomeMessage.innerHTML = `
-                    <div style="font-size: 24px; margin-bottom: 16px;">📋</div>
-                    <h3 style="margin: 0 0 8px 0; color: #666;">自定义内容区域</h3>
-                    <p style="margin: 0; color: #999; font-size: 14px;">等待添加自定义内容...</p>
-                `;
-                    document.getElementById('customContent').appendChild(welcomeMessage);
+                if (container) {
+                    // 检查是否已经显示过欢迎消息
+                    const existingWelcome = container.querySelector('.welcome-message');
+                    if (!existingWelcome) {
+                        const welcomeMessage = document.createElement('div');
+                        welcomeMessage.className = 'welcome-message';
+                        welcomeMessage.style.cssText = `
+                            padding: 40px 20px;
+                            text-align: center;
+                            background: rgba(0,0,0,0.02);
+                            border-radius: 12px;
+                            border: 1px dashed rgba(0,0,0,0.2);
+                            margin: 20px 0;
+                        `;
+                        welcomeMessage.innerHTML = `
+                            <div style="font-size: 24px; margin-bottom: 16px;">📋</div>
+                            <h3 style="margin: 0 0 8px 0; color: #666;">错发包裹处理工具</h3>
+                            <p style="margin: 0; color: #999; font-size: 14px;">请参考上方流程图进行操作</p>
+                        `;
+                        container.appendChild(welcomeMessage);
+                    }
                 }
             }
 
