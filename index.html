@@ -9,10 +9,10 @@
     <link rel="apple-touch-icon" href="logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <meta name="description" content="售后工具箱 - 专业的售后处理工具集合，提供方案计算、错发包裹处理、恶意买家判断等功能">
+    <meta name="description" content="售后工具箱 - 专业的售后处理工具集合，提供方案计算、错发包裹处理、恶意买家处理等功能">
     <meta name="keywords" content="售后工具,利润计算,错发包裹,恶意买家,决策工具">
     <meta property="og:title" content="售后工具箱">
-    <meta property="og:description" content="专业的售后处理工具集合，提供方案计算、错发包裹处理、恶意买家判断等功能">
+    <meta property="og:description" content="专业的售后处理工具集合，提供方案计算、错发包裹处理、恶意买家处理等功能">
     <meta property="og:image" content="logo.png">
     <style>
         :root {
@@ -733,26 +733,18 @@
                 padding: 14px;
             }
 
-            /* 图片查看器样式 - 优化版 */
+            /* 图片显示样式 */
             .image-section {
                 margin: 24px 0;
                 text-align: center;
             }
 
             .image-container {
-                position: relative;
                 display: inline-block;
                 border-radius: 12px;
                 overflow: hidden;
-                cursor: zoom-in;
                 box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                 max-width: 100%;
-            }
-
-            .image-container:hover {
-                transform: translateY(-4px);
-                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
             }
 
             .image-container img {
@@ -760,158 +752,6 @@
                 max-width: 100%;
                 height: auto;
                 border-radius: 12px;
-            }
-
-            .image-overlay {
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: linear-gradient(to top, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3));
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                opacity: 0;
-                transition: opacity 0.3s ease;
-            }
-
-            .image-container:hover .image-overlay {
-                opacity: 1;
-            }
-
-            .image-overlay .material-icons {
-                color: white;
-                font-size: 48px;
-                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-                animation: pulse 2s ease-in-out infinite;
-            }
-
-            @keyframes pulse {
-
-                0%,
-                100% {
-                    transform: scale(1);
-                }
-
-                50% {
-                    transform: scale(1.1);
-                }
-            }
-
-            .image-overlay p {
-                color: white;
-                margin: 12px 0 0 0;
-                font-size: 14px;
-                font-weight: 500;
-                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-            }
-
-            /* 模态框样式 - 优化版 */
-            .image-modal {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.95);
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                z-index: 10000;
-                opacity: 0;
-                animation: fadeIn 0.3s ease-out forwards;
-                cursor: zoom-out;
-                -webkit-tap-highlight-color: transparent;
-            }
-
-            @keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-
-                to {
-                    opacity: 1;
-                }
-            }
-
-            @keyframes fadeOut {
-                from {
-                    opacity: 1;
-                }
-
-                to {
-                    opacity: 0;
-                }
-            }
-
-            @keyframes zoomIn {
-                from {
-                    opacity: 0;
-                    transform: scale(0.5);
-                }
-
-                to {
-                    opacity: 1;
-                    transform: scale(1);
-                }
-            }
-
-            @keyframes zoomOut {
-                from {
-                    opacity: 1;
-                    transform: scale(1);
-                }
-
-                to {
-                    opacity: 0;
-                    transform: scale(0.5);
-                }
-            }
-
-            .image-modal-content {
-                max-width: 95%;
-                max-height: 85%;
-                object-fit: contain;
-                border-radius: 8px;
-                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-                cursor: zoom-out;
-                animation: zoomIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                -webkit-user-select: none;
-                user-select: none;
-            }
-
-            .image-modal.closing .image-modal-content {
-                animation: zoomOut 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            }
-
-            .image-modal.closing {
-                animation: fadeOut 0.25s ease-out forwards;
-            }
-
-            .image-modal-hint {
-                position: absolute;
-                bottom: 40px;
-                left: 50%;
-                transform: translateX(-50%);
-                color: white;
-                font-size: 14px;
-                background: rgba(0, 0, 0, 0.6);
-                padding: 12px 24px;
-                border-radius: 24px;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                opacity: 0;
-                animation: fadeIn 0.3s ease-out 0.5s forwards;
-                pointer-events: none;
-                backdrop-filter: blur(10px);
-            }
-
-            .image-modal-hint .material-icons {
-                font-size: 20px;
             }
 
             /* 自定义内容区域样式 */
@@ -974,7 +814,7 @@
             <div class="tabs-nav">
                 <button class="tab-button active" data-tab="profit-calculator">方案利润计算器</button>
                 <button class="tab-button" data-tab="shipping-control">错发包裹处理</button>
-                <button class="tab-button" data-tab="service-methods">恶意买家判断处理</button>
+                <button class="tab-button" data-tab="service-methods">恶意买家处理</button>
                 <button class="tab-button" data-tab="coming-soon">更多工具</button>
             </div>
         </div>
@@ -1012,33 +852,54 @@
             <div class="section">
                 <h2 class="section-title">错发包裹处理</h2>
                 <div id="shippingProcessContainer" class="text-blocks-container">
-                    <!-- 用户自定义内容将在这里显示 -->
-
-                    <!-- 错发流程图片显示区域 -->
+                    <!-- 错发流程图片显示 -->
                     <div class="image-section">
-                        <div class="image-container" onclick="openImageViewer('错发流程.png')">
-                            <img src="错发流程.png" alt="错发包裹处理流程" class="process-image">
-                            <div class="image-overlay">
-                                <span class="material-icons">zoom_in</span>
-                                <p>点击放大查看</p>
-                            </div>
+                        <div class="image-container">
+                            <img src="错发流程.png" alt="错发包裹处理流程">
                         </div>
                     </div>
 
-                    <!-- 用户自定义内容区域 - 等待用户提供 -->
-                    <div id="customContent" class="custom-content">
-                        <!-- 内容将在这里动态添加 -->
+                    <!-- 错发包裹处理流程步骤 -->
+                    <div class="text-block">
+                        <div class="text-block-header">
+                            <h3 class="text-block-title">错发包裹处理流程</h3>
+                            <button class="copy-button" onclick="copyTextBlock('shipping-process-steps')">
+                                <span class="material-icons" style="font-size: 16px;">content_copy</span>
+                                复制
+                            </button>
+                        </div>
+                        <div class="text-block-content" id="shipping-process-steps">
+                            1. 确认客户反馈：仔细核对客户提供的订单信息和收到的商品信息，确认是否存在错发情况。<br>
+                            2. 内部核查：与仓库或发货部门沟通，核查发货记录，确认错发原因。<br>
+                            3. 联系客户：主动联系客户，说明情况，并提供解决方案。<br>
+                            4. 解决方案：
+                            <ul>
+                                <li>若客户愿意退回错发商品：提供免费退货标签，待收到退货后，重新发出正确商品。</li>
+                                <li>若错发商品价值较低，且客户不愿退回：可考虑直接补发正确商品，错发商品无需退回。</li>
+                                <li>若客户急需商品：可先补发正确商品，同时安排错发商品的退回。</li>
+                            </ul>
+                            5. 跟踪处理：全程跟踪退货和补发物流信息，确保客户及时收到正确商品。<br>
+                            6. 记录与总结：详细记录错发事件，分析原因，避免再次发生。
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- 恶意买家判断处理标签页 -->
+        <!-- 恶意买家处理标签页 -->
         <div id="service-methods" class="tab-content">
-            <div class="placeholder-content">
-                <div class="placeholder-icon material-icons">support_agent</div>
-                <div class="placeholder-title">恶意买家判断处理</div>
-                <div class="placeholder-desc">提供专业的恶意买家识别和应对策略，帮助合理处理各种售后请求</div>
+            <div class="section">
+                <h2 class="section-title">恶意买家处理流程</h2>
+                <div
+                    style="background: var(--surface); padding: 32px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <ol style="line-height: 2; font-size: 16px; color: var(--text-primary); padding-left: 24px;">
+                        <li style="margin-bottom: 16px;"><strong>查看聊天记录</strong> - 仔细审查与客户的所有沟通记录</li>
+                        <li style="margin-bottom: 16px;"><strong>检查是否为老客</strong> - 确认客户的历史订单和交易记录</li>
+                        <li style="margin-bottom: 16px;"><strong>检查原因并记录和反馈</strong> - 详细记录问题原因并及时反馈</li>
+                        <li style="margin-bottom: 16px;"><strong>反馈确定拉黑后需将客户头像及姓名，截图反馈给淼</strong> - 保存证据并报告</li>
+                        <li style="margin-bottom: 16px;"><strong>订单页面拉黑，停止客户拉黑</strong> - 在系统中执行拉黑操作</li>
+                    </ol>
+                </div>
             </div>
         </div>
 
@@ -1059,8 +920,24 @@
         // 方案利润计算器相关变量
         let currentPrice = 0;
 
-        // 文本块数据存储
-        let textBlocksData = [];
+        // 文本块数据存储 (仅用于模拟，实际数据已硬编码)
+        let textBlocksData = [
+            {
+                id: 'shipping-process-steps',
+                title: '错发包裹处理流程',
+                content: `1. 确认客户反馈：仔细核对客户提供的订单信息和收到的商品信息，确认是否存在错发情况。<br>
+                            2. 内部核查：与仓库或发货部门沟通，核查发货记录，确认错发原因。<br>
+                            3. 联系客户：主动联系客户，说明情况，并提供解决方案。<br>
+                            4. 解决方案：
+                            <ul>
+                                <li>若客户愿意退回错发商品：提供免费退货标签，待收到退货后，重新发出正确商品。</li>
+                                <li>若错发商品价值较低，且客户不愿退回：可考虑直接补发正确商品，错发商品无需退回。</li>
+                                <li>若客户急需商品：可先补发正确商品，同时安排错发商品的退回。</li>
+                            </ul>
+                            5. 跟踪处理：全程跟踪退货和补发物流信息，确保客户及时收到正确商品。<br>
+                            6. 记录与总结：详细记录错发事件，分析原因，避免再次发生。`
+            }
+        ];
 
         // 标签页切换功能
         function switchTab(tabId) {
@@ -1187,55 +1064,16 @@
             initProfitCalculator();
         }
 
-        // 加载文本块配置
-        async function loadTextBlocks() {
-            try {
-                const response = await fetch('config/shipping-texts.json');
-                if (!response.ok) {
-                    throw new Error('配置文件加载失败');
-                }
-                const data = await response.json();
-                textBlocksData = data.textBlocks;
-                renderTextBlocks();
-            } catch (error) {
-                console.error('加载文本块配置失败:', error);
-                showErrorMessage('配置文件加载失败，请检查网络连接或联系管理员');
-            }
-        }
-
-        // 渲染文本块
-        function renderTextBlocks() {
-            const container = document.getElementById('textBlocksContainer');
-            if (!container) return;
-
-            if (textBlocksData.length === 0) {
-                container.innerHTML = '<div class="loading-message">暂无可用模板</div>';
-                return;
-            }
-
-            container.innerHTML = textBlocksData.map(block => `
-                <div class="text-block" data-block-id="${block.id}">
-                    <div class="text-block-header">
-                        <h3 class="text-block-title">${block.title}</h3>
-                        <button class="copy-button" onclick="copyTextBlock('${block.id}')">
-                            <span class="material-icons" style="font-size: 16px;">content_copy</span>
-                            复制
-                        </button>
-                    </div>
-                    <div class="text-block-content">${block.content}</div>
-                </div>
-            `).join('');
-        }
-
         // 复制文本块内容
         async function copyTextBlock(blockId) {
             const block = textBlocksData.find(b => b.id === blockId);
             if (!block) return;
 
             try {
-                await navigator.clipboard.writeText(block.content);
+                // Use the content from the hardcoded data, not the DOM element
+                await navigator.clipboard.writeText(block.content.replace(/<br>/g, '\n').replace(/<li>/g, '- ').replace(/<\/li>/g, '\n').replace(/<ul>/g, '').replace(/<\/ul>/g, ''));
 
-                // 更新按钮状态
+                // Update button state
                 const button = document.querySelector(`[data-block-id="${blockId}"] .copy-button`);
                 const originalHTML = button.innerHTML;
 
@@ -1250,8 +1088,8 @@
 
             } catch (error) {
                 console.error('复制失败:', error);
-                // 降级方案：选中文本
-                const textElement = document.querySelector(`[data-block-id="${blockId}"] .text-block-content`);
+                // Fallback: select text
+                const textElement = document.getElementById(blockId);
                 if (textElement) {
                     const range = document.createRange();
                     range.selectNodeContents(textElement);
@@ -1262,92 +1100,11 @@
             }
         }
 
-        // 显示错误消息
+        // 显示错误消息 (不再使用，但保留函数定义)
         function showErrorMessage(message) {
-            const container = document.getElementById('textBlocksContainer');
+            const container = document.getElementById('shippingProcessContainer');
             if (container) {
                 container.innerHTML = `<div class="error-message">${message}</div>`;
-            }
-        }
-
-        // 图片查看器功能 - 优化版
-        function openImageViewer(imageSrc) {
-            // 防止重复打开
-            if (document.querySelector('.image-modal')) return;
-
-            // 创建模态框
-            const modal = document.createElement('div');
-            modal.className = 'image-modal';
-            modal.innerHTML = `
-                <img src="${imageSrc}" alt="错发流程图" class="image-modal-content">
-                <div class="image-modal-hint">
-                    <span class="material-icons">touch_app</span>
-                    点击图片或背景关闭
-                </div>
-            `;
-
-            // 阻止body滚动
-            document.body.style.overflow = 'hidden';
-
-            // 添加到页面
-            document.body.appendChild(modal);
-
-            // 点击模态框任意位置关闭（包括图片本身）
-            modal.addEventListener('click', (e) => {
-                closeImageViewer();
-            });
-
-            // 阻止图片上的点击事件冒泡导致其他问题
-            const img = modal.querySelector('.image-modal-content');
-            img.addEventListener('click', (e) => {
-                e.stopPropagation();
-                closeImageViewer();
-            });
-
-            // ESC键关闭
-            document.addEventListener('keydown', handleEscKey);
-
-            // 触摸设备优化：双击关闭
-            let lastTap = 0;
-            modal.addEventListener('touchend', (e) => {
-                const currentTime = new Date().getTime();
-                const tapLength = currentTime - lastTap;
-                if (tapLength < 300 && tapLength > 0) {
-                    closeImageViewer();
-                    e.preventDefault();
-                }
-                lastTap = currentTime;
-            });
-        }
-
-        // 关闭图片查看器
-        function closeImageViewer() {
-            const modal = document.querySelector('.image-modal');
-            if (modal) {
-                // 添加关闭动画
-                modal.classList.add('closing');
-
-                // 等待动画完成后移除元素
-                setTimeout(() => {
-                    modal.remove();
-                    document.body.style.overflow = '';
-                    document.removeEventListener('keydown', handleEscKey);
-                }, 250);
-            }
-        }
-
-        // 处理ESC键
-        function handleEscKey(e) {
-            if (e.key === 'Escape') {
-                closeImageViewer();
-            }
-        }
-
-        // 添加用户自定义内容的方法
-        function addCustomContent(content) {
-            const customContentDiv = document.getElementById('customContent');
-            if (customContentDiv) {
-                customContentDiv.innerHTML = content;
             }
         }
 
@@ -1377,10 +1134,9 @@
             }
         }
 
-        // 初始化恶意买家判断处理工具
+        // 初始化恶意买家处理工具
         function initServiceMethods() {
-            // 该功能正在开发中，暂时无需特殊初始化
-            console.log('恶意买家判断处理功能初始化完成');
+            console.log('恶意买家处理功能初始化完成');
         }
 
         // 页面加载完成后初始化
