@@ -76,8 +76,7 @@
             background: var(--md-surface);
             color: var(--text-primary);
             margin-bottom: 24px;
-            border-radius: 12px;
-            box-shadow: var(--elevation-2);
+            border-radius: 0;
         }
 
         .logo {
@@ -104,8 +103,8 @@
 
         .container {
             background: var(--md-surface);
-            border-radius: 12px;
-            box-shadow: var(--elevation-2);
+            border-radius: 0;
+            box-shadow: none;
             overflow: hidden;
         }
 
@@ -768,7 +767,7 @@
             .image-container img {
                 display: block;
                 width: 100%;
-                max-width: 800px;
+                max-width: 100%;
                 height: auto;
                 margin: 0 auto;
                 border-radius: 8px;
@@ -920,30 +919,6 @@
                             <img src="错发流程.png" alt="错发包裹处理流程">
                         </div>
                     </div>
-
-                    <!-- 错发包裹处理流程步骤 -->
-                    <div class="text-block">
-                        <div class="text-block-header">
-                            <h3 class="text-block-title">错发包裹处理流程</h3>
-                            <button class="copy-button" onclick="copyTextBlock('shipping-process-steps')">
-                                <span class="material-icons" style="font-size: 16px;">content_copy</span>
-                                复制
-                            </button>
-                        </div>
-                        <div class="text-block-content" id="shipping-process-steps">
-                            1. 确认客户反馈：仔细核对客户提供的订单信息和收到的商品信息，确认是否存在错发情况。<br>
-                            2. 内部核查：与仓库或发货部门沟通，核查发货记录，确认错发原因。<br>
-                            3. 联系客户：主动联系客户，说明情况，并提供解决方案。<br>
-                            4. 解决方案：
-                            <ul>
-                                <li>若客户愿意退回错发商品：提供免费退货标签，待收到退货后，重新发出正确商品。</li>
-                                <li>若错发商品价值较低，且客户不愿退回：可考虑直接补发正确商品，错发商品无需退回。</li>
-                                <li>若客户急需商品：可先补发正确商品，同时安排错发商品的退回。</li>
-                            </ul>
-                            5. 跟踪处理：全程跟踪退货和补发物流信息，确保客户及时收到正确商品。<br>
-                            6. 记录与总结：详细记录错发事件，分析原因，避免再次发生。
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -962,7 +937,7 @@
                             <li><strong>检查是否为老客</strong> - 确认客户的历史订单和交易记录</li>
                             <li><strong>检查原因并记录和反馈</strong> - 详细记录问题原因并及时反馈</li>
                             <li><strong>反馈确定拉黑后需将客户头像及姓名,截图反馈给淼</strong> - 保存证据并报告</li>
-                            <li><strong>订单页面拉黑，停止客户拉黑</strong> - 在系统中执行拉黑操作</li>
+                            <li><strong>订单页面拉黑，终止客户下单</strong> - 在系统中执行拉黑操作</li>
                         </ol>
                     </div>
                 </div>
