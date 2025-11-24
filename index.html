@@ -334,8 +334,8 @@
 
         /* 文本块容器 */
         .text-blocks-container {
-            display: grid;
-            gap: 20px;
+            display: block;
+            /* 改为block布局以避免Grid溢出问题 */
             margin-top: 16px;
         }
 
@@ -749,24 +749,28 @@
                 padding: 14px;
             }
 
-            /* 图片显示样式 - 响应式优化 */
+            /* 图片显示样式 - 缩放版 */
             .image-section {
-                margin: 24px 0;
-                text-align: center;
+                margin: 20px 0;
                 width: 100%;
-                overflow: hidden;
+                max-width: 100%;
+                text-align: center;
+                display: block;
             }
 
             .image-container {
                 display: inline-block;
-                max-width: 100%;
+                width: 80%;
+                /* 缩放至80%宽度 */
+                max-width: 1000px;
+                /* 限制最大宽度 */
+                line-height: 0;
             }
 
             .image-container img {
                 display: block;
-                max-width: 100%;
+                width: 100%;
                 height: auto;
-                margin: 0 auto;
                 border-radius: 8px;
                 box-shadow: var(--elevation-2);
             }
