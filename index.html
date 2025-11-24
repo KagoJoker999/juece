@@ -16,25 +16,37 @@
     <meta property="og:image" content="logo.png">
     <style>
         :root {
-            --primary: #2563eb;
-            --secondary: #64748b;
-            --background: #f8fafc;
-            --surface: #ffffff;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --text-muted: #94a3b8;
+            /* Material Design Color Palette */
+            --md-primary: #1976d2;
+            --md-primary-variant: #1565c0;
+            --md-secondary: #424242;
+            --md-surface: #ffffff;
+            --md-background: #fafafa;
+            --md-error: #d32f2f;
+            --md-on-primary: #ffffff;
+            --md-on-secondary: #ffffff;
+            --md-on-surface: #212121;
+            --md-on-background: #212121;
+            --md-on-error: #ffffff;
+
+            /* Text Colors */
+            --text-primary: #212121;
+            --text-secondary: #757575;
+            --text-disabled: #9e9e9e;
+            --text-hint: #9e9e9e;
+
+            /* Elevation Shadows */
+            --elevation-1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+            --elevation-2: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+            --elevation-3: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+            --elevation-4: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+            --elevation-5: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
 
             /* 固定方案颜色 */
             --refund-return: #ef4444;
-            /* 退货退款 - 红色 */
             --resend: #3b82f6;
-            /* 补发 - 蓝色 */
             --refund-only: #10b981;
-            /* 仅退款 - 绿色 */
             --exchange: #f59e0b;
-            /* 换货 - 橙色 */
-
-            /* 颜色对应的浅色背景 */
             --refund-return-bg: #fef2f2;
             --resend-bg: #eff6ff;
             --refund-only-bg: #f0fdf4;
@@ -48,11 +60,11 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--background);
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--md-background);
             color: var(--text-primary);
             line-height: 1.6;
-            padding: 20px 100px;
+            padding: 20px;
             max-width: 1200px;
             margin: 0 auto;
             min-height: 100vh;
@@ -61,9 +73,11 @@
         .header {
             text-align: center;
             padding: 40px 20px;
-            background: var(--surface);
+            background: var(--md-surface);
             color: var(--text-primary);
             margin-bottom: 24px;
+            border-radius: 12px;
+            box-shadow: var(--elevation-2);
         }
 
         .logo {
@@ -75,9 +89,10 @@
 
         .app-title {
             font-size: 32px;
-            font-weight: 700;
+            font-weight: 500;
             margin: 0 0 8px 0;
-            color: var(--primary);
+            color: var(--md-primary);
+            letter-spacing: -0.5px;
         }
 
         .app-subtitle {
@@ -88,19 +103,17 @@
         }
 
         .container {
-            background: var(--surface);
+            background: var(--md-surface);
+            border-radius: 12px;
+            box-shadow: var(--elevation-2);
+            overflow: hidden;
         }
 
         .section {
-            padding: 32px 0;
+            padding: 32px 24px;
         }
 
-        .section-title {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 24px;
-            color: var(--text-primary);
-        }
+
 
         /* 售价输入区 */
         .price-input-section {
@@ -452,13 +465,14 @@
             font-weight: 400;
         }
 
-        /* 标签页样式 */
+        /* 标签页样式 - Material Design */
         .tabs-container {
             background: var(--md-surface);
-            border-bottom: 1px solid var(--md-outline);
+            border-bottom: 1px solid #e0e0e0;
             position: sticky;
             top: 0;
             z-index: 100;
+            box-shadow: var(--elevation-1);
         }
 
         .tabs-nav {
@@ -475,27 +489,29 @@
         .tab-button {
             flex: 1;
             min-width: 120px;
-            padding: 16px 20px;
+            padding: 16px 24px;
             border: none;
             background: transparent;
             color: var(--text-secondary);
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             white-space: nowrap;
             text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .tab-button:hover {
-            background: var(--background);
-            color: var(--text-primary);
+            background: rgba(25, 118, 210, 0.04);
+            color: var(--md-primary);
         }
 
         .tab-button.active {
-            color: var(--primary);
-            background: var(--background);
+            color: var(--md-primary);
+            background: rgba(25, 118, 210, 0.08);
         }
 
         .tab-button.active::after {
@@ -504,8 +520,9 @@
             bottom: 0;
             left: 0;
             right: 0;
-            height: 2px;
-            background: var(--primary);
+            height: 3px;
+            background: var(--md-primary);
+            border-radius: 3px 3px 0 0;
         }
 
         .tab-content {
@@ -733,34 +750,81 @@
                 padding: 14px;
             }
 
-            /* 图片显示样式 */
+            /* 图片显示样式 - 修复溢出 */
             .image-section {
                 margin: 24px 0;
                 text-align: center;
+                width: 100%;
+                max-width: 100%;
+                overflow: hidden;
             }
 
             .image-container {
                 display: inline-block;
-                border-radius: 12px;
-                overflow: hidden;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
                 max-width: 100%;
+                width: 100%;
             }
 
             .image-container img {
                 display: block;
-                max-width: 100%;
+                width: 100%;
+                max-width: 800px;
                 height: auto;
-                border-radius: 12px;
+                margin: 0 auto;
+                border-radius: 8px;
+                box-shadow: var(--elevation-2);
             }
 
-            /* 自定义内容区域样式 */
-            .custom-content {
-                margin-top: 24px;
-                padding: 20px;
-                background: rgba(0, 0, 0, 0.02);
+            /* Material Design 卡片样式 */
+            .md-card {
+                background: var(--md-surface);
                 border-radius: 8px;
-                border: 1px solid rgba(0, 0, 0, 0.1);
+                padding: 24px;
+                margin-bottom: 16px;
+                box-shadow: var(--elevation-1);
+                transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            .md-card:hover {
+                box-shadow: var(--elevation-3);
+            }
+
+            .md-card-title {
+                font-size: 20px;
+                font-weight: 500;
+                color: var(--text-primary);
+                margin-bottom: 16px;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .md-card-title .material-icons {
+                color: var(--md-primary);
+                font-size: 24px;
+            }
+
+            .md-card-content {
+                color: var(--text-secondary);
+                font-size: 14px;
+                line-height: 1.8;
+            }
+
+            .empty-state {
+                text-align: center;
+                padding: 48px 24px;
+                color: var(--text-secondary);
+            }
+
+            .empty-state .material-icons {
+                font-size: 64px;
+                color: var(--text-disabled);
+                margin-bottom: 16px;
+            }
+
+            .empty-state-text {
+                font-size: 14px;
+                font-style: italic;
             }
         }
 
@@ -838,7 +902,6 @@
 
             <!-- 结果选择区 -->
             <div class="section">
-                <h2 class="section-title">方案选择</h2>
                 <div class="options-grid" id="optionsGrid">
                     <!-- 动态生成选项卡片 -->
                 </div>
@@ -850,7 +913,6 @@
         <!-- 错发包裹处理标签页 -->
         <div id="shipping-control" class="tab-content">
             <div class="section">
-                <h2 class="section-title">错发包裹处理</h2>
                 <div id="shippingProcessContainer" class="text-blocks-container">
                     <!-- 错发流程图片显示 -->
                     <div class="image-section">
@@ -889,26 +951,68 @@
         <!-- 恶意买家处理标签页 -->
         <div id="service-methods" class="tab-content">
             <div class="section">
-                <h2 class="section-title">恶意买家处理流程</h2>
-                <div
-                    style="background: var(--surface); padding: 32px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                    <ol style="line-height: 2; font-size: 16px; color: var(--text-primary); padding-left: 24px;">
-                        <li style="margin-bottom: 16px;"><strong>查看聊天记录</strong> - 仔细审查与客户的所有沟通记录</li>
-                        <li style="margin-bottom: 16px;"><strong>检查是否为老客</strong> - 确认客户的历史订单和交易记录</li>
-                        <li style="margin-bottom: 16px;"><strong>检查原因并记录和反馈</strong> - 详细记录问题原因并及时反馈</li>
-                        <li style="margin-bottom: 16px;"><strong>反馈确定拉黑后需将客户头像及姓名，截图反馈给淼</strong> - 保存证据并报告</li>
-                        <li style="margin-bottom: 16px;"><strong>订单页面拉黑，停止客户拉黑</strong> - 在系统中执行拉黑操作</li>
-                    </ol>
+                <div class="md-card">
+                    <div class="md-card-title">
+                        <span class="material-icons">warning</span>
+                        恶意买家处理流程
+                    </div>
+                    <div class="md-card-content">
+                        <ol style="padding-left: 20px; line-height: 2;">
+                            <li><strong>查看聊天记录</strong> - 仔细审查与客户的所有沟通记录</li>
+                            <li><strong>检查是否为老客</strong> - 确认客户的历史订单和交易记录</li>
+                            <li><strong>检查原因并记录和反馈</strong> - 详细记录问题原因并及时反馈</li>
+                            <li><strong>反馈确定拉黑后需将客户头像及姓名,截图反馈给淼</strong> - 保存证据并报告</li>
+                            <li><strong>订单页面拉黑，停止客户拉黑</strong> - 在系统中执行拉黑操作</li>
+                        </ol>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- 更多工具标签页 -->
         <div id="coming-soon" class="tab-content">
-            <div class="placeholder-content">
-                <div class="placeholder-icon material-icons">construction</div>
-                <div class="placeholder-title">更多工具开发中</div>
-                <div class="placeholder-desc">我们正在开发更多实用的售后处理工具，敬请期待</div>
+            <div class="section">
+                <!-- 注意事项 -->
+                <div class="md-card">
+                    <div class="md-card-title">
+                        <span class="material-icons">info</span>
+                        注意事项
+                    </div>
+                    <div class="md-card-content">
+                        <div class="empty-state">
+                            <span class="material-icons">edit_note</span>
+                            <p class="empty-state-text">内容待添加...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 基础信息 -->
+                <div class="md-card">
+                    <div class="md-card-title">
+                        <span class="material-icons">description</span>
+                        基础信息
+                    </div>
+                    <div class="md-card-content">
+                        <div class="empty-state">
+                            <span class="material-icons">edit_note</span>
+                            <p class="empty-state-text">内容待添加...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 相关链接 -->
+                <div class="md-card">
+                    <div class="md-card-title">
+                        <span class="material-icons">link</span>
+                        相关链接
+                    </div>
+                    <div class="md-card-content">
+                        <div class="empty-state">
+                            <span class="material-icons">edit_note</span>
+                            <p class="empty-state-text">内容待添加...</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
