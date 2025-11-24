@@ -609,138 +609,258 @@
         .price-input::-webkit-inner-spin-button {
             -webkit-appearance: none;
             margin: 0;
+        }
 
-            /* 移动端响应式优化 */
-            @media (max-width: 768px) {
-                body {
-                    padding: 0;
-                    /* 移动端全屏体验 */
-                    background: var(--md-surface);
-                    /* 背景色与容器一致 */
-                }
-
-                .container {
-                    border-radius: 0;
-                    box-shadow: none;
-                    min-height: 100vh;
-                }
-
-                .section {
-                    padding: 20px 16px;
-                    /* 减小内边距 */
-                }
-
-                /* 移除已删除的header样式 */
-
-                .tab-button {
-                    min-width: auto;
-                    /* 允许更窄 */
-                    flex: 1;
-                    /* 均分宽度 */
-                    padding: 16px 12px;
-                    font-size: 14px;
-                }
-
-                .price-input-section {
-                    flex-direction: column;
-                    gap: 20px;
-                    align-items: stretch;
-                    /* 宽度拉伸 */
-                }
-
-                .input-group {
-                    min-width: unset;
-                    width: 100%;
-                }
-
-                .price-input {
-                    padding: 16px;
-                    /* 更大的点击区域 */
-                    font-size: 18px;
-                    text-align: center;
-                    background: #f5f5f5;
-                    /* 浅灰背景突出输入框 */
-                    border: none;
-                }
-
-                .compensation-display {
-                    padding: 16px;
-                    min-width: unset;
-                    width: 100%;
-                    background: #e3f2fd;
-                    /* 强调背景 */
-                    border: none;
-                }
-
-                .compensation-amount {
-                    font-size: 24px;
-                }
-
-                .options-grid {
-                    display: grid;
-                    grid-template-columns: 1fr;
-                    /* 移动端单列显示更清晰 */
-                    gap: 16px;
-                    margin-top: 24px;
-                }
-
-                .option-card {
-                    padding: 20px;
-                    min-height: auto;
-                    flex-direction: row;
-                    /* 横向布局 */
-                    justify-content: space-between;
-                    align-items: center;
-                    text-align: left;
-                }
-
-                .option-content {
-                    align-items: flex-start;
-                }
-
-                .option-rank {
-                    position: static;
-                    /* 排名不再绝对定位 */
-                    margin-left: 16px;
-                    order: 2;
-                    /* 放右边 */
-                }
-
-                .option-name {
-                    font-size: 16px;
-                    margin-bottom: 4px;
-                }
-
-                .option-loss {
-                    font-size: 20px;
-                    font-weight: 700;
-                }
-
-                .selected-option-info {
-                    margin-top: 24px;
-                    padding: 24px 20px;
-                    border-radius: 16px;
-                }
-
-                /* 图片部分优化 */
-                .image-section {
-                    margin: 16px -16px;
-                    /* 抵消section padding，让图片通栏 */
-                    width: calc(100% + 32px);
-                }
-
-                .image-container {
-                    width: 100% !important;
-                    /* 强制满宽 */
-                    max-width: none !important;
-                }
-
-                .image-container img {
-                    border-radius: 0;
-                    /* 移动端直角 */
-                    box-shadow: none;
-                }
+        /* 移动端响应式优化 */
+        @media (max-width: 768px) {
+            body {
+                padding: 12px 40px;
             }
+
+            .container {
+                border-radius: 20px;
+                box-shadow: var(--md-elevation-3);
+            }
+
+            .section {
+                padding: 24px 20px;
+            }
+
+            .header {
+                padding: 32px 20px;
+                border-radius: 20px 20px 0 0;
+            }
+
+            .logo {
+                width: 56px;
+                height: 56px;
+            }
+
+            .app-title {
+                font-size: 24px;
+            }
+
+            .section-title {
+                font-size: 18px;
+                margin-bottom: 16px;
+            }
+
+            .tab-button {
+                min-width: 100px;
+                padding: 14px 16px;
+                font-size: 13px;
+            }
+
+            .price-input-section {
+                flex-direction: column;
+                gap: 16px;
+                align-items: center;
+            }
+
+            .input-group {
+                min-width: unset;
+            }
+
+            .price-input {
+                padding: 14px 16px;
+                font-size: 16px;
+            }
+
+            .compensation-display {
+                padding: 14px 16px;
+                min-width: unset;
+            }
+
+            .compensation-amount {
+                font-size: 20px;
+            }
+
+            .options-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+                margin-top: 16px;
+            }
+
+            .option-card {
+                padding: 24px 20px;
+                min-width: unset;
+                min-height: 140px;
+                flex: unset;
+            }
+
+            .option-name {
+                font-size: 15px;
+                margin-bottom: 10px;
+            }
+
+            .option-loss {
+                font-size: 18px;
+                font-weight: 700;
+            }
+
+            .selected-option-info {
+                margin-top: 16px;
+                padding: 28px 20px;
+                border-radius: 20px;
+            }
+
+            .selected-option-title {
+                font-size: 16px;
+            }
+
+            .selected-option-result {
+                font-size: 36px;
+            }
+
+            .placeholder-content {
+                padding: 40px 20px;
+            }
+
+            .placeholder-icon {
+                font-size: 48px;
+            }
+
+            .placeholder-title {
+                font-size: 18px;
+            }
+
+            .text-block {
+                padding: 20px 16px;
+            }
+
+            .text-block-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .text-block-title {
+                font-size: 16px;
+            }
+
+            .copy-button {
+                align-self: flex-end;
+                padding: 10px 16px;
+            }
+
+            .text-block-content {
+                font-size: 14px;
+                padding: 14px;
+            }
+
+            /* 图片显示样式 - 缩放版 */
+            .image-section {
+                margin: 20px 0;
+                width: 100%;
+                max-width: 100%;
+                text-align: center;
+                display: block;
+            }
+
+            .image-container {
+                display: inline-block;
+                width: 80%;
+                /* 缩放至80%宽度 */
+                max-width: 1000px;
+                /* 限制最大宽度 */
+                line-height: 0;
+            }
+
+            .image-container img {
+                display: block;
+                width: 100%;
+                height: auto;
+                border-radius: 8px;
+                box-shadow: var(--elevation-2);
+            }
+
+            /* Material Design 卡片样式 */
+            .md-card {
+                background: var(--md-surface);
+                border-radius: 8px;
+                padding: 24px;
+                margin-bottom: 16px;
+                box-shadow: var(--elevation-1);
+                transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            .md-card:hover {
+                box-shadow: var(--elevation-3);
+            }
+
+            .md-card-title {
+                font-size: 20px;
+                font-weight: 500;
+                color: var(--text-primary);
+                margin-bottom: 16px;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .md-card-title .material-icons {
+                color: var(--md-primary);
+                font-size: 24px;
+            }
+
+            .md-card-content {
+                color: var(--text-secondary);
+                font-size: 14px;
+                line-height: 1.8;
+            }
+
+            .empty-state {
+                text-align: center;
+                padding: 48px 24px;
+                color: var(--text-secondary);
+            }
+
+            .empty-state .material-icons {
+                font-size: 64px;
+                color: var(--text-disabled);
+                margin-bottom: 16px;
+            }
+
+            .empty-state-text {
+                font-size: 14px;
+                font-style: italic;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 8px 20px;
+            }
+
+            .tab-button {
+                min-width: 80px;
+                padding: 12px 8px;
+                font-size: 12px;
+            }
+
+            .options-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .option-card {
+                padding: 28px 24px;
+                min-height: 150px;
+            }
+
+            .option-name {
+                font-size: 16px;
+            }
+
+            .option-loss {
+                font-size: 20px;
+            }
+
+            .selected-option-result {
+                font-size: 32px;
+            }
+        }
     </style>
 </head>
 
