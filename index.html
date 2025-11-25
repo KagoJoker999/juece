@@ -48,7 +48,8 @@
                 MessageSquare: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>,
                 Calculator: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="8" x2="16" y1="6" y2="6"></line><line x1="8" x2="16" y1="10" y2="10"></line><line x1="8" x2="16" y1="14" y2="14"></line><line x1="8" x2="16" y1="18" y2="18"></line></svg>,
                 FileText: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><line x1="16" x2="8" y1="13" y2="13"></line><line x1="16" x2="8" y1="17" y2="17"></line></svg>,
-                AlertCircle: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="8" y2="12"></line><line x1="12" x2="12.01" y1="16" y2="16"></line></svg>
+                AlertCircle: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="8" y2="12"></line><line x1="12" x2="12.01" y1="16" y2="16"></line></svg>,
+                UserX: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="19" x2="19" y1="8" y2="12"></line><line x1="19" x2="15" y1="12" y2="16"></line></svg>
             };
             return iconMap[name] || <span className={className}>*</span>;
         };
@@ -65,6 +66,7 @@
         const Calculator = (props) => <Icon name="Calculator" {...props} />;
         const FileText = (props) => <Icon name="FileText" {...props} />;
         const AlertCircle = (props) => <Icon name="AlertCircle" {...props} />;
+        const UserX = (props) => <Icon name="UserX" {...props} />;
         
         // 由于原代码中还有 ChevronDown/Up，但它们在 JSX 中未使用，这里省略定义
 
@@ -233,10 +235,6 @@
                                 {item.val > 0 ? '+' : ''}{item.val.toFixed(2)}
                               </span>
                             </div>
-                            
-                            <div className="text-xs text-slate-400 font-mono bg-white/50 p-1 rounded inline-block">
-                              公式: {item.formula}
-                            </div>
                           </div>
                         );
                       })}
@@ -253,17 +251,79 @@
             );
           };
 
+          // --- Customer Blacklist Module ---
+          const CustomerBlacklistModule = () => (
+            <div className="max-w-3xl mx-auto space-y-6">
+              <Card className="p-6">
+                <h2 className="text-xl font-bold text-slate-800 mb-4 flex items-center">
+                  <UserX size={20} className="mr-2 text-red-600" /> 风险控制（客户拉黑）
+                </h2>
+                
+                <div className="space-y-4">
+                  <div className="border rounded-lg p-4 bg-red-50">
+                    <h3 className="font-bold text-red-700 mb-3">第1步：问题排查</h3>
+                    <div className="bg-white p-3 rounded border border-red-200">
+                      <p className="text-sm text-slate-700 mb-2">排查客户聊天记录，确认问题</p>
+                      <div className="mt-2 text-xs text-slate-500 bg-slate-100 p-2 rounded">
+                        记录详细问题和客户行为
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="border rounded-lg p-4 bg-amber-50">
+                    <h3 className="font-bold text-amber-700 mb-3">第2步：信息反馈</h3>
+                    <div className="bg-white p-3 rounded border border-amber-200">
+                      <p className="text-sm text-slate-700 mb-2">将问题及客户是否为老客和是否仍有在途订单反馈给淼</p>
+                      <div className="mt-2 text-xs text-amber-600 bg-amber-100 p-2 rounded">
+                        提供完整信息供决策
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="border rounded-lg p-4 bg-slate-50">
+                    <h3 className="font-bold text-slate-700 mb-3">第3步：获取拉黑指令</h3>
+                    <div className="bg-white p-3 rounded border border-slate-200">
+                      <p className="text-sm text-slate-700 mb-2">淼提供主播拉黑客户的名称和头像</p>
+                      <div className="mt-2 text-xs text-slate-500 bg-slate-100 p-2 rounded">
+                        在飞鸽对话框内复制，方便快捷
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="border rounded-lg p-4 bg-emerald-50">
+                    <h3 className="font-bold text-emerald-700 mb-3">第4步：执行拉黑</h3>
+                    <div className="bg-white p-3 rounded border border-emerald-200">
+                      <p className="text-sm text-slate-700 mb-2">在最后订单结束后拉黑</p>
+                      <div className="mt-2 text-xs text-emerald-600 bg-emerald-100 p-2 rounded">
+                        重要：订单结束后再拉黑，避免影响正常订单流程
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-6 pt-4 border-t">
+                  <div className="flex items-center p-4 bg-slate-100 rounded-lg">
+                    <AlertCircle size={20} className="mr-3 text-slate-600 flex-shrink-0" />
+                    <p className="text-sm text-slate-700">
+                      风险控制要点：确认客户无在途订单后再进行拉黑操作，确保订单流程不受影响。
+                    </p>
+                  </div>
+                </div>
+              </Card>
+            </div>
+          );
+
           // --- Placeholder Module for Precautions ---
           const NotesModule = () => (
             <div className="max-w-3xl mx-auto space-y-6">
               <Card className="p-6">
                 <h2 className="text-xl font-bold text-slate-800 mb-4 flex items-center">
-                  <AlertCircle size={20} className="mr-2 text-orange-600" /> 注意事项
+                  <AlertCircle size={20} className="mr-2 text-orange-600" /> 注意事项 / 风险处理流程
                 </h2>
                 <div className="flex flex-col items-center justify-center p-12 border-2 border-dashed border-slate-200 rounded-lg text-slate-400 bg-slate-50">
                   <FileText size={48} className="mb-4 opacity-50" />
-                  <p className="text-lg font-medium">内容待定</p>
-                  <p className="text-sm mt-2">请等待管理员补充相关注意事项...</p>
+                  <p className="text-lg font-medium text-slate-700">风险处理详情页 (待补充)</p>
+                  <p className="text-sm mt-2">请等待管理员补充相关风险处理流程和注意事项的详细内容...</p>
                 </div>
               </Card>
             </div>
@@ -282,7 +342,6 @@
                   <div className="flex flex-col space-y-2">
                     <a href="https://www.erp321.com" target="_blank" rel="noreferrer" className="text-blue-600 hover:underline hover:bg-blue-50 p-1 rounded transition">ERP后台系统 (erp321) &rarr;</a>
                     <a href="https://fxg.jinritemai.com" target="_blank" rel="noreferrer" className="text-blue-600 hover:underline hover:bg-blue-50 p-1 rounded transition">抖店商家后台 &rarr;</a>
-                    <a href="#" className="text-blue-600 hover:underline hover:bg-blue-50 p-1 rounded transition">决策辅助网站 &rarr;</a>
                   </div>
                 </Card>
 
@@ -291,41 +350,66 @@
                     <Clock size={16} className="mr-2" /> 今日必做 (日巡)
                   </h3>
                   <div className="space-y-2">
-                    <label className="flex items-center space-x-2 cursor-pointer p-1 hover:bg-slate-50 rounded">
-                      <input type="checkbox" checked={checklist.scanMorning} onChange={() => toggleCheck('scanMorning')} className="rounded text-blue-600" />
-                      <span className={checklist.scanMorning ? "line-through text-slate-400" : ""}>上午 ERP扫码退货</span>
-                    </label>
-                    <label className="flex items-center space-x-2 cursor-pointer p-1 hover:bg-slate-50 rounded">
-                      <input type="checkbox" checked={checklist.check10am} onChange={() => toggleCheck('check10am')} className="rounded text-blue-600" />
-                      <span className={checklist.check10am ? "line-through text-slate-400" : ""}>10:00 抖店售后检查</span>
-                    </label>
-                    <label className="flex items-center space-x-2 cursor-pointer p-1 hover:bg-slate-50 rounded">
-                      <input type="checkbox" checked={checklist.scanAfternoon} onChange={() => toggleCheck('scanAfternoon')} className="rounded text-blue-600" />
-                      <span className={checklist.scanAfternoon ? "line-through text-slate-400" : ""}>下午 ERP扫码退货</span>
-                    </label>
-                    <label className="flex items-center space-x-2 cursor-pointer p-1 hover:bg-slate-50 rounded">
-                      <input type="checkbox" checked={checklist.check4pm} onChange={() => toggleCheck('check4pm')} className="rounded text-blue-600" />
-                      <span className={checklist.check4pm ? "line-through text-slate-400" : ""}>16:00 抖店售后检查</span>
-                    </label>
+                    <div className="w-full text-left p-3 rounded-lg bg-blue-50 hover:bg-blue-100 transition flex justify-between items-center group shadow-sm border border-blue-100">
+                      <span className="font-semibold text-blue-800">扫码退货</span>
+                    </div>
+                    <div className="w-full text-left p-3 rounded-lg bg-emerald-50 hover:bg-emerald-100 transition flex justify-between items-center group shadow-sm border border-emerald-100">
+                      <span className="font-semibold text-emerald-800">售后工作台检查</span>
+                    </div>
+                    <div className="w-full text-left p-3 rounded-lg bg-amber-50 hover:bg-amber-100 transition flex justify-between items-center group shadow-sm border border-amber-100">
+                      <span className="font-semibold text-amber-800">客户群处理</span>
+                    </div>
+                    <div className="w-full text-left p-3 rounded-lg bg-purple-50 hover:bg-purple-100 transition flex justify-between items-center group shadow-sm border border-purple-100">
+                      <span className="font-semibold text-purple-800">超卖订单处理</span>
+                    </div>
+                    <div className="w-full text-left p-3 rounded-lg bg-red-50 hover:bg-red-100 transition flex justify-between items-center group shadow-sm border border-red-100">
+                      <span className="font-semibold text-red-800">当日工作检查</span>
+                    </div>
                   </div>
                 </Card>
 
+                {/* 风险预警 (更新后的样式和跳转逻辑) */}
                 <Card className="p-4 border-l-4 border-l-amber-500">
                   <h3 className="text-sm font-semibold text-slate-500 mb-2 flex items-center">
-                    <AlertTriangle size={16} className="mr-2" /> 风险预警
+                    <AlertTriangle size={16} className="mr-2 text-amber-500" /> 风险预警 (点击查看流程)
                   </h3>
-                  <div className="text-sm space-y-3">
-                    <div className="flex justify-between items-center bg-red-50 p-2 rounded text-red-700">
-                      <span>恶意买家</span>
-                      <span className="text-xs">请按流程核实拉黑</span>
-                    </div>
-                    <div className="flex justify-between items-center bg-amber-50 p-2 rounded text-amber-800">
-                      <span>超期售后 (1个月+)</span>
-                      <span className="text-xs">需签收/超期证明</span>
-                    </div>
-                    <div className="text-xs text-slate-500 mt-2">
-                      * 遇到物品不符，务必录制视频留证
-                    </div>
+                  <div className="space-y-2">
+                    
+                    {/* Item 1: Malicious Buyers -> Links to Notes/Manual */}
+                    <button 
+                      onClick={() => setActiveTab('blacklist')}
+                      className="w-full text-left p-3 rounded-lg bg-red-50 hover:bg-red-100 transition flex justify-between items-center group shadow-sm border border-red-100"
+                    >
+                      <div className="flex flex-col">
+                        <span className="font-semibold text-red-800">恶意买家</span>
+                        <span className="text-xs text-red-600">核实拉黑 / 升级处理</span>
+                      </div>
+                      <ExternalLink size={16} className="text-red-500 group-hover:translate-x-0.5 transition" />
+                    </button>
+                    
+                    {/* Item 2: Overdue After-sales -> Links to Notes/Manual */}
+                    <button 
+                      onClick={() => setActiveTab('manual')}
+                      className="w-full text-left p-3 rounded-lg bg-amber-50 hover:bg-amber-100 transition flex justify-between items-center group shadow-sm border border-amber-100"
+                    >
+                      <div className="flex flex-col">
+                        <span className="font-semibold text-amber-800">超期售后 (1个月+)</span>
+                        <span className="text-xs text-amber-600">需提供签收时间证明截图</span>
+                      </div>
+                      <ExternalLink size={16} className="text-amber-500 group-hover:translate-x-0.5 transition" />
+                    </button>
+
+                    {/* Item 3: Inconsistent Items (物品不符) -> Links to Returns/Scanning Flow */}
+                    <button 
+                      onClick={() => setActiveTab('returns')}
+                      className="w-full text-left p-3 rounded-lg bg-emerald-50 hover:bg-emerald-100 transition flex justify-between items-center group shadow-sm border border-emerald-100"
+                    >
+                      <div className="flex flex-col">
+                        <span className="font-semibold text-emerald-800">物品不符/错发</span>
+                        <span className="text-xs text-emerald-600 font-bold">🚨 务必录制视频留证</span>
+                      </div>
+                      <ExternalLink size={16} className="text-emerald-500 group-hover:translate-x-0.5 transition" />
+                    </button>
                   </div>
                 </Card>
               </div>
@@ -465,7 +549,7 @@
                 <Card className="p-6 border-t-4 border-t-orange-500">
                   <h3 className="text-lg font-bold text-orange-700 mb-4">线下/手工售后</h3>
                   <div className="text-sm text-slate-600 mb-4">
-                    客服群答应补发、错发处理等系统无法自动生成的单据。
+                    指通过客服群答应售后,或错发等系统无法满足的售后单,需要在ERP中手动创建。
                   </div>
                   <ol className="list-decimal list-inside space-y-3 text-sm text-slate-700">
                     <li className="p-2 bg-slate-50 rounded">ERP 点击<span className="font-bold">「手工创建售后单」</span></li>
@@ -497,6 +581,7 @@
                 case 'refunds': return <RefundsModule />;
                 case 'returns': return <ReturnsModule />;
                 case 'replace': return <ReplaceModule />;
+                case 'blacklist': return <CustomerBlacklistModule />;
                 case 'manual': return <NotesModule />;
                 default: return <Dashboard />;
               }
@@ -514,7 +599,7 @@
                     <h1 className="text-lg font-bold">客服售后工作台</h1>
                   </div>
                   <div className="text-xs text-slate-500 bg-slate-100 px-3 py-1 rounded-full">
-                    版本: v1.3 (新增最大补偿金额显示)
+                    版本: v1.4 (优化风险预警样式及跳转)
                   </div>
                 </div>
               </header>
@@ -558,6 +643,12 @@
                     className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'replace' ? 'bg-white text-purple-600 border-l-4 border-purple-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
                   >
                     <RefreshCw size={18} className="mr-3" /> 补发 / 换货
+                  </button>
+                  <button 
+                    onClick={() => setActiveTab('blacklist')}
+                    className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'blacklist' ? 'bg-white text-red-600 border-l-4 border-red-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
+                  >
+                    <UserX size={18} className="mr-3" /> 风险控制
                   </button>
                   
                   <div className="pt-4 pb-2 text-xs font-bold text-slate-400 uppercase tracking-wider px-4">其它</div>
