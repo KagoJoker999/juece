@@ -53,7 +53,7 @@
         AlertCircle: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="8" y2="12"></line><line x1="12" x2="12.01" y1="16" y2="16"></line></svg>,
         UserX: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="19" x2="19" y1="8" y2="12"></line><line x1="19" x2="15" y1="12" y2="16"></line></svg>,
         ChevronDown: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="6 9 12 15 18 9"></polyline></svg>,
-        ChevronUp: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="18 15 12 9 6 15"></polyline></svg>
+        ChevronRight: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="9 18 15 12 9 6"></polyline></svg>
       };
       return iconMap[name] || <span className={className}>*</span>;
     };
@@ -72,7 +72,7 @@
     const AlertCircle = (props) => <Icon name="AlertCircle" {...props} />;
     const UserX = (props) => <Icon name="UserX" {...props} />;
     const ChevronDown = (props) => <Icon name="ChevronDown" {...props} />;
-    const ChevronUp = (props) => <Icon name="ChevronUp" {...props} />;
+    const ChevronRight = (props) => <Icon name="ChevronRight" {...props} />;
 
     // 由于原代码中还有 ChevronDown/Up，但它们在 JSX 中未使用，这里省略定义
 
@@ -99,15 +99,14 @@
 
     function App() {
       const [activeTab, setActiveTab] = useState('dashboard');
+      const [isSopExpanded, setIsSopExpanded] = useState(true);
+      const [isDailyExpanded, setIsDailyExpanded] = useState(true);
       const [checklist, setChecklist] = useState({
         scanMorning: false,
         check10am: false,
         scanAfternoon: false,
         check4pm: false,
       });
-      // 折叠菜单状态管理
-      const [sopAfterSalesOpen, setSopAfterSalesOpen] = useState(true);
-      const [sopDailyOpen, setSopDailyOpen] = useState(false);
 
       const toggleCheck = (key) => {
         setChecklist(prev => ({ ...prev, [key]: !prev[key] }));
@@ -328,7 +327,7 @@
               <div className="border rounded-lg p-4 bg-slate-50">
                 <h3 className="font-bold text-slate-700 mb-3">第3步：获取拉黑指令</h3>
                 <div className="bg-white p-3 rounded border border-slate-200">
-                  <p className="text-sm text-slate-700 mb-2">淼提供主播拉黑客户的名称和头像</p>
+                  <p className="text-sm text-slate-700 mb-2">向淼提供拉黑客户的名称和头像</p>
                   <div className="mt-2 text-xs text-slate-500 bg-slate-100 p-2 rounded">
                     在飞鸽对话框内复制，方便快捷
                   </div>
@@ -358,17 +357,43 @@
         </div>
       );
 
-      // --- Placeholder Module for Precautions ---
+      // --- Operation Tips Module ---
       const NotesModule = () => (
         <div className="max-w-3xl mx-auto space-y-6">
           <Card className="p-6">
-            <h2 className="text-xl font-bold text-slate-800 mb-4 flex items-center">
-              <AlertCircle size={20} className="mr-2 text-orange-600" /> 注意事项 / 风险处理流程
+            <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center">
+              <AlertCircle size={20} className="mr-2 text-orange-600" /> 客服操作技巧
             </h2>
-            <div className="flex flex-col items-center justify-center p-12 border-2 border-dashed border-slate-200 rounded-lg text-slate-400 bg-slate-50">
-              <FileText size={48} className="mb-4 opacity-50" />
-              <p className="text-lg font-medium text-slate-700">风险处理详情页 (待补充)</p>
-              <p className="text-sm mt-2">请等待管理员补充相关风险处理流程和注意事项的详细内容...</p>
+
+            <div className="space-y-6">
+              {/* Tip 1 */}
+              <div className="border border-slate-200 rounded-lg p-5 bg-white hover:shadow-sm transition">
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center font-bold">1</div>
+                  <div className="flex-1">
+                    <h3 className="font-bold text-slate-800 mb-2">善用客户对话框备注</h3>
+                    <p className="text-sm text-slate-600 mb-3">
+                      对于有特殊情况或需要长期关注的客户，务必在对话框侧边栏添加备注（记录客人长期行为），方便后续接待时快速了解情况。
+                    </p>
+                    <ImageToggler src="客户备注.png" alt="客户备注操作示例" buttonText="查看备注操作示例" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Tip 2 */}
+              <div className="border border-slate-200 rounded-lg p-5 bg-white hover:shadow-sm transition">
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold">2</div>
+                  <div className="flex-1">
+                    <h3 className="font-bold text-slate-800 mb-2">快速查找该客户所有订单</h3>
+                    <p className="text-sm text-slate-600 mb-3">
+                      在处理售后或咨询时，通过“查看该客户所有订单”功能，可以快速了解客户的历史购买记录，有助于判断客户价值和处理策略。
+                    </p>
+                    <ImageToggler src="查找客户订单.png" alt="查找客户订单操作示例" buttonText="查看查找订单操作示例" />
+                  </div>
+                </div>
+              </div>
+
             </div>
           </Card>
         </div>
@@ -384,9 +409,15 @@
               <h3 className="text-sm font-semibold text-slate-500 mb-2 flex items-center">
                 <ExternalLink size={16} className="mr-2" /> 常用工具
               </h3>
-              <div className="flex flex-col space-y-2">
-                <a href="https://www.erp321.com" target="_blank" rel="noreferrer" className="text-blue-600 hover:underline hover:bg-blue-50 p-1 rounded transition">ERP后台系统 &rarr;</a>
-                <a href="https://fxg.jinritemai.com" target="_blank" rel="noreferrer" className="text-blue-600 hover:underline hover:bg-blue-50 p-1 rounded transition">抖店商家后台 &rarr;</a>
+              <div className="space-y-2">
+                <a href="https://www.erp321.com" target="_blank" rel="noreferrer" className="w-full text-left p-3 rounded-lg bg-blue-50 hover:bg-blue-100 transition flex justify-between items-center group shadow-sm border border-blue-100">
+                  <span className="font-semibold text-blue-800">ERP后台系统</span>
+                  <ExternalLink size={16} className="text-blue-500 group-hover:translate-x-0.5 transition" />
+                </a>
+                <a href="https://fxg.jinritemai.com" target="_blank" rel="noreferrer" className="w-full text-left p-3 rounded-lg bg-purple-50 hover:bg-purple-100 transition flex justify-between items-center group shadow-sm border border-purple-100">
+                  <span className="font-semibold text-purple-800">抖店商家后台</span>
+                  <ExternalLink size={16} className="text-purple-500 group-hover:translate-x-0.5 transition" />
+                </a>
               </div>
             </Card>
 
@@ -432,7 +463,7 @@
 
                 {/* Item 2: Overdue After-sales -> Links to Notes/Manual */}
                 <button
-                  onClick={() => setActiveTab('manual')}
+                  onClick={() => setActiveTab('overdue')}
                   className="w-full text-left p-3 rounded-lg bg-amber-50 hover:bg-amber-100 transition flex justify-between items-center group shadow-sm border border-amber-100"
                 >
                   <div className="flex flex-col">
@@ -488,6 +519,26 @@
         </div>
       );
 
+      const ImageToggler = ({ src, alt, buttonText = "查看示例图片" }) => {
+        const [isOpen, setIsOpen] = useState(false);
+        return (
+          <div className="mt-2">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="flex items-center text-sm text-blue-600 hover:text-blue-800 font-medium transition focus:outline-none"
+            >
+              {isOpen ? <ChevronDown size={16} className="mr-1" /> : <ChevronRight size={16} className="mr-1" />}
+              {buttonText}
+            </button>
+            {isOpen && (
+              <div className="mt-2 transition-all duration-300 ease-in-out">
+                <img src={src} alt={alt} className="w-full max-w-2xl rounded border border-slate-200 shadow-sm" />
+              </div>
+            )}
+          </div>
+        );
+      };
+
       const RefundsModule = () => (
         <div className="max-w-5xl mx-auto space-y-6">
           <Card className="p-6">
@@ -510,9 +561,7 @@
                       <div className="flex-1">
                         <h4 className="font-bold text-slate-800 mb-2">如包裹在途，需要手动复制快递号，发至快递群内进行手动拦截</h4>
                         <p className="text-sm text-slate-600 mb-2">反馈拦截成功后，同意退款即可。</p>
-                        <div className="mt-2">
-                          <img src="同意退款示例图.png" alt="操作要点示例" className="w-full max-w-2xl rounded border border-amber-300" />
-                        </div>
+                        <ImageToggler src="同意退款示例图.png" alt="操作要点示例" />
                       </div>
                     </div>
                   </div>
@@ -524,9 +573,7 @@
                       <div className="flex-1">
                         <h4 className="font-bold text-slate-800 mb-2">如包裹显示待取件/派送中</h4>
                         <p className="text-sm text-slate-600 mb-2">则需要手动复制快递号，发至快递群内进行手动拦截，<span className="font-bold text-red-600">等待群内反馈或确认快递信息显示退货中时</span>，再去同意退款。（否则会有去件可能）</p>
-                        <div className="mt-2">
-                          <img src="待取件示例图.png" alt="待取件状态示例" className="w-full max-w-2xl rounded border border-slate-300" />
-                        </div>
+                        <ImageToggler src="待取件示例图.png" alt="待取件状态示例" />
                       </div>
                     </div>
                   </div>
@@ -539,9 +586,7 @@
                         <h4 className="font-bold text-slate-800 mb-3">如已经签收后仅退款，检查聊天记录无其他问题的情况下，拒绝仅退款，参考填写如下：</h4>
 
                         <div className="space-y-3">
-                          <div className="mt-3">
-                            <img src="拒绝仅退款填写示例图.png" alt="协商文案与操作步骤示例" className="w-full rounded border border-slate-300" />
-                          </div>
+                          <ImageToggler src="拒绝仅退款示例图.png" alt="协商文案与操作步骤示例" />
                         </div>
                       </div>
                     </div>
@@ -624,6 +669,260 @@
         </div>
       );
 
+      const OverdueModule = () => (
+        <div className="max-w-3xl mx-auto space-y-6">
+          <Card className="p-6">
+            <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center">
+              <Clock size={20} className="mr-2 text-amber-600" /> 超期售后处理流程
+            </h2>
+
+            <div className="space-y-6">
+              {/* 定义卡片 */}
+              <div className="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg">
+                <h3 className="font-bold text-amber-800 text-lg mb-2 flex items-center">
+                  <AlertCircle size={18} className="mr-2" /> 什么是超期售后？
+                </h3>
+                <p className="text-amber-900 font-medium">
+                  订单状态显示“已完成”且时间超过 <span className="text-red-600 font-bold text-lg mx-1">1个月</span> 的售后申请。
+                </p>
+              </div>
+
+              {/* 核心注意事项 */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="border border-slate-200 rounded-lg p-5 hover:shadow-md transition bg-white">
+                  <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center text-red-600 mb-3">
+                    <AlertTriangle size={20} />
+                  </div>
+                  <h4 className="font-bold text-slate-800 mb-2">规避评价风险</h4>
+                  <p className="text-sm text-slate-600 leading-relaxed">
+                    处理超期售后时，需特别注意客户情绪，<span className="font-bold text-slate-800">尽量避免产生差评或投诉风险</span>。如遇难缠客户，请<button onClick={() => setActiveTab('blacklist')} className="text-blue-600 hover:underline font-medium focus:outline-none">及时升级处理 &rarr;</button>。
+                  </p>
+                </div>
+
+                <div className="border border-slate-200 rounded-lg p-5 hover:shadow-md transition bg-white">
+                  <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 mb-3">
+                    <FileText size={20} />
+                  </div>
+                  <h4 className="font-bold text-slate-800 mb-2">提交签收证明</h4>
+                  <p className="text-sm text-slate-600 leading-relaxed">
+                    必须提供<span className="font-bold text-slate-800">物流签收证明截图</span>。请在快递官网或第三方平台查询并截图保存，作为凭证上传。
+                  </p>
+                </div>
+              </div>
+
+              {/* 操作提示 */}
+              <div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
+                <h4 className="font-bold text-slate-700 mb-3 flex items-center">
+                  <CheckSquare size={16} className="mr-2" /> 处理步骤简述
+                </h4>
+                <ol className="list-decimal list-inside space-y-2 text-sm text-slate-600">
+                  <li>核实订单完成时间是否超过1个月。</li>
+                  <li>查询并截图物流签收信息。</li>
+                  <li>与客户沟通，确认售后诉求，评估风险。</li>
+                  <li>按流程提交售后申请，并附上签收证明。</li>
+                </ol>
+              </div>
+            </div>
+          </Card>
+        </div>
+      );
+
+      const OversoldModule = () => (
+        <div className="max-w-4xl mx-auto space-y-6">
+          <Card className="p-6">
+            <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center">
+              <AlertTriangle size={20} className="mr-2 text-rose-600" /> 超卖处理流程
+            </h2>
+            <div className="border border-slate-200 rounded-lg p-2 bg-slate-50">
+              <img src="超卖处理.png" alt="超卖处理流程图" className="w-full rounded shadow-sm" />
+            </div>
+          </Card>
+        </div>
+      );
+
+      const WrongShipmentModule = () => {
+        // State for the decision tree
+        // currentStep: current step ID
+        // history: array of previous steps with selections for display
+        const [currentStep, setCurrentStep] = useState('start');
+        const [history, setHistory] = useState([]);
+
+        // Decision Tree Data (keeping the same structure)
+        const decisionTree = {
+          start: {
+            question: "请选择售后类型",
+            options: [
+              { label: "少发 / 漏发", next: "short_shipment" },
+              { label: "错发", next: "wrong_item" },
+            ]
+          },
+          short_shipment: {
+            question: "仓库是否有货？",
+            options: [
+              { label: "有货", next: "result_resend" },
+              { label: "无货", next: "result_refund_only" },
+            ]
+          },
+          wrong_item: {
+            question: "正确应发的商品是否有货？",
+            options: [
+              { label: "应发商品 - 有货", next: "correct_in_stock" },
+              { label: "应发商品 - 无货", next: "correct_out_stock" },
+            ]
+          },
+          correct_in_stock: {
+            question: "客户需求是什么？",
+            options: [
+              { label: "要错发商品 + 要正确商品", next: "result_keep_both" },
+              { label: "要错发商品 + 不要正确商品", next: "result_keep_wrong" },
+              { label: "不要错发商品 + 要正确商品", next: "result_return_resend" },
+              { label: "不要错发商品 + 不要正确商品", next: "result_return_refund" },
+            ]
+          },
+          correct_out_stock: {
+            question: "客户是否接受保留错发商品？",
+            options: [
+              { label: "需要错发商品", next: "result_keep_wrong_out" },
+              { label: "不需要错发商品", next: "result_return_refund_out" },
+            ]
+          },
+          result_resend: { type: 'result', title: "补发", content: "安排仓库补发漏发商品。", color: "blue" },
+          result_refund_only: { type: 'result', title: "仅退款", content: "与客户协商进行仅退款处理。", color: "red" },
+          result_keep_both: { type: 'result', title: "错误商品减5元成交 + 客户重新下单", content: "1. 错误商品按减5元价格成交。\n2. 引导客户对正确商品重新下单。", color: "blue" },
+          result_keep_wrong: { type: 'result', title: "错误商品减5元成交", content: "错误商品按减5元价格成交，无需退回。", color: "blue" },
+          result_return_resend: { type: 'result', title: "错误商品退回(运费我出) + 客户重新下单", content: "1. 引导客户退回错误商品，运费由我方承担。\n2. 引导客户对正确商品重新下单。", color: "purple" },
+          result_return_refund: { type: 'result', title: "帮客户申请退货退款 (运费我出)", content: "引导客户申请退货退款，运费由我方承担。", color: "orange" },
+          result_keep_wrong_out: { type: 'result', title: "错误商品减5元成交", content: "错误商品按减5元价格成交。", color: "blue" },
+          result_return_refund_out: { type: 'result', title: "帮客户申请退货退款 (运费我出)", content: "引导客户申请退货退款，运费由我方承担。", color: "orange" },
+        };
+
+        const currentStepData = decisionTree[currentStep];
+        const isResult = currentStepData && currentStepData.type === 'result';
+
+        const handleOptionSelect = (option) => {
+          // Store current state in closure to avoid stale state issues
+          const currentState = {
+            step: currentStep,
+            stepData: currentStepData,
+            selectedOption: option.label,
+            nextStep: option.next
+          };
+
+          // First update history
+          setHistory(prev => [
+            ...prev, 
+            { 
+              stepId: currentState.step, 
+              step: currentState.stepData, 
+              selectedOption: currentState.selectedOption
+            }
+          ]);
+
+          // Then update current step using the captured next step
+          setCurrentStep(currentState.nextStep);
+        };
+
+        const reset = () => {
+          setCurrentStep('start');
+          setHistory([]);
+        };
+
+        return (
+          <div className="max-w-3xl mx-auto space-y-6">
+            <Card className="p-6">
+              <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center justify-between">
+                <div className="flex items-center">
+                  <FileText size={20} className="mr-2 text-indigo-600" /> 错发处理决策树
+                </div>
+                {history.length > 0 && (
+                  <button onClick={reset} className="text-sm text-slate-500 hover:text-indigo-600 flex items-center transition">
+                    <RefreshCw size={14} className="mr-1" /> 重置
+                  </button>
+                )}
+              </h2>
+
+              <div className="space-y-4">
+                {/* Display selection history */}
+                {history.map((stepInfo, index) => (
+                  <div key={index} className="border-l-4 border-indigo-200 pl-4 py-2">
+                    <div className="text-sm text-slate-500 mb-1">步骤 {index + 1}</div>
+                    <div className="bg-slate-50 rounded-lg p-4">
+                      <div className="font-medium text-slate-800 mb-2">{stepInfo.step.question}</div>
+                      <div className="text-indigo-600 font-medium">
+                        <ChevronRight size={14} className="inline mr-1" />
+                        选择：{stepInfo.selectedOption}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+
+                {/* Display current question or result */}
+                {currentStepData && (
+                  <div className="border-l-4 border-indigo-400 pl-4 py-2">
+                    <div className="text-sm text-indigo-600 mb-1">
+                      {history.length === 0 ? '步骤 1' : `步骤 ${history.length + 1}`}
+                    </div>
+                    <div className="bg-indigo-50 rounded-lg p-6">
+                      {!isResult ? (
+                        <>
+                          <h3 className="text-lg font-bold text-indigo-800 mb-4">
+                            {currentStepData.question}
+                          </h3>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {currentStepData.options.map((opt, idx) => (
+                              <button
+                                key={idx}
+                                onClick={() => handleOptionSelect(opt)}
+                                className="p-3 bg-white border-2 border-indigo-100 hover:border-indigo-400 hover:bg-indigo-50 rounded-lg transition-all duration-200 text-left group shadow-sm"
+                              >
+                                <span className="font-medium text-slate-700 group-hover:text-indigo-700 block">
+                                  {opt.label}
+                                </span>
+                              </button>
+                            ))}
+                          </div>
+                        </>
+                      ) : (
+                        <div className="text-center space-y-4">
+                          <div className={`w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4 ${currentStepData.color === 'red' ? 'bg-red-100 text-red-600' :
+                            currentStepData.color === 'blue' ? 'bg-blue-100 text-blue-600' :
+                              currentStepData.color === 'purple' ? 'bg-purple-100 text-purple-600' :
+                                'bg-orange-100 text-orange-600'
+                            }`}>
+                            <CheckSquare size={32} />
+                          </div>
+
+                          <h3 className={`text-2xl font-bold ${currentStepData.color === 'red' ? 'text-red-700' :
+                            currentStepData.color === 'blue' ? 'text-blue-700' :
+                              currentStepData.color === 'purple' ? 'text-purple-700' :
+                                'text-orange-700'
+                            }`}>
+                            {currentStepData.title}
+                          </h3>
+
+                          <div className="text-slate-600 text-lg whitespace-pre-line leading-relaxed bg-white p-4 rounded-lg border border-slate-200 inline-block text-left min-w-[300px]">
+                            {currentStepData.content}
+                          </div>
+
+                          <div className="pt-6">
+                            <button
+                              onClick={reset}
+                              className="px-6 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition shadow-lg"
+                            >
+                              重新开始
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </Card>
+          </div>
+        );
+      };
+
       const ContentRenderer = () => {
         switch (activeTab) {
           case 'dashboard': return <Dashboard />;
@@ -633,6 +932,9 @@
           case 'replace': return <ReplaceModule />;
           case 'blacklist': return <CustomerBlacklistModule />;
           case 'manual': return <NotesModule />;
+          case 'overdue': return <OverdueModule />;
+          case 'oversold': return <OversoldModule />;
+          case 'wrongShipment': return <WrongShipmentModule />;
           default: return <Dashboard />;
         }
       }
@@ -649,7 +951,7 @@
                 <h1 className="text-lg font-bold">客服售后工作台</h1>
               </div>
               <div className="text-xs text-slate-500 bg-slate-100 px-3 py-1 rounded-full">
-                版本: v1.4 (优化风险预警样式及跳转)
+                版本: v1.5 (新增超期/超卖/错发SOP及操作技巧)
               </div>
             </div>
           </header>
@@ -675,72 +977,81 @@
                 <Calculator size={18} className="mr-3" /> 决策计算器
               </button>
 
-              <div className="pt-4 pb-2 text-xs font-bold text-slate-400 uppercase tracking-wider px-4">SOP 流程指引</div>
-
-              {/* 售后分类 - 可折叠 */}
-              <div>
-                <button
-                  onClick={() => setSopAfterSalesOpen(!sopAfterSalesOpen)}
-                  className="w-full text-left px-4 py-2 rounded-lg font-medium flex items-center justify-between transition text-slate-700 hover:bg-slate-50"
-                >
-                  <span className="text-sm">📋 售后分类</span>
-                  {sopAfterSalesOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                </button>
-                {sopAfterSalesOpen && (
-                  <div className="ml-2 mt-1 space-y-1">
-                    <button
-                      onClick={() => setActiveTab('refunds')}
-                      className={`w-full text-left px-4 py-2.5 rounded-lg font-medium flex items-center transition text-sm ${activeTab === 'refunds' ? 'bg-white text-blue-600 border-l-4 border-blue-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
-                    >
-                      <Search size={16} className="mr-3" /> 仅退款 / 拦截
-                    </button>
-                    <button
-                      onClick={() => setActiveTab('returns')}
-                      className={`w-full text-left px-4 py-2.5 rounded-lg font-medium flex items-center transition text-sm ${activeTab === 'returns' ? 'bg-white text-emerald-600 border-l-4 border-emerald-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
-                    >
-                      <Package size={16} className="mr-3" /> 退货扫码
-                    </button>
-                    <button
-                      onClick={() => setActiveTab('replace')}
-                      className={`w-full text-left px-4 py-2.5 rounded-lg font-medium flex items-center transition text-sm ${activeTab === 'replace' ? 'bg-white text-purple-600 border-l-4 border-purple-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
-                    >
-                      <RefreshCw size={16} className="mr-3" /> 补发 / 换货
-                    </button>
-                    <button
-                      onClick={() => setActiveTab('blacklist')}
-                      className={`w-full text-left px-4 py-2.5 rounded-lg font-medium flex items-center transition text-sm ${activeTab === 'blacklist' ? 'bg-white text-red-600 border-l-4 border-red-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
-                    >
-                      <UserX size={16} className="mr-3" /> 风险控制
-                    </button>
-                  </div>
-                )}
-              </div>
-
-              {/* 日常分类 - 可折叠 */}
-              <div className="mt-2">
-                <button
-                  onClick={() => setSopDailyOpen(!sopDailyOpen)}
-                  className="w-full text-left px-4 py-2 rounded-lg font-medium flex items-center justify-between transition text-slate-700 hover:bg-slate-50"
-                >
-                  <span className="text-sm">📅 日常分类</span>
-                  {sopDailyOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                </button>
-                {sopDailyOpen && (
-                  <div className="ml-2 mt-1 space-y-1">
-                    <div className="px-4 py-6 text-center text-sm text-slate-400">
-                      暂无日常分类内容
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <div className="pt-4 pb-2 text-xs font-bold text-slate-400 uppercase tracking-wider px-4">其它</div>
-              <button
-                onClick={() => setActiveTab('manual')}
-                className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'manual' ? 'bg-white text-orange-600 border-l-4 border-orange-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
+              {/* SOP 流程指引 - 可折叠 */}
+              <div
+                className="flex items-center justify-between px-4 pt-4 pb-2 cursor-pointer hover:bg-slate-50 rounded transition select-none"
+                onClick={() => setIsSopExpanded(!isSopExpanded)}
               >
-                <AlertCircle size={18} className="mr-3" /> 注意事项
-              </button>
+                <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">SOP 流程指引</div>
+                {isSopExpanded ? <ChevronDown size={14} className="text-slate-400" /> : <ChevronRight size={14} className="text-slate-400" />}
+              </div>
+
+              {isSopExpanded && (
+                <div className="space-y-1">
+                  <button
+                    onClick={() => setActiveTab('refunds')}
+                    className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'refunds' ? 'bg-white text-blue-600 border-l-4 border-blue-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
+                  >
+                    <Search size={18} className="mr-3" /> 仅退款 / 拦截
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('returns')}
+                    className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'returns' ? 'bg-white text-emerald-600 border-l-4 border-emerald-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
+                  >
+                    <Package size={18} className="mr-3" /> 退货扫码
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('replace')}
+                    className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'replace' ? 'bg-white text-purple-600 border-l-4 border-purple-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
+                  >
+                    <RefreshCw size={18} className="mr-3" /> 补发 / 换货
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('overdue')}
+                    className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'overdue' ? 'bg-white text-amber-600 border-l-4 border-amber-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
+                  >
+                    <Clock size={18} className="mr-3" /> 超期售后
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('oversold')}
+                    className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'oversold' ? 'bg-white text-rose-600 border-l-4 border-rose-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
+                  >
+                    <AlertTriangle size={18} className="mr-3" /> 超卖处理
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('wrongShipment')}
+                    className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'wrongShipment' ? 'bg-white text-indigo-600 border-l-4 border-indigo-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
+                  >
+                    <FileText size={18} className="mr-3" /> 错发处理
+                  </button>
+                </div>
+              )}
+
+              {/* 日常流程指引 (原其它) - 可折叠 */}
+              <div
+                className="flex items-center justify-between px-4 pt-4 pb-2 cursor-pointer hover:bg-slate-50 rounded transition select-none"
+                onClick={() => setIsDailyExpanded(!isDailyExpanded)}
+              >
+                <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">日常流程指引</div>
+                {isDailyExpanded ? <ChevronDown size={14} className="text-slate-400" /> : <ChevronRight size={14} className="text-slate-400" />}
+              </div>
+
+              {isDailyExpanded && (
+                <div className="space-y-1">
+                  <button
+                    onClick={() => setActiveTab('blacklist')}
+                    className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'blacklist' ? 'bg-white text-red-600 border-l-4 border-red-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
+                  >
+                    <UserX size={18} className="mr-3" /> 风险控制
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('manual')}
+                    className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'manual' ? 'bg-white text-orange-600 border-l-4 border-orange-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
+                  >
+                    <AlertCircle size={18} className="mr-3" /> 操作技巧
+                  </button>
+                </div>
+              )}
             </nav>
 
             {/* Content Area */}
