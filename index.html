@@ -1,676 +1,720 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>客服售后智能工作台 (静态)</title>
-    <!-- 引入 Tailwind CSS CDN 以提供样式支持 -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* 使用 Inter 字体以获得现代感 */
-        body {
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-    </style>
-    <!-- 引入 React 和 ReactDOM CDN -->
-    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <!-- 引入 Babel CDN，用于在浏览器中编译 JSX -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    
-    <!-- 引入 Lucide Icons for React (这是简化处理，假设环境能识别) -->
-    <!-- 由于无法直接引入lucide-react的完整CDN，我们将使用一个简化的Icon组件来包裹SVG，以确保页面结构不报错 -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>客服售后智能工作台 (静态)</title>
+  <!-- 引入 Tailwind CSS CDN 以提供样式支持 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* 使用 Inter 字体以获得现代感 */
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+  <!-- 引入 React 和 ReactDOM CDN -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <!-- 引入 Babel CDN，用于在浏览器中编译 JSX -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- 引入 Lucide Icons for React (这是简化处理，假设环境能识别) -->
+  <!-- 由于无法直接引入lucide-react的完整CDN，我们将使用一个简化的Icon组件来包裹SVG，以确保页面结构不报错 -->
 </head>
+
 <body class="bg-slate-100">
-    <div id="root">
-        <!-- React 应用将渲染在这里 -->
-    </div>
+  <div id="root">
+    <!-- React 应用将渲染在这里 -->
+  </div>
 
-    <script type="text/babel">
-        const { useState, useEffect } = React;
-        const root = ReactDOM.createRoot(document.getElementById('root'));
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+    const root = ReactDOM.createRoot(document.getElementById('root'));
 
-        // --- 简化 Lucide Icons 定义 ---
-        // 实际的lucide-react组件无法通过简单CDN引入。这里仅为避免JSX编译错误，我们使用占位符或简单的SVG结构。
-        // 为了确保功能完整，我将直接使用inline SVG/Emoji作为图标的视觉替代品，以保障代码的静态可运行性。
-        const Icon = ({ name, size = 18, className = "" }) => {
-            const iconMap = {
-                Clipboard: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg>,
-                CheckSquare: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>,
-                ExternalLink: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" x2="21" y1="14" y2="3"></line></svg>,
-                AlertTriangle: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" x2="12" y1="9" y2="13"></line><line x1="12" x2="12" y1="17" y2="17"></line></svg>,
-                Search: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="11" cy="11" r="8"></circle><line x1="21" x2="16.65" y1="21" y2="16.65"></line></svg>,
-                Clock: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>,
-                Package: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M12.89 2.19a1 1 0 0 0-1.78 0L3.62 17a2 2 0 0 0 1.71 3h15.34a2 2 0 0 0 1.71-3z"></path><line x1="12" x2="12" y1="17" y2="22"></line><line x1="6.83" x2="17.17" y1="17" y2="17"></line></svg>,
-                RefreshCw: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M23 4v6h-6"></path><path d="M1 20v-6h6"></path><path d="M3.52 14C3.23 13.4 3 12.72 3 12c0-4.97 4.03-9 9-9s9 4.03 9 9-4.03 9-9 9c-1.39 0-2.73-.31-3.9-1"></path></svg>,
-                MessageSquare: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>,
-                Calculator: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="8" x2="16" y1="6" y2="6"></line><line x1="8" x2="16" y1="10" y2="10"></line><line x1="8" x2="16" y1="14" y2="14"></line><line x1="8" x2="16" y1="18" y2="18"></line></svg>,
-                FileText: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><line x1="16" x2="8" y1="13" y2="13"></line><line x1="16" x2="8" y1="17" y2="17"></line></svg>,
-                AlertCircle: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="8" y2="12"></line><line x1="12" x2="12.01" y1="16" y2="16"></line></svg>,
-                UserX: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="19" x2="19" y1="8" y2="12"></line><line x1="19" x2="15" y1="12" y2="16"></line></svg>
-            };
-            return iconMap[name] || <span className={className}>*</span>;
-        };
-        // 重命名以便在JSX中使用
-        const Clipboard = (props) => <Icon name="Clipboard" {...props} />;
-        const CheckSquare = (props) => <Icon name="CheckSquare" {...props} />;
-        const ExternalLink = (props) => <Icon name="ExternalLink" {...props} />;
-        const AlertTriangle = (props) => <Icon name="AlertTriangle" {...props} />;
-        const Search = (props) => <Icon name="Search" {...props} />;
-        const Clock = (props) => <Icon name="Clock" {...props} />;
-        const Package = (props) => <Icon name="Package" {...props} />;
-        const RefreshCw = (props) => <Icon name="RefreshCw" {...props} />;
-        const MessageSquare = (props) => <Icon name="MessageSquare" {...props} />;
-        const Calculator = (props) => <Icon name="Calculator" {...props} />;
-        const FileText = (props) => <Icon name="FileText" {...props} />;
-        const AlertCircle = (props) => <Icon name="AlertCircle" {...props} />;
-        const UserX = (props) => <Icon name="UserX" {...props} />;
-        
-        // 由于原代码中还有 ChevronDown/Up，但它们在 JSX 中未使用，这里省略定义
+    // --- 简化 Lucide Icons 定义 ---
+    // 实际的lucide-react组件无法通过简单CDN引入。这里仅为避免JSX编译错误，我们使用占位符或简单的SVG结构。
+    // 为了确保功能完整，我将直接使用inline SVG/Emoji作为图标的视觉替代品，以保障代码的静态可运行性。
+    const Icon = ({ name, size = 18, className = "" }) => {
+      const iconMap = {
+        Clipboard: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg>,
+        CheckSquare: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>,
+        ExternalLink: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" x2="21" y1="14" y2="3"></line></svg>,
+        AlertTriangle: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" x2="12" y1="9" y2="13"></line><line x1="12" x2="12" y1="17" y2="17"></line></svg>,
+        Search: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="11" cy="11" r="8"></circle><line x1="21" x2="16.65" y1="21" y2="16.65"></line></svg>,
+        Clock: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>,
+        Package: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M12.89 2.19a1 1 0 0 0-1.78 0L3.62 17a2 2 0 0 0 1.71 3h15.34a2 2 0 0 0 1.71-3z"></path><line x1="12" x2="12" y1="17" y2="22"></line><line x1="6.83" x2="17.17" y1="17" y2="17"></line></svg>,
+        RefreshCw: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M23 4v6h-6"></path><path d="M1 20v-6h6"></path><path d="M3.52 14C3.23 13.4 3 12.72 3 12c0-4.97 4.03-9 9-9s9 4.03 9 9-4.03 9-9 9c-1.39 0-2.73-.31-3.9-1"></path></svg>,
+        MessageSquare: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>,
+        Calculator: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="8" x2="16" y1="6" y2="6"></line><line x1="8" x2="16" y1="10" y2="10"></line><line x1="8" x2="16" y1="14" y2="14"></line><line x1="8" x2="16" y1="18" y2="18"></line></svg>,
+        FileText: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><line x1="16" x2="8" y1="13" y2="13"></line><line x1="16" x2="8" y1="17" y2="17"></line></svg>,
+        AlertCircle: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="8" y2="12"></line><line x1="12" x2="12.01" y1="16" y2="16"></line></svg>,
+        UserX: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="19" x2="19" y1="8" y2="12"></line><line x1="19" x2="15" y1="12" y2="16"></line></svg>
+      };
+      return iconMap[name] || <span className={className}>*</span>;
+    };
+    // 重命名以便在JSX中使用
+    const Clipboard = (props) => <Icon name="Clipboard" {...props} />;
+    const CheckSquare = (props) => <Icon name="CheckSquare" {...props} />;
+    const ExternalLink = (props) => <Icon name="ExternalLink" {...props} />;
+    const AlertTriangle = (props) => <Icon name="AlertTriangle" {...props} />;
+    const Search = (props) => <Icon name="Search" {...props} />;
+    const Clock = (props) => <Icon name="Clock" {...props} />;
+    const Package = (props) => <Icon name="Package" {...props} />;
+    const RefreshCw = (props) => <Icon name="RefreshCw" {...props} />;
+    const MessageSquare = (props) => <Icon name="MessageSquare" {...props} />;
+    const Calculator = (props) => <Icon name="Calculator" {...props} />;
+    const FileText = (props) => <Icon name="FileText" {...props} />;
+    const AlertCircle = (props) => <Icon name="AlertCircle" {...props} />;
+    const UserX = (props) => <Icon name="UserX" {...props} />;
 
-        const Card = ({ children, className = "" }) => (
-          <div className={`bg-white rounded-lg shadow-sm border border-slate-200 ${className}`}>
-            {children}
-          </div>
-        );
+    // 由于原代码中还有 ChevronDown/Up，但它们在 JSX 中未使用，这里省略定义
 
-        const Badge = ({ children, type = "default" }) => {
-          const styles = {
-            default: "bg-slate-100 text-slate-700",
-            warning: "bg-amber-100 text-amber-700",
-            danger: "bg-red-100 text-red-700",
-            success: "bg-emerald-100 text-emerald-700",
-            blue: "bg-blue-100 text-blue-700"
-          };
-          return (
-            <span className={`px-2 py-0.5 rounded text-xs font-medium ${styles[type]}`}>
-              {children}
-            </span>
-          );
-        };
+    const Card = ({ children, className = "" }) => (
+      <div className={`bg-white rounded-lg shadow-sm border border-slate-200 ${className}`}>
+        {children}
+      </div>
+    );
 
-        function App() {
-          const [activeTab, setActiveTab] = useState('dashboard');
-          const [checklist, setChecklist] = useState({
-            scanMorning: false,
-            check10am: false,
-            scanAfternoon: false,
-            check4pm: false,
-          });
+    const Badge = ({ children, type = "default" }) => {
+      const styles = {
+        default: "bg-slate-100 text-slate-700",
+        warning: "bg-amber-100 text-amber-700",
+        danger: "bg-red-100 text-red-700",
+        success: "bg-emerald-100 text-emerald-700",
+        blue: "bg-blue-100 text-blue-700"
+      };
+      return (
+        <span className={`px-2 py-0.5 rounded text-xs font-medium ${styles[type]}`}>
+          {children}
+        </span>
+      );
+    };
 
-          const toggleCheck = (key) => {
-            setChecklist(prev => ({ ...prev, [key]: !prev[key] }));
-          };
+    function App() {
+      const [activeTab, setActiveTab] = useState('dashboard');
+      const [checklist, setChecklist] = useState({
+        scanMorning: false,
+        check10am: false,
+        scanAfternoon: false,
+        check4pm: false,
+      });
 
-          const copyToClipboard = (text) => {
-            const el = document.createElement('textarea');
-            el.value = text;
-            document.body.appendChild(el);
-            el.select();
-            // 使用 execCommand 是为了兼容旧环境和 iframe 限制
-            document.execCommand('copy'); 
-            document.body.removeChild(el);
-            // 可以在此处添加一个复制成功的简单UI提示
-          };
+      const toggleCheck = (key) => {
+        setChecklist(prev => ({ ...prev, [key]: !prev[key] }));
+      };
 
-          // --- Feature: Decision Calculator ---
-          const DecisionCalculator = () => {
-            const [price, setPrice] = useState('');
-            const [results, setResults] = useState(null);
-            const [maxCompensateValue, setMaxCompensateValue] = useState(null);
+      const copyToClipboard = (text) => {
+        const el = document.createElement('textarea');
+        el.value = text;
+        document.body.appendChild(el);
+        el.select();
+        // 使用 execCommand 是为了兼容旧环境和 iframe 限制
+        document.execCommand('copy');
+        document.body.removeChild(el);
+        // 可以在此处添加一个复制成功的简单UI提示
+      };
 
-            const calculate = (val) => {
-              const p = parseFloat(val);
-              if (isNaN(p) || p <= 0) {
-                setResults(null);
-                setMaxCompensateValue(null);
-                return;
-              }
+      // --- Feature: Decision Calculator ---
+      const DecisionCalculator = () => {
+        const [price, setPrice] = useState('');
+        const [results, setResults] = useState(null);
+        const [maxCompensateValue, setMaxCompensateValue] = useState(null);
+        const [canReturnToFactory, setCanReturnToFactory] = useState(true); // 是否可以退回厂家
 
-              // Calculate Max Compensation  
-              const maxCompensation = p / 2;
-              setMaxCompensateValue(maxCompensation);
-
-              // Formula implementation
-              const returnRefund = -12; // Fixed loss of 12 yuan
-              const resend = 0;
-              const refundOnly = 0 - (p / 2);
-              const exchange = p - ((p / 2) + 10);
-
-              const scenarios = [
-                { id: 'returnRefund', name: '退货退款', val: returnRefund, formula: '0 - (售价/2) - 7' },
-                { id: 'resend', name: '补发', val: resend, formula: '0' },
-                { id: 'refundOnly', name: '仅退款', val: refundOnly, formula: '0 - (售价/2)' },
-                { id: 'exchange', name: '换货', val: exchange, formula: '售价 - (售价/2 + 10)' },
-              ];
-
-              // Find max (Best) and min (Worst) values
-              const maxVal = Math.max(...scenarios.map(s => s.val));
-              const minVal = Math.min(...scenarios.map(s => s.val));
-              
-              setResults(scenarios.map(s => ({
-                ...s,
-                isBest: s.val === maxVal,
-                isWorst: s.val === minVal && s.val !== maxVal // Ensure best isn't marked as worst if all equal
-              })));
-            };
-
-            const handlePriceChange = (e) => {
-              const val = e.target.value;
-              setPrice(val);
-              calculate(val);
-            };
-
-            return (
-              <div className="max-w-3xl mx-auto space-y-6">
-                <Card className="p-6">
-                  <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center">
-                    <Calculator size={20} className="mr-2 text-blue-600" /> 售后决策计算器
-                  </h2>
-                  
-                  <div className="mb-8">
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
-                      输入商品售价 (元)
-                    </label>
-                    <div className="relative">
-                      <span className="absolute left-3 top-2.5 text-slate-400">¥</span>
-                      <input 
-                        type="number" 
-                        value={price}
-                        onChange={handlePriceChange}
-                        placeholder="例如: 50" 
-                        className="pl-8 w-full border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-                      />
-                    </div>
-                    <p className="text-xs text-slate-500 mt-2">
-                      系统将根据售价自动计算4种方案的预估盈亏，并标记最优与最差方案。
-                    </p>
-                  </div>
-                  
-                  {/* Max Compensation Display */}
-                  {maxCompensateValue !== null && (
-                    <div className="p-4 bg-amber-50 border border-amber-300 rounded-lg mb-6">
-                      <p className="text-sm font-semibold text-amber-800 flex items-center flex-wrap">
-                        <AlertTriangle size={16} className="mr-2 text-amber-600 flex-shrink-0" /> 
-                        最大补偿金额: 
-                        <span className="ml-2 text-xl font-bold text-amber-900 mt-1 md:mt-0">
-                          ¥{maxCompensateValue.toFixed(2)}
-                        </span>
-                      </p>
-                    </div>
-                  )}
-
-                  {results && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {results.map((item) => {
-                        let cardStyle = 'bg-white border-slate-200 hover:border-slate-300';
-                        if (item.isBest) cardStyle = 'bg-blue-50 border-blue-500 ring-1 ring-blue-500 shadow-md';
-                        if (item.isWorst) cardStyle = 'bg-red-50 border-red-500 ring-1 ring-red-500 shadow-md';
-
-                        return (
-                          <div 
-                            key={item.id}
-                            className={`border rounded-lg p-4 relative transition-all ${cardStyle}`}
-                          >
-                            {item.isBest && (
-                              <span className="absolute -top-3 left-4 bg-blue-600 text-white text-xs px-2 py-1 rounded shadow-sm">
-                                ✨ 损失最小/最优方案
-                              </span>
-                            )}
-                            {item.isWorst && (
-                              <span className="absolute -top-3 left-4 bg-red-600 text-white text-xs px-2 py-1 rounded shadow-sm">
-                                🚫 损失最大/不推荐
-                              </span>
-                            )}
-                            
-                            <div className="flex justify-between items-start mb-2">
-                              <h3 className={`font-bold ${item.isBest ? 'text-blue-800' : item.isWorst ? 'text-red-800' : 'text-slate-700'}`}>
-                                {item.name}
-                              </h3>
-                              <span className={`text-lg font-mono font-bold ${
-                                item.val >= 0 ? 'text-emerald-600' : 'text-red-500'
-                              }`}>
-                                {item.val > 0 ? '+' : ''}{item.val.toFixed(2)}
-                              </span>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-
-                  {!results && price && (
-                    <div className="text-center py-8 text-slate-400">
-                      请输入有效的数字售价
-                    </div>
-                  )}
-                </Card>
-              </div>
-            );
-          };
-
-          // --- Customer Blacklist Module ---
-          const CustomerBlacklistModule = () => (
-            <div className="max-w-3xl mx-auto space-y-6">
-              <Card className="p-6">
-                <h2 className="text-xl font-bold text-slate-800 mb-4 flex items-center">
-                  <UserX size={20} className="mr-2 text-red-600" /> 风险控制（客户拉黑）
-                </h2>
-                
-                <div className="space-y-4">
-                  <div className="border rounded-lg p-4 bg-red-50">
-                    <h3 className="font-bold text-red-700 mb-3">第1步：问题排查</h3>
-                    <div className="bg-white p-3 rounded border border-red-200">
-                      <p className="text-sm text-slate-700 mb-2">排查客户聊天记录，确认问题</p>
-                      <div className="mt-2 text-xs text-slate-500 bg-slate-100 p-2 rounded">
-                        记录详细问题和客户行为
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="border rounded-lg p-4 bg-amber-50">
-                    <h3 className="font-bold text-amber-700 mb-3">第2步：信息反馈</h3>
-                    <div className="bg-white p-3 rounded border border-amber-200">
-                      <p className="text-sm text-slate-700 mb-2">将问题及客户是否为老客和是否仍有在途订单反馈给淼</p>
-                      <div className="mt-2 text-xs text-amber-600 bg-amber-100 p-2 rounded">
-                        提供完整信息供决策
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="border rounded-lg p-4 bg-slate-50">
-                    <h3 className="font-bold text-slate-700 mb-3">第3步：获取拉黑指令</h3>
-                    <div className="bg-white p-3 rounded border border-slate-200">
-                      <p className="text-sm text-slate-700 mb-2">淼提供主播拉黑客户的名称和头像</p>
-                      <div className="mt-2 text-xs text-slate-500 bg-slate-100 p-2 rounded">
-                        在飞鸽对话框内复制，方便快捷
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="border rounded-lg p-4 bg-emerald-50">
-                    <h3 className="font-bold text-emerald-700 mb-3">第4步：执行拉黑</h3>
-                    <div className="bg-white p-3 rounded border border-emerald-200">
-                      <p className="text-sm text-slate-700 mb-2">在最后订单结束后拉黑</p>
-                      <div className="mt-2 text-xs text-emerald-600 bg-emerald-100 p-2 rounded">
-                        重要：订单结束后再拉黑，避免影响正常订单流程
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-6 pt-4 border-t">
-                  <div className="flex items-center p-4 bg-slate-100 rounded-lg">
-                    <AlertCircle size={20} className="mr-3 text-slate-600 flex-shrink-0" />
-                    <p className="text-sm text-slate-700">
-                      风险控制要点：确认客户无在途订单后再进行拉黑操作，确保订单流程不受影响。
-                    </p>
-                  </div>
-                </div>
-              </Card>
-            </div>
-          );
-
-          // --- Placeholder Module for Precautions ---
-          const NotesModule = () => (
-            <div className="max-w-3xl mx-auto space-y-6">
-              <Card className="p-6">
-                <h2 className="text-xl font-bold text-slate-800 mb-4 flex items-center">
-                  <AlertCircle size={20} className="mr-2 text-orange-600" /> 注意事项 / 风险处理流程
-                </h2>
-                <div className="flex flex-col items-center justify-center p-12 border-2 border-dashed border-slate-200 rounded-lg text-slate-400 bg-slate-50">
-                  <FileText size={48} className="mb-4 opacity-50" />
-                  <p className="text-lg font-medium text-slate-700">风险处理详情页 (待补充)</p>
-                  <p className="text-sm mt-2">请等待管理员补充相关风险处理流程和注意事项的详细内容...</p>
-                </div>
-              </Card>
-            </div>
-          );
-
-          // --- Sub-Components for Different Tabs ---
-
-          const Dashboard = () => (
-            <div className="space-y-6">
-              {/* Top Stats/Links Row - 响应式：在 md 断点以下切换为单列 (grid-cols-1) */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Card className="p-4 border-l-4 border-l-blue-500">
-                  <h3 className="text-sm font-semibold text-slate-500 mb-2 flex items-center">
-                    <ExternalLink size={16} className="mr-2" /> 常用工具
-                  </h3>
-                  <div className="flex flex-col space-y-2">
-                    <a href="https://www.erp321.com" target="_blank" rel="noreferrer" className="text-blue-600 hover:underline hover:bg-blue-50 p-1 rounded transition">ERP后台系统 &rarr;</a>
-                    <a href="https://fxg.jinritemai.com" target="_blank" rel="noreferrer" className="text-blue-600 hover:underline hover:bg-blue-50 p-1 rounded transition">抖店商家后台 &rarr;</a>
-                  </div>
-                </Card>
-
-                <Card className="p-4 border-l-4 border-l-emerald-500">
-                  <h3 className="text-sm font-semibold text-slate-500 mb-2 flex items-center">
-                    <Clock size={16} className="mr-2" /> 今日必做 (日巡)
-                  </h3>
-                  <div className="space-y-2">
-                    <div className="w-full text-left p-3 rounded-lg bg-blue-50 hover:bg-blue-100 transition flex justify-between items-center group shadow-sm border border-blue-100">
-                      <span className="font-semibold text-blue-800">扫码退货</span>
-                    </div>
-                    <div className="w-full text-left p-3 rounded-lg bg-emerald-50 hover:bg-emerald-100 transition flex justify-between items-center group shadow-sm border border-emerald-100">
-                      <span className="font-semibold text-emerald-800">售后工作台检查</span>
-                    </div>
-                    <div className="w-full text-left p-3 rounded-lg bg-amber-50 hover:bg-amber-100 transition flex justify-between items-center group shadow-sm border border-amber-100">
-                      <span className="font-semibold text-amber-800">客户群处理</span>
-                    </div>
-                    <div className="w-full text-left p-3 rounded-lg bg-purple-50 hover:bg-purple-100 transition flex justify-between items-center group shadow-sm border border-purple-100">
-                      <span className="font-semibold text-purple-800">超卖订单处理</span>
-                    </div>
-                    <div className="w-full text-left p-3 rounded-lg bg-red-50 hover:bg-red-100 transition flex justify-between items-center group shadow-sm border border-red-100">
-                      <span className="font-semibold text-red-800">当日工作检查</span>
-                    </div>
-                  </div>
-                </Card>
-
-                {/* 风险预警 (更新后的样式和跳转逻辑) */}
-                <Card className="p-4 border-l-4 border-l-amber-500">
-                  <h3 className="text-sm font-semibold text-slate-500 mb-2 flex items-center">
-                    <AlertTriangle size={16} className="mr-2 text-amber-500" /> 风险预警 (点击查看流程)
-                  </h3>
-                  <div className="space-y-2">
-                    
-                    {/* Item 1: Malicious Buyers -> Links to Notes/Manual */}
-                    <button 
-                      onClick={() => setActiveTab('blacklist')}
-                      className="w-full text-left p-3 rounded-lg bg-red-50 hover:bg-red-100 transition flex justify-between items-center group shadow-sm border border-red-100"
-                    >
-                      <div className="flex flex-col">
-                        <span className="font-semibold text-red-800">恶意买家</span>
-                        <span className="text-xs text-red-600">核实拉黑 / 升级处理</span>
-                      </div>
-                      <ExternalLink size={16} className="text-red-500 group-hover:translate-x-0.5 transition" />
-                    </button>
-                    
-                    {/* Item 2: Overdue After-sales -> Links to Notes/Manual */}
-                    <button 
-                      onClick={() => setActiveTab('manual')}
-                      className="w-full text-left p-3 rounded-lg bg-amber-50 hover:bg-amber-100 transition flex justify-between items-center group shadow-sm border border-amber-100"
-                    >
-                      <div className="flex flex-col">
-                        <span className="font-semibold text-amber-800">超期售后 (1个月+)</span>
-                        <span className="text-xs text-amber-600">需提供签收时间证明截图</span>
-                      </div>
-                      <ExternalLink size={16} className="text-amber-500 group-hover:translate-x-0.5 transition" />
-                    </button>
-
-                    {/* Item 3: Inconsistent Items (物品不符) -> Links to Returns/Scanning Flow */}
-                    <button 
-                      onClick={() => setActiveTab('returns')}
-                      className="w-full text-left p-3 rounded-lg bg-emerald-50 hover:bg-emerald-100 transition flex justify-between items-center group shadow-sm border border-emerald-100"
-                    >
-                      <div className="flex flex-col">
-                        <span className="font-semibold text-emerald-800">物品不符/错发</span>
-                        <span className="text-xs text-emerald-600 font-bold">🚨 务必录制视频留证</span>
-                      </div>
-                      <ExternalLink size={16} className="text-emerald-500 group-hover:translate-x-0.5 transition" />
-                    </button>
-                  </div>
-                </Card>
-              </div>
-
-              {/* Quick Actions Grid - 响应式：在 md 断点以下切换为两列 (grid-cols-2) */}
-              <h2 className="text-lg font-bold text-slate-800 mt-6">核心作业流程</h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <button onClick={() => setActiveTab('calculator')} className="p-4 bg-white border border-blue-200 hover:border-blue-500 hover:shadow-md hover:bg-blue-50 rounded-lg flex flex-col items-center justify-center space-y-2 transition group">
-                  <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform">
-                    <Calculator size={20} />
-                  </div>
-                  <span className="font-bold text-blue-700 text-sm md:text-base">决策计算器</span>
-                </button>
-                <button onClick={() => setActiveTab('refunds')} className="p-4 bg-white border hover:border-blue-500 hover:shadow-md rounded-lg flex flex-col items-center justify-center space-y-2 transition">
-                  <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
-                    <Search size={20} />
-                  </div>
-                  <span className="font-medium text-slate-700 text-sm md:text-base">仅退款/拦截</span>
-                </button>
-                <button onClick={() => setActiveTab('returns')} className="p-4 bg-white border hover:border-emerald-500 hover:shadow-md rounded-lg flex flex-col items-center justify-center space-y-2 transition">
-                  <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600">
-                    <Package size={20} />
-                  </div>
-                  <span className="font-medium text-slate-700 text-sm md:text-base">退货扫码</span>
-                </button>
-                <button onClick={() => setActiveTab('replace')} className="p-4 bg-white border hover:border-purple-500 hover:shadow-md rounded-lg flex flex-col items-center justify-center space-y-2 transition">
-                  <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center text-purple-600">
-                    <RefreshCw size={20} />
-                  </div>
-                  <span className="font-medium text-slate-700 text-sm md:text-base">补发/换货</span>
-                </button>
-              </div>
-            </div>
-          );
-
-          const RefundsModule = () => (
-            <div className="max-w-3xl mx-auto space-y-6">
-              <Card className="p-6">
-                <h2 className="text-xl font-bold text-slate-800 mb-4 flex items-center">
-                  <Search size={20} className="mr-2 text-blue-600" /> 仅退款处理 SOP
-                </h2>
-                
-                <div className="space-y-4">
-                  <div className="border rounded-lg p-4 bg-slate-50">
-                    <h3 className="font-bold text-slate-700 mb-2">第1步：判断发货状态</h3>
-                    {/* 响应式：在 md 断点以下切换为单列 (grid-cols-1) */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="bg-white p-3 rounded border border-slate-200">
-                        <Badge type="success">未发货/缺货</Badge>
-                        <p className="text-sm mt-2 text-slate-600">直接同意退款。</p>
-                        <div className="mt-2 text-xs text-slate-400 bg-slate-100 p-2 rounded">
-                          注意：如果是缺货导致，记得联系客户致歉并建议改为“仅退款”。
-                        </div>
-                      </div>
-                      <div className="bg-white p-3 rounded border border-slate-200">
-                        <Badge type="danger">已发货/在途/待取件</Badge>
-                        <p className="text-sm mt-2 text-slate-600">1. 复制快递单号。<br/>2. 发送到快递对接群进行<span className="font-bold text-red-600">手动拦截</span>。<br/>3. 等待显示“退回中”或群内反馈成功。<br/>4. 同意退款。</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="border rounded-lg p-4 bg-white">
-                    <h3 className="font-bold text-slate-700 mb-2">已签收处理</h3>
-                    <p className="text-sm text-slate-600 mb-2">如无其他质量问题，原则上<span className="font-bold text-red-600">拒绝仅退款</span>，引导客户走“退货退款”。</p>
-                  </div>
-                </div>
-
-                <div className="mt-6 pt-4 border-t">
-                  <h3 className="font-bold text-slate-700 mb-2">拦截话术生成 (发给快递群)</h3>
-                  <div className="flex flex-col sm:flex-row gap-2">
-                    <input type="text" placeholder="输入快递单号" className="flex-1 border p-2 rounded text-sm" id="trackingInput" />
-                    <button 
-                      onClick={() => {
-                        const val = document.getElementById('trackingInput').value;
-                        if(val) copyToClipboard(`麻烦拦截一下这个件，单号：${val}，客户申请退款了，谢谢！`);
-                      }}
-                      className="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700 transition flex-shrink-0"
-                    >
-                      复制拦截话术
-                    </button>
-                  </div>
-                </div>
-              </Card>
-            </div>
-          );
-
-          const ReturnsModule = () => (
-            <div className="max-w-3xl mx-auto space-y-6">
-              <Card className="p-6">
-                <h2 className="text-xl font-bold text-slate-800 mb-4 flex items-center">
-                  <Package size={20} className="mr-2 text-emerald-600" /> 退货扫码注意事项
-                </h2>
-                
-                <div className="bg-amber-50 border-l-4 border-amber-400 p-4 mb-6">
-                  <h3 className="font-bold text-amber-800 mb-2">⚠️ 扫码前必查 (避免无法录入)</h3>
-                  <ul className="list-disc list-inside text-sm text-amber-800 space-y-1">
-                    <li>输入法必须切换至：<span className="font-bold bg-white px-1 rounded">英文模式</span> (否则顺丰单号会乱码)</li>
-                    <li>ERP光标位置：必须点击<span className="font-bold bg-white px-1 rounded">快递单号</span>输入框</li>
-                    <li>扫码对象：只扫快递单号，不要扫线上订单号</li>
-                  </ul>
-                </div>
-
-                <div className="space-y-4">
-                  <div className="p-4 border rounded-lg hover:shadow-sm transition">
-                    <h3 className="font-bold text-slate-700">无信息件/无法扫描</h3>
-                    <p className="text-sm text-slate-500 mt-1">系统提示“无此单”或扫不出来时：</p>
-                    <div className="mt-2 text-sm bg-slate-100 p-3 rounded">
-                      1. 尝试手动输入单号查询。<br/>
-                      2. 使用“无信息件绑定订单”功能。<br/>
-                      3. 如仍无法解决，进行“售后问题登记”（拍照/留档）。
-                    </div>
-                  </div>
-                </div>
-              </Card>
-            </div>
-          );
-
-          const ReplaceModule = () => (
-            <div className="max-w-3xl mx-auto space-y-6">
-              {/* 响应式：在 md 断点以下切换为单列 (grid-cols-1) */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Online Flow */}
-                <Card className="p-6 border-t-4 border-t-blue-500">
-                  <h3 className="text-lg font-bold text-blue-700 mb-4">线上售后 (抖店来源)</h3>
-                  <div className="text-sm text-slate-600 mb-4">
-                    指通过抖店官方申请的售后单，已自动同步至ERP。
-                  </div>
-                  <ol className="list-decimal list-inside space-y-3 text-sm text-slate-700">
-                    <li className="p-2 bg-slate-50 rounded">进入 ERP「订单-售后(极速版)」</li>
-                    <li className="p-2 bg-slate-50 rounded">通过<span className="font-bold">售后单号</span>或线上单号搜索</li>
-                    <li className="p-2 bg-slate-50 rounded">勾选订单，点击<span className="font-bold text-blue-600">「确认」</span></li>
-                    <li className="p-2 bg-slate-50 rounded">系统自动生成发货单 &rarr; 通知发货</li>
-                  </ol>
-                </Card>
-
-                {/* Offline Flow */}
-                <Card className="p-6 border-t-4 border-t-orange-500">
-                  <h3 className="text-lg font-bold text-orange-700 mb-4">线下/手工售后</h3>
-                  <div className="text-sm text-slate-600 mb-4">
-                    指通过客服群答应售后,或错发等系统无法满足的售后单,需要在ERP中手动创建。
-                  </div>
-                  <ol className="list-decimal list-inside space-y-3 text-sm text-slate-700">
-                    <li className="p-2 bg-slate-50 rounded">ERP 点击<span className="font-bold">「手工创建售后单」</span></li>
-                    <li className="p-2 bg-slate-50 rounded">输入<span className="font-bold">原线上订单号</span>关联信息</li>
-                    <li className="p-2 bg-slate-50 rounded">类型选择：<span className="font-bold">补发</span> 或 <span className="font-bold">换货</span></li>
-                    <li className="p-2 bg-slate-50 rounded">添加对应商品及数量</li>
-                    <li className="p-2 bg-orange-50 rounded border border-orange-200">
-                      <span className="text-orange-700 font-bold">关键：</span>创建后需将新快递号手动发到客服群，客户在抖店看不到。
-                    </li>
-                  </ol>
-                </Card>
-              </div>
-
-              <Card className="p-4 bg-slate-50">
-                <h3 className="font-bold text-slate-700 mb-2 flex items-center">
-                  <RefreshCw size={16} className="mr-2" /> 修改已创建的售后单
-                </h3>
-                <p className="text-sm text-slate-600">
-                  如果在ERP中修改了售后单（如地址、商品），保存后<span className="font-bold text-red-600">必须重新点击「确认」</span>，否则不会生成新的发货单。
-                </p>
-              </Card>
-            </div>
-          );
-
-          const ContentRenderer = () => {
-              switch (activeTab) {
-                case 'dashboard': return <Dashboard />;
-                case 'calculator': return <DecisionCalculator />;
-                case 'refunds': return <RefundsModule />;
-                case 'returns': return <ReturnsModule />;
-                case 'replace': return <ReplaceModule />;
-                case 'blacklist': return <CustomerBlacklistModule />;
-                case 'manual': return <NotesModule />;
-                default: return <Dashboard />;
-              }
+        const calculate = (val, returnToFactory) => {
+          const p = parseFloat(val);
+          if (isNaN(p) || p <= 0) {
+            setResults(null);
+            setMaxCompensateValue(null);
+            return;
           }
 
-          return (
-            <div className="min-h-screen bg-slate-100 font-sans text-slate-800">
-              {/* Header */}
-              <header className="bg-white shadow-sm border-b sticky top-0 z-10">
-                <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div className="bg-blue-600 text-white p-2 rounded-lg">
-                      <MessageSquare size={20} />
-                    </div>
-                    <h1 className="text-lg font-bold">客服售后工作台</h1>
-                  </div>
-                  <div className="text-xs text-slate-500 bg-slate-100 px-3 py-1 rounded-full">
-                    版本: v1.4 (优化风险预警样式及跳转)
+          // Calculate Max Compensation  
+          const maxCompensation = p / 2;
+          setMaxCompensateValue(maxCompensation);
+
+          // Formula implementation
+          const returnRefund = returnToFactory ? -12 : (0 - (p / 2) - 7); // 根据是否可退回厂家使用不同公式
+          const resend = 0;
+          const refundOnly = 0 - (p / 2);
+          const exchange = p - ((p / 2) + 12);
+
+          const scenarios = [
+            { id: 'returnRefund', name: '退货退款', val: returnRefund, formula: returnToFactory ? '固定 -12 (可退回厂家)' : '0 - (售价/2) - 7 (不可退回厂家)' },
+            { id: 'resend', name: '补发', val: resend, formula: '0' },
+            { id: 'refundOnly', name: '仅退款', val: refundOnly, formula: '0 - (售价/2)' },
+            { id: 'exchange', name: '换货', val: exchange, formula: '售价 - (售价/2 + 12)' },
+          ];
+
+          // Find max (Best) and min (Worst) values
+          const maxVal = Math.max(...scenarios.map(s => s.val));
+          const minVal = Math.min(...scenarios.map(s => s.val));
+
+          setResults(scenarios.map(s => ({
+            ...s,
+            isBest: s.val === maxVal,
+            isWorst: s.val === minVal && s.val !== maxVal // Ensure best isn't marked as worst if all equal
+          })));
+        };
+
+        const handlePriceChange = (e) => {
+          const val = e.target.value;
+          setPrice(val);
+          calculate(val, canReturnToFactory);
+        };
+
+        return (
+          <div className="max-w-3xl mx-auto space-y-6">
+            <Card className="p-6">
+              <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center">
+                <Calculator size={20} className="mr-2 text-blue-600" /> 售后决策计算器
+              </h2>
+
+              <div className="mb-8">
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  输入商品售价 (元)
+                </label>
+                <div className="relative">
+                  <span className="absolute left-3 top-2.5 text-slate-400">¥</span>
+                  <input
+                    type="number"
+                    value={price}
+                    onChange={handlePriceChange}
+                    placeholder="例如: 50"
+                    className="pl-8 w-full border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                  />
+                </div>
+                <p className="text-xs text-slate-500 mt-2">
+                  系统将根据售价自动计算4种方案的预估盈亏，并标记最优与最差方案。
+                </p>
+              </div>
+
+              {/* 退回厂家选项 */}
+              <div className="mb-8">
+                <label className="block text-sm font-medium text-slate-700 mb-3">
+                  商品是否可以退回厂家？
+                </label>
+                <div className="flex gap-3">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCanReturnToFactory(true);
+                      if (price) calculate(price, true);
+                    }}
+                    className={`flex-1 py-3 px-4 rounded-lg font-medium transition-colors ${canReturnToFactory
+                      ? 'bg-blue-600 text-white shadow-md'
+                      : 'bg-white text-slate-600 border border-slate-300 hover:border-blue-400 hover:bg-blue-50'
+                      }`}
+                  >
+                    ✓ 可以退回厂家
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCanReturnToFactory(false);
+                      if (price) calculate(price, false);
+                    }}
+                    className={`flex-1 py-3 px-4 rounded-lg font-medium transition-colors ${!canReturnToFactory
+                      ? 'bg-blue-600 text-white shadow-md'
+                      : 'bg-white text-slate-600 border border-slate-300 hover:border-blue-400 hover:bg-blue-50'
+                      }`}
+                  >
+                    ✗ 不可以退回厂家
+                  </button>
+                </div>
+              </div>
+
+              {/* Max Compensation Display */}
+              {maxCompensateValue !== null && (
+                <div className="p-4 bg-amber-50 border border-amber-300 rounded-lg mb-6">
+                  <p className="text-sm font-semibold text-amber-800 flex items-center flex-wrap">
+                    <AlertTriangle size={16} className="mr-2 text-amber-600 flex-shrink-0" />
+                    最大补偿金额:
+                    <span className="ml-2 text-xl font-bold text-amber-900 mt-1 md:mt-0">
+                      ¥{maxCompensateValue.toFixed(2)}
+                    </span>
+                  </p>
+                </div>
+              )}
+
+              {results && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {results.map((item) => {
+                    let cardStyle = 'bg-white border-slate-200 hover:border-slate-300';
+                    if (item.isBest) cardStyle = 'bg-blue-50 border-blue-500 ring-1 ring-blue-500 shadow-md';
+                    if (item.isWorst) cardStyle = 'bg-red-50 border-red-500 ring-1 ring-red-500 shadow-md';
+
+                    return (
+                      <div
+                        key={item.id}
+                        className={`border rounded-lg p-4 relative transition-all ${cardStyle}`}
+                      >
+                        {item.isBest && (
+                          <span className="absolute -top-3 left-4 bg-blue-600 text-white text-xs px-2 py-1 rounded shadow-sm">
+                            ✨ 损失最小/最优方案
+                          </span>
+                        )}
+                        {item.isWorst && (
+                          <span className="absolute -top-3 left-4 bg-red-600 text-white text-xs px-2 py-1 rounded shadow-sm">
+                            🚫 损失最大/不推荐
+                          </span>
+                        )}
+
+                        <div className="flex justify-between items-start mb-2">
+                          <h3 className={`font-bold ${item.isBest ? 'text-blue-800' : item.isWorst ? 'text-red-800' : 'text-slate-700'}`}>
+                            {item.name}
+                          </h3>
+                          <span className={`text-lg font-mono font-bold ${item.val >= 0 ? 'text-emerald-600' : 'text-red-500'
+                            }`}>
+                            {item.val > 0 ? '+' : ''}{item.val.toFixed(2)}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              {!results && price && (
+                <div className="text-center py-8 text-slate-400">
+                  请输入有效的数字售价
+                </div>
+              )}
+            </Card>
+          </div>
+        );
+      };
+
+      // --- Customer Blacklist Module ---
+      const CustomerBlacklistModule = () => (
+        <div className="max-w-4xl mx-auto space-y-6">
+          <Card className="p-6">
+            <h2 className="text-xl font-bold text-slate-800 mb-4 flex items-center">
+              <UserX size={20} className="mr-2 text-red-600" /> 风险控制（客户拉黑）
+            </h2>
+
+            {/* 2列 2行布局 */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="border rounded-lg p-4 bg-red-50">
+                <h3 className="font-bold text-red-700 mb-3">第1步：问题排查</h3>
+                <div className="bg-white p-3 rounded border border-red-200">
+                  <p className="text-sm text-slate-700 mb-2">排查客户聊天记录，确认问题</p>
+                  <div className="mt-2 text-xs text-slate-500 bg-slate-100 p-2 rounded">
+                    记录详细问题和客户行为
                   </div>
                 </div>
-              </header>
+              </div>
 
-              {/* Main Content */}
-              {/* 响应式布局：在 md 断点以下，侧边栏导航会占据全宽并在内容区域上方 */}
-              <main className="max-w-5xl mx-auto px-4 py-6 flex flex-col md:flex-row gap-6">
-                
-                {/* Sidebar Navigation - 响应式：在 md 屏幕以下会变成垂直堆叠的按钮组 (w-full) */}
-                <nav className="w-full md:w-64 flex-shrink-0 space-y-2 p-2 bg-white md:bg-transparent rounded-lg shadow-sm md:shadow-none">
-                  <button 
-                    onClick={() => setActiveTab('dashboard')}
-                    className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'dashboard' ? 'bg-blue-600 text-white shadow-md' : 'bg-white text-slate-600 hover:bg-slate-50'}`}
-                  >
-                    <CheckSquare size={18} className="mr-3" /> 工作总览
-                  </button>
-                  
-                  <div className="pt-4 pb-2 text-xs font-bold text-slate-400 uppercase tracking-wider px-4">工具</div>
-                  <button 
-                    onClick={() => setActiveTab('calculator')}
-                    className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'calculator' ? 'bg-white text-blue-600 border-l-4 border-blue-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
-                  >
-                    <Calculator size={18} className="mr-3" /> 决策计算器
-                  </button>
-
-                  <div className="pt-4 pb-2 text-xs font-bold text-slate-400 uppercase tracking-wider px-4">SOP 流程指引</div>
-                  <button 
-                    onClick={() => setActiveTab('refunds')}
-                    className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'refunds' ? 'bg-white text-blue-600 border-l-4 border-blue-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
-                  >
-                    <Search size={18} className="mr-3" /> 仅退款 / 拦截
-                  </button>
-                  <button 
-                    onClick={() => setActiveTab('returns')}
-                    className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'returns' ? 'bg-white text-emerald-600 border-l-4 border-emerald-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
-                  >
-                    <Package size={18} className="mr-3" /> 退货扫码
-                  </button>
-                  <button 
-                    onClick={() => setActiveTab('replace')}
-                    className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'replace' ? 'bg-white text-purple-600 border-l-4 border-purple-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
-                  >
-                    <RefreshCw size={18} className="mr-3" /> 补发 / 换货
-                  </button>
-                  <button 
-                    onClick={() => setActiveTab('blacklist')}
-                    className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'blacklist' ? 'bg-white text-red-600 border-l-4 border-red-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
-                  >
-                    <UserX size={18} className="mr-3" /> 风险控制
-                  </button>
-                  
-                  <div className="pt-4 pb-2 text-xs font-bold text-slate-400 uppercase tracking-wider px-4">其它</div>
-                  <button 
-                    onClick={() => setActiveTab('manual')}
-                    className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'manual' ? 'bg-white text-orange-600 border-l-4 border-orange-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
-                  >
-                    <AlertCircle size={18} className="mr-3" /> 注意事项
-                  </button>
-                </nav>
-
-                {/* Content Area */}
-                <div className="flex-1">
-                  <ContentRenderer />
+              <div className="border rounded-lg p-4 bg-amber-50">
+                <h3 className="font-bold text-amber-700 mb-3">第2步：信息反馈</h3>
+                <div className="bg-white p-3 rounded border border-amber-200">
+                  <p className="text-sm text-slate-700 mb-2">将问题及客户是否为老客和是否仍有在途订单反馈给淼</p>
+                  <div className="mt-2 text-xs text-amber-600 bg-amber-100 p-2 rounded">
+                    提供完整信息供决策
+                  </div>
                 </div>
+              </div>
 
-              </main>
+              <div className="border rounded-lg p-4 bg-slate-50">
+                <h3 className="font-bold text-slate-700 mb-3">第3步：获取拉黑指令</h3>
+                <div className="bg-white p-3 rounded border border-slate-200">
+                  <p className="text-sm text-slate-700 mb-2">淼提供主播拉黑客户的名称和头像</p>
+                  <div className="mt-2 text-xs text-slate-500 bg-slate-100 p-2 rounded">
+                    在飞鸽对话框内复制，方便快捷
+                  </div>
+                </div>
+              </div>
+
+              <div className="border rounded-lg p-4 bg-emerald-50">
+                <h3 className="font-bold text-emerald-700 mb-3">第4步：执行拉黑</h3>
+                <div className="bg-white p-3 rounded border border-emerald-200">
+                  <p className="text-sm text-slate-700 mb-2">在最后订单结束后拉黑</p>
+                  <div className="mt-2 text-xs text-emerald-600 bg-emerald-100 p-2 rounded">
+                    重要：订单结束后再拉黑，避免影响正常订单流程
+                  </div>
+                </div>
+              </div>
             </div>
-          );
-        }
 
-        root.render(<App />);
-    </script>
+            <div className="mt-6 pt-4 border-t">
+              <div className="flex items-center p-4 bg-slate-100 rounded-lg">
+                <AlertCircle size={20} className="mr-3 text-slate-600 flex-shrink-0" />
+                <p className="text-sm text-slate-700">
+                  风险控制要点：确认客户无在途订单后再进行拉黑操作，确保订单流程不受影响。
+                </p>
+              </div>
+            </div>
+          </Card>
+        </div>
+      );
+
+      // --- Placeholder Module for Precautions ---
+      const NotesModule = () => (
+        <div className="max-w-3xl mx-auto space-y-6">
+          <Card className="p-6">
+            <h2 className="text-xl font-bold text-slate-800 mb-4 flex items-center">
+              <AlertCircle size={20} className="mr-2 text-orange-600" /> 注意事项 / 风险处理流程
+            </h2>
+            <div className="flex flex-col items-center justify-center p-12 border-2 border-dashed border-slate-200 rounded-lg text-slate-400 bg-slate-50">
+              <FileText size={48} className="mb-4 opacity-50" />
+              <p className="text-lg font-medium text-slate-700">风险处理详情页 (待补充)</p>
+              <p className="text-sm mt-2">请等待管理员补充相关风险处理流程和注意事项的详细内容...</p>
+            </div>
+          </Card>
+        </div>
+      );
+
+      // --- Sub-Components for Different Tabs ---
+
+      const Dashboard = () => (
+        <div className="space-y-6">
+          {/* Top Stats/Links Row - 响应式：在 md 断点以下切换为单列 (grid-cols-1) */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Card className="p-4 border-l-4 border-l-blue-500">
+              <h3 className="text-sm font-semibold text-slate-500 mb-2 flex items-center">
+                <ExternalLink size={16} className="mr-2" /> 常用工具
+              </h3>
+              <div className="flex flex-col space-y-2">
+                <a href="https://www.erp321.com" target="_blank" rel="noreferrer" className="text-blue-600 hover:underline hover:bg-blue-50 p-1 rounded transition">ERP后台系统 &rarr;</a>
+                <a href="https://fxg.jinritemai.com" target="_blank" rel="noreferrer" className="text-blue-600 hover:underline hover:bg-blue-50 p-1 rounded transition">抖店商家后台 &rarr;</a>
+              </div>
+            </Card>
+
+            <Card className="p-4 border-l-4 border-l-emerald-500">
+              <h3 className="text-sm font-semibold text-slate-500 mb-2 flex items-center">
+                <Clock size={16} className="mr-2" /> 今日必做 (日巡)
+              </h3>
+              <div className="space-y-2">
+                <div className="w-full text-left p-3 rounded-lg bg-blue-50 hover:bg-blue-100 transition flex justify-between items-center group shadow-sm border border-blue-100">
+                  <span className="font-semibold text-blue-800">扫码退货</span>
+                </div>
+                <div className="w-full text-left p-3 rounded-lg bg-emerald-50 hover:bg-emerald-100 transition flex justify-between items-center group shadow-sm border border-emerald-100">
+                  <span className="font-semibold text-emerald-800">售后工作台检查</span>
+                </div>
+                <div className="w-full text-left p-3 rounded-lg bg-amber-50 hover:bg-amber-100 transition flex justify-between items-center group shadow-sm border border-amber-100">
+                  <span className="font-semibold text-amber-800">客户群处理</span>
+                </div>
+                <div className="w-full text-left p-3 rounded-lg bg-purple-50 hover:bg-purple-100 transition flex justify-between items-center group shadow-sm border border-purple-100">
+                  <span className="font-semibold text-purple-800">超卖订单处理</span>
+                </div>
+
+              </div>
+            </Card>
+
+            {/* 风险预警 (更新后的样式和跳转逻辑) */}
+            <Card className="p-4 border-l-4 border-l-amber-500">
+              <h3 className="text-sm font-semibold text-slate-500 mb-2 flex items-center">
+                <AlertTriangle size={16} className="mr-2 text-amber-500" /> 风险预警 (点击查看流程)
+              </h3>
+              <div className="space-y-2">
+
+                {/* Item 1: Malicious Buyers -> Links to Notes/Manual */}
+                <button
+                  onClick={() => setActiveTab('blacklist')}
+                  className="w-full text-left p-3 rounded-lg bg-red-50 hover:bg-red-100 transition flex justify-between items-center group shadow-sm border border-red-100"
+                >
+                  <div className="flex flex-col">
+                    <span className="font-semibold text-red-800">恶意买家</span>
+                    <span className="text-xs text-red-600">核实拉黑 / 升级处理</span>
+                  </div>
+                  <ExternalLink size={16} className="text-red-500 group-hover:translate-x-0.5 transition" />
+                </button>
+
+                {/* Item 2: Overdue After-sales -> Links to Notes/Manual */}
+                <button
+                  onClick={() => setActiveTab('manual')}
+                  className="w-full text-left p-3 rounded-lg bg-amber-50 hover:bg-amber-100 transition flex justify-between items-center group shadow-sm border border-amber-100"
+                >
+                  <div className="flex flex-col">
+                    <span className="font-semibold text-amber-800">超期售后 (1个月+)</span>
+                    <span className="text-xs text-amber-600">需提供签收时间证明截图</span>
+                  </div>
+                  <ExternalLink size={16} className="text-amber-500 group-hover:translate-x-0.5 transition" />
+                </button>
+
+                {/* Item 3: Inconsistent Items (物品不符) -> Links to Returns/Scanning Flow */}
+                <button
+                  onClick={() => setActiveTab('returns')}
+                  className="w-full text-left p-3 rounded-lg bg-emerald-50 hover:bg-emerald-100 transition flex justify-between items-center group shadow-sm border border-emerald-100"
+                >
+                  <div className="flex flex-col">
+                    <span className="font-semibold text-emerald-800">物品不符/错发</span>
+                    <span className="text-xs text-emerald-600 font-bold">🚨 务必录制视频留证</span>
+                  </div>
+                  <ExternalLink size={16} className="text-emerald-500 group-hover:translate-x-0.5 transition" />
+                </button>
+              </div>
+            </Card>
+          </div>
+
+          {/* Quick Actions Grid - 响应式：在 md 断点以下切换为两列 (grid-cols-2) */}
+          <h2 className="text-lg font-bold text-slate-800 mt-6">核心作业流程</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <button onClick={() => setActiveTab('calculator')} className="p-4 bg-white border border-blue-200 hover:border-blue-500 hover:shadow-md hover:bg-blue-50 rounded-lg flex flex-col items-center justify-center space-y-2 transition group">
+              <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform">
+                <Calculator size={20} />
+              </div>
+              <span className="font-bold text-blue-700 text-sm md:text-base">决策计算器</span>
+            </button>
+            <button onClick={() => setActiveTab('refunds')} className="p-4 bg-white border hover:border-blue-500 hover:shadow-md rounded-lg flex flex-col items-center justify-center space-y-2 transition">
+              <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
+                <Search size={20} />
+              </div>
+              <span className="font-medium text-slate-700 text-sm md:text-base">仅退款/拦截</span>
+            </button>
+            <button onClick={() => setActiveTab('returns')} className="p-4 bg-white border hover:border-emerald-500 hover:shadow-md rounded-lg flex flex-col items-center justify-center space-y-2 transition">
+              <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600">
+                <Package size={20} />
+              </div>
+              <span className="font-medium text-slate-700 text-sm md:text-base">退货扫码</span>
+            </button>
+            <button onClick={() => setActiveTab('replace')} className="p-4 bg-white border hover:border-purple-500 hover:shadow-md rounded-lg flex flex-col items-center justify-center space-y-2 transition">
+              <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center text-purple-600">
+                <RefreshCw size={20} />
+              </div>
+              <span className="font-medium text-slate-700 text-sm md:text-base">补发/换货</span>
+            </button>
+          </div>
+        </div>
+      );
+
+      const RefundsModule = () => (
+        <div className="max-w-5xl mx-auto space-y-6">
+          <Card className="p-6">
+            <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center">
+              <Search size={20} className="mr-2 text-blue-600" /> 仅退款处理 SOP
+            </h2>
+
+            <div className="space-y-6">
+              {/* 抖店工作台处理流程 */}
+              <div className="border-2 border-blue-200 rounded-lg p-5 bg-blue-50">
+                <h3 className="text-lg font-bold text-blue-800 mb-4">
+                  抖店工作台操作
+                </h3>
+
+                <div className="space-y-4">
+                  {/* 步骤1 */}
+                  <div className="bg-white rounded-lg p-4 border border-blue-200">
+                    <div className="flex items-start gap-3">
+                      <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">1</div>
+                      <div className="flex-1">
+                        <h4 className="font-bold text-slate-800 mb-2">如包裹在途，需要手动复制快递号，发至快递群内进行手动拦截</h4>
+                        <p className="text-sm text-slate-600 mb-2">反馈拦截成功后，同意退款即可。</p>
+                        <div className="mt-2">
+                          <img src="同意退款示例图.png" alt="操作要点示例" className="w-full max-w-2xl rounded border border-amber-300" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 步骤2 */}
+                  <div className="bg-white rounded-lg p-4 border border-blue-200">
+                    <div className="flex items-start gap-3">
+                      <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">2</div>
+                      <div className="flex-1">
+                        <h4 className="font-bold text-slate-800 mb-2">如包裹显示待取件/派送中</h4>
+                        <p className="text-sm text-slate-600 mb-2">则需要手动复制快递号，发至快递群内进行手动拦截，<span className="font-bold text-red-600">等待群内反馈或确认快递信息显示退货中时</span>，再去同意退款。（否则会有去件可能）</p>
+                        <div className="mt-2">
+                          <img src="待取件示例图.png" alt="待取件状态示例" className="w-full max-w-2xl rounded border border-slate-300" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 步骤3 */}
+                  <div className="bg-white rounded-lg p-4 border border-blue-200">
+                    <div className="flex items-start gap-3">
+                      <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">3</div>
+                      <div className="flex-1">
+                        <h4 className="font-bold text-slate-800 mb-3">如已经签收后仅退款，检查聊天记录无其他问题的情况下，拒绝仅退款，参考填写如下：</h4>
+
+                        <div className="space-y-3">
+                          <div className="mt-3">
+                            <img src="拒绝仅退款示例图.png" alt="协商文案与操作步骤示例" className="w-full rounded border border-slate-300" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Card>
+        </div>
+      );
+
+      const ReturnsModule = () => (
+        <div className="max-w-3xl mx-auto space-y-6">
+          <Card className="p-6">
+            <h2 className="text-xl font-bold text-slate-800 mb-4 flex items-center">
+              <Package size={20} className="mr-2 text-emerald-600" /> 退货扫码注意事项
+            </h2>
+
+            <div className="bg-amber-50 border-l-4 border-amber-400 p-4 mb-6">
+              <h3 className="font-bold text-amber-800 mb-2">⚠️ 扫码前必查 (避免无法录入)</h3>
+              <ul className="list-disc list-inside text-sm text-amber-800 space-y-1">
+                <li>输入法必须切换至：<span className="font-bold bg-white px-1 rounded">英文模式</span> (否则顺丰单号会乱码)</li>
+                <li>ERP光标位置：必须点击<span className="font-bold bg-white px-1 rounded">快递单号</span>输入框</li>
+                <li>扫码对象：只扫快递单号，不要扫线上订单号</li>
+              </ul>
+            </div>
+
+            <div className="space-y-4">
+              <div className="p-4 border rounded-lg hover:shadow-sm transition">
+                <h3 className="font-bold text-slate-700">无信息件/无法扫描</h3>
+                <p className="text-sm text-slate-500 mt-1">系统提示“无此单”或扫不出来时：</p>
+                <div className="mt-2 text-sm bg-slate-100 p-3 rounded">
+                  1. 尝试手动输入单号查询。<br />
+                  2. 使用“无信息件绑定订单”功能。<br />
+                  3. 如仍无法解决，进行“售后问题登记”（拍照/留档）。
+                </div>
+              </div>
+            </div>
+          </Card>
+        </div>
+      );
+
+      const ReplaceModule = () => (
+        <div className="max-w-3xl mx-auto space-y-6">
+          {/* 响应式：在 md 断点以下切换为单列 (grid-cols-1) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Online Flow */}
+            <Card className="p-6 border-t-4 border-t-blue-500">
+              <h3 className="text-lg font-bold text-blue-700 mb-4">线上售后 (抖店来源)</h3>
+              <div className="text-sm text-slate-600 mb-4">
+                指通过抖店官方申请的售后单，已自动同步至ERP。
+              </div>
+              <ol className="list-decimal list-inside space-y-3 text-sm text-slate-700">
+                <li className="p-2 bg-slate-50 rounded">进入 ERP「订单-售后(极速版)」</li>
+                <li className="p-2 bg-slate-50 rounded">通过<span className="font-bold">售后单号</span>或线上单号搜索</li>
+                <li className="p-2 bg-slate-50 rounded">勾选订单，点击<span className="font-bold text-blue-600">「确认」</span></li>
+                <li className="p-2 bg-slate-50 rounded">系统自动生成发货单 &rarr; 通知发货</li>
+              </ol>
+            </Card>
+
+            {/* Offline Flow */}
+            <Card className="p-6 border-t-4 border-t-orange-500">
+              <h3 className="text-lg font-bold text-orange-700 mb-4">线下/手工售后</h3>
+              <div className="text-sm text-slate-600 mb-4">
+                指通过客服群答应售后,或错发等系统无法满足的售后单,需要在ERP中手动创建。
+              </div>
+              <ol className="list-decimal list-inside space-y-3 text-sm text-slate-700">
+                <li className="p-2 bg-slate-50 rounded">ERP 点击<span className="font-bold">「手工创建售后单」</span></li>
+                <li className="p-2 bg-slate-50 rounded">输入<span className="font-bold">原线上订单号</span>关联信息</li>
+                <li className="p-2 bg-slate-50 rounded">类型选择：<span className="font-bold">补发</span> 或 <span className="font-bold">换货</span></li>
+                <li className="p-2 bg-slate-50 rounded">添加对应商品及数量</li>
+                <li className="p-2 bg-orange-50 rounded border border-orange-200">
+                  <span className="text-orange-700 font-bold">关键：</span>创建后需将新快递号手动发到客服群，客户在抖店看不到。
+                </li>
+              </ol>
+            </Card>
+          </div>
+
+
+        </div>
+      );
+
+      const ContentRenderer = () => {
+        switch (activeTab) {
+          case 'dashboard': return <Dashboard />;
+          case 'calculator': return <DecisionCalculator />;
+          case 'refunds': return <RefundsModule />;
+          case 'returns': return <ReturnsModule />;
+          case 'replace': return <ReplaceModule />;
+          case 'blacklist': return <CustomerBlacklistModule />;
+          case 'manual': return <NotesModule />;
+          default: return <Dashboard />;
+        }
+      }
+
+      return (
+        <div className="min-h-screen bg-slate-100 font-sans text-slate-800">
+          {/* Header */}
+          <header className="bg-white shadow-sm border-b sticky top-0 z-10">
+            <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="bg-blue-600 text-white p-2 rounded-lg">
+                  <MessageSquare size={20} />
+                </div>
+                <h1 className="text-lg font-bold">客服售后工作台</h1>
+              </div>
+              <div className="text-xs text-slate-500 bg-slate-100 px-3 py-1 rounded-full">
+                版本: v1.4 (优化风险预警样式及跳转)
+              </div>
+            </div>
+          </header>
+
+          {/* Main Content */}
+          {/* 响应式布局：在 md 断点以下，侧边栏导航会占据全宽并在内容区域上方 */}
+          <main className="max-w-5xl mx-auto px-4 py-6 flex flex-col md:flex-row gap-6">
+
+            {/* Sidebar Navigation - 响应式：在 md 屏幕以下会变成垂直堆叠的按钮组 (w-full) */}
+            <nav className="w-full md:w-64 flex-shrink-0 space-y-2 p-2 bg-white md:bg-transparent rounded-lg shadow-sm md:shadow-none">
+              <button
+                onClick={() => setActiveTab('dashboard')}
+                className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'dashboard' ? 'bg-blue-600 text-white shadow-md' : 'bg-white text-slate-600 hover:bg-slate-50'}`}
+              >
+                <CheckSquare size={18} className="mr-3" /> 工作总览
+              </button>
+
+              <div className="pt-4 pb-2 text-xs font-bold text-slate-400 uppercase tracking-wider px-4">工具</div>
+              <button
+                onClick={() => setActiveTab('calculator')}
+                className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'calculator' ? 'bg-white text-blue-600 border-l-4 border-blue-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
+              >
+                <Calculator size={18} className="mr-3" /> 决策计算器
+              </button>
+
+              <div className="pt-4 pb-2 text-xs font-bold text-slate-400 uppercase tracking-wider px-4">SOP 流程指引</div>
+              <button
+                onClick={() => setActiveTab('refunds')}
+                className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'refunds' ? 'bg-white text-blue-600 border-l-4 border-blue-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
+              >
+                <Search size={18} className="mr-3" /> 仅退款 / 拦截
+              </button>
+              <button
+                onClick={() => setActiveTab('returns')}
+                className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'returns' ? 'bg-white text-emerald-600 border-l-4 border-emerald-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
+              >
+                <Package size={18} className="mr-3" /> 退货扫码
+              </button>
+              <button
+                onClick={() => setActiveTab('replace')}
+                className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'replace' ? 'bg-white text-purple-600 border-l-4 border-purple-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
+              >
+                <RefreshCw size={18} className="mr-3" /> 补发 / 换货
+              </button>
+              <button
+                onClick={() => setActiveTab('blacklist')}
+                className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'blacklist' ? 'bg-white text-red-600 border-l-4 border-red-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
+              >
+                <UserX size={18} className="mr-3" /> 风险控制
+              </button>
+
+              <div className="pt-4 pb-2 text-xs font-bold text-slate-400 uppercase tracking-wider px-4">其它</div>
+              <button
+                onClick={() => setActiveTab('manual')}
+                className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'manual' ? 'bg-white text-orange-600 border-l-4 border-orange-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
+              >
+                <AlertCircle size={18} className="mr-3" /> 注意事项
+              </button>
+            </nav>
+
+            {/* Content Area */}
+            <div className="flex-1">
+              <ContentRenderer />
+            </div>
+
+          </main>
+        </div>
+      );
+    }
+
+    root.render(<App />);
+  </script>
 </body>
+
 </html>
