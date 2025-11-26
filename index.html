@@ -134,13 +134,13 @@
               setMaxCompensateValue(maxCompensation);
 
               // Formula implementation
-              const returnRefund = 0 - (p / 2) - 7;
+              const returnRefund = -12; // 固定损失 -12元
               const resend = 0;
               const refundOnly = 0 - (p / 2);
               const exchange = p - ((p / 2) + 10);
 
               const scenarios = [
-                { id: 'returnRefund', name: '退货退款', val: returnRefund, formula: '0 - (售价/2) - 7' },
+                { id: 'returnRefund', name: '退货退款', val: returnRefund, formula: '固定 -12 元' },
                 { id: 'resend', name: '补发', val: resend, formula: '0' },
                 { id: 'refundOnly', name: '仅退款', val: refundOnly, formula: '0 - (售价/2)' },
                 { id: 'exchange', name: '换货', val: exchange, formula: '售价 - (售价/2 + 10)' },
