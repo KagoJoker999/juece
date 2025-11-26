@@ -51,7 +51,9 @@
         Calculator: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="8" x2="16" y1="6" y2="6"></line><line x1="8" x2="16" y1="10" y2="10"></line><line x1="8" x2="16" y1="14" y2="14"></line><line x1="8" x2="16" y1="18" y2="18"></line></svg>,
         FileText: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><line x1="16" x2="8" y1="13" y2="13"></line><line x1="16" x2="8" y1="17" y2="17"></line></svg>,
         AlertCircle: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="8" y2="12"></line><line x1="12" x2="12.01" y1="16" y2="16"></line></svg>,
-        UserX: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="19" x2="19" y1="8" y2="12"></line><line x1="19" x2="15" y1="12" y2="16"></line></svg>
+        UserX: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="19" x2="19" y1="8" y2="12"></line><line x1="19" x2="15" y1="12" y2="16"></line></svg>,
+        ChevronDown: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="6 9 12 15 18 9"></polyline></svg>,
+        ChevronUp: <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="18 15 12 9 6 15"></polyline></svg>
       };
       return iconMap[name] || <span className={className}>*</span>;
     };
@@ -69,6 +71,8 @@
     const FileText = (props) => <Icon name="FileText" {...props} />;
     const AlertCircle = (props) => <Icon name="AlertCircle" {...props} />;
     const UserX = (props) => <Icon name="UserX" {...props} />;
+    const ChevronDown = (props) => <Icon name="ChevronDown" {...props} />;
+    const ChevronUp = (props) => <Icon name="ChevronUp" {...props} />;
 
     // 由于原代码中还有 ChevronDown/Up，但它们在 JSX 中未使用，这里省略定义
 
@@ -101,6 +105,9 @@
         scanAfternoon: false,
         check4pm: false,
       });
+      // 折叠菜单状态管理
+      const [sopAfterSalesOpen, setSopAfterSalesOpen] = useState(true);
+      const [sopDailyOpen, setSopDailyOpen] = useState(false);
 
       const toggleCheck = (key) => {
         setChecklist(prev => ({ ...prev, [key]: !prev[key] }));
@@ -533,7 +540,7 @@
 
                         <div className="space-y-3">
                           <div className="mt-3">
-                            <img src="拒绝仅退款示例图.png" alt="协商文案与操作步骤示例" className="w-full rounded border border-slate-300" />
+                            <img src="拒绝仅退款填写示例图.png" alt="协商文案与操作步骤示例" className="w-full rounded border border-slate-300" />
                           </div>
                         </div>
                       </div>
@@ -669,30 +676,63 @@
               </button>
 
               <div className="pt-4 pb-2 text-xs font-bold text-slate-400 uppercase tracking-wider px-4">SOP 流程指引</div>
-              <button
-                onClick={() => setActiveTab('refunds')}
-                className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'refunds' ? 'bg-white text-blue-600 border-l-4 border-blue-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
-              >
-                <Search size={18} className="mr-3" /> 仅退款 / 拦截
-              </button>
-              <button
-                onClick={() => setActiveTab('returns')}
-                className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'returns' ? 'bg-white text-emerald-600 border-l-4 border-emerald-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
-              >
-                <Package size={18} className="mr-3" /> 退货扫码
-              </button>
-              <button
-                onClick={() => setActiveTab('replace')}
-                className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'replace' ? 'bg-white text-purple-600 border-l-4 border-purple-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
-              >
-                <RefreshCw size={18} className="mr-3" /> 补发 / 换货
-              </button>
-              <button
-                onClick={() => setActiveTab('blacklist')}
-                className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'blacklist' ? 'bg-white text-red-600 border-l-4 border-red-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
-              >
-                <UserX size={18} className="mr-3" /> 风险控制
-              </button>
+
+              {/* 售后分类 - 可折叠 */}
+              <div>
+                <button
+                  onClick={() => setSopAfterSalesOpen(!sopAfterSalesOpen)}
+                  className="w-full text-left px-4 py-2 rounded-lg font-medium flex items-center justify-between transition text-slate-700 hover:bg-slate-50"
+                >
+                  <span className="text-sm">📋 售后分类</span>
+                  {sopAfterSalesOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                </button>
+                {sopAfterSalesOpen && (
+                  <div className="ml-2 mt-1 space-y-1">
+                    <button
+                      onClick={() => setActiveTab('refunds')}
+                      className={`w-full text-left px-4 py-2.5 rounded-lg font-medium flex items-center transition text-sm ${activeTab === 'refunds' ? 'bg-white text-blue-600 border-l-4 border-blue-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
+                    >
+                      <Search size={16} className="mr-3" /> 仅退款 / 拦截
+                    </button>
+                    <button
+                      onClick={() => setActiveTab('returns')}
+                      className={`w-full text-left px-4 py-2.5 rounded-lg font-medium flex items-center transition text-sm ${activeTab === 'returns' ? 'bg-white text-emerald-600 border-l-4 border-emerald-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
+                    >
+                      <Package size={16} className="mr-3" /> 退货扫码
+                    </button>
+                    <button
+                      onClick={() => setActiveTab('replace')}
+                      className={`w-full text-left px-4 py-2.5 rounded-lg font-medium flex items-center transition text-sm ${activeTab === 'replace' ? 'bg-white text-purple-600 border-l-4 border-purple-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
+                    >
+                      <RefreshCw size={16} className="mr-3" /> 补发 / 换货
+                    </button>
+                    <button
+                      onClick={() => setActiveTab('blacklist')}
+                      className={`w-full text-left px-4 py-2.5 rounded-lg font-medium flex items-center transition text-sm ${activeTab === 'blacklist' ? 'bg-white text-red-600 border-l-4 border-red-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
+                    >
+                      <UserX size={16} className="mr-3" /> 风险控制
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* 日常分类 - 可折叠 */}
+              <div className="mt-2">
+                <button
+                  onClick={() => setSopDailyOpen(!sopDailyOpen)}
+                  className="w-full text-left px-4 py-2 rounded-lg font-medium flex items-center justify-between transition text-slate-700 hover:bg-slate-50"
+                >
+                  <span className="text-sm">📅 日常分类</span>
+                  {sopDailyOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                </button>
+                {sopDailyOpen && (
+                  <div className="ml-2 mt-1 space-y-1">
+                    <div className="px-4 py-6 text-center text-sm text-slate-400">
+                      暂无日常分类内容
+                    </div>
+                  </div>
+                )}
+              </div>
 
               <div className="pt-4 pb-2 text-xs font-bold text-slate-400 uppercase tracking-wider px-4">其它</div>
               <button
