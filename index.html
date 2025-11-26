@@ -489,7 +489,7 @@
           </div>
 
           {/* Quick Actions Grid - 响应式：在 md 断点以下切换为两列 (grid-cols-2) */}
-          <h2 className="text-lg font-bold text-slate-800 mt-6">核心作业流程</h2>
+          <h2 className="text-lg font-bold text-slate-800 mt-6">快速决策SOP</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <button onClick={() => setActiveTab('calculator')} className="p-4 bg-white border border-blue-200 hover:border-blue-500 hover:shadow-md hover:bg-blue-50 rounded-lg flex flex-col items-center justify-center space-y-2 transition group">
               <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform">
@@ -497,23 +497,23 @@
               </div>
               <span className="font-bold text-blue-700 text-sm md:text-base">决策计算器</span>
             </button>
-            <button onClick={() => setActiveTab('oversold')} className="p-4 bg-white border hover:border-blue-500 hover:shadow-md rounded-lg flex flex-col items-center justify-center space-y-2 transition">
+            <button onClick={() => setActiveTab('refunds')} className="p-4 bg-white border hover:border-blue-500 hover:shadow-md rounded-lg flex flex-col items-center justify-center space-y-2 transition">
               <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
                 <Search size={20} />
               </div>
-              <span className="font-medium text-slate-700 text-sm md:text-base">超卖处理</span>
+              <span className="font-medium text-slate-700 text-sm md:text-base">仅退款/拦截</span>
             </button>
-            <button onClick={() => setActiveTab('wrongshipment')} className="p-4 bg-white border hover:border-emerald-500 hover:shadow-md rounded-lg flex flex-col items-center justify-center space-y-2 transition">
+            <button onClick={() => setActiveTab('returns')} className="p-4 bg-white border hover:border-emerald-500 hover:shadow-md rounded-lg flex flex-col items-center justify-center space-y-2 transition">
               <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600">
                 <Package size={20} />
               </div>
-              <span className="font-medium text-slate-700 text-sm md:text-base">错发处理</span>
+              <span className="font-medium text-slate-700 text-sm md:text-base">退货扫码</span>
             </button>
-            <button onClick={() => setActiveTab('techniques')} className="p-4 bg-white border hover:border-purple-500 hover:shadow-md rounded-lg flex flex-col items-center justify-center space-y-2 transition">
+            <button onClick={() => setActiveTab('replace')} className="p-4 bg-white border hover:border-purple-500 hover:shadow-md rounded-lg flex flex-col items-center justify-center space-y-2 transition">
               <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center text-purple-600">
                 <RefreshCw size={20} />
               </div>
-              <span className="font-medium text-slate-700 text-sm md:text-base">操作技巧</span>
+              <span className="font-medium text-slate-700 text-sm md:text-base">补发/换货</span>
             </button>
           </div>
         </div>
@@ -1115,7 +1115,7 @@
           case 'calculator': return <DecisionCalculator />;
           case 'refunds': return <RefundsModule />;
           case 'returns': return <ReturnsModule />;
-          case 'techniques': return <ReplaceModule />;
+          case 'replace': return <ReplaceModule />;
           case 'blacklist': return <CustomerBlacklistModule />;
           case 'manual': return <NotesModule />;
           case 'overdue': return <OverdueModule />;
@@ -1175,22 +1175,22 @@
               {isSopExpanded && (
                 <div className="space-y-1">
                   <button
-                    onClick={() => setActiveTab('oversold')}
-                    className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'oversold' ? 'bg-white text-blue-600 border-l-4 border-blue-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
+                    onClick={() => setActiveTab('refunds')}
+                    className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'refunds' ? 'bg-white text-blue-600 border-l-4 border-blue-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
                   >
-                    <Search size={18} className="mr-3" /> 超卖处理
+                    <Search size={18} className="mr-3" /> 仅退款 / 拦截
                   </button>
                   <button
-                    onClick={() => setActiveTab('wrongShipment')}
-                    className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'wrongShipment' ? 'bg-white text-emerald-600 border-l-4 border-emerald-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
+                    onClick={() => setActiveTab('returns')}
+                    className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'returns' ? 'bg-white text-emerald-600 border-l-4 border-emerald-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
                   >
-                    <Package size={18} className="mr-3" /> 错发处理
+                    <Package size={18} className="mr-3" /> 退货扫码
                   </button>
                   <button
-                    onClick={() => setActiveTab('techniques')}
-                    className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'techniques' ? 'bg-white text-purple-600 border-l-4 border-purple-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
+                    onClick={() => setActiveTab('replace')}
+                    className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'replace' ? 'bg-white text-purple-600 border-l-4 border-purple-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
                   >
-                    <RefreshCw size={18} className="mr-3" /> 操作技巧
+                    <RefreshCw size={18} className="mr-3" /> 补发 / 换货
                   </button>
                   <button
                     onClick={() => setActiveTab('overdue')}
