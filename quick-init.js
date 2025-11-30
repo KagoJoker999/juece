@@ -5,8 +5,8 @@
 async function initSupabaseDatabase() {
     console.log('🔄 开始初始化数据库...');
     
-    const SUPABASE_URL = 'https://xjjzgxqrxddbqsdcqeqa.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhqamFneGFxcnhkZGJxc2RjcWVxYSIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzM0MDcwODkwLCJleHAiOjIwNDk2NDY4OTB9.sG5pP6Lq8o8e2wQ2aWq2pN8lY3vj7qC9rM1b4vZ6y5m';
+    const SUPABASE_URL = 'https://zxsjvainccqwrmndilhr.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4c2p2YWluY2Nxd3JtbmRpbGhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ1MjQ1MDksImV4cCI6MjA4MDEwMDUwOX0.f33OG29IJ-QEhtCqwK8Rvd3jhF1rqA64sACTf28jDpk';
     
     const headers = {
         'apikey': SUPABASE_ANON_KEY,
@@ -58,7 +58,7 @@ async function initSupabaseDatabase() {
         
         if (error.message.includes('Could not find the table')) {
             console.log('\n🔧 手动初始化步骤:');
-            console.log('1. 访问 Supabase Dashboard: https://supabase.com/dashboard/project/xjjzgxqrxddbqsdcqeqa');
+            console.log('1. 访问 Supabase Dashboard: https://supabase.com/dashboard/project/zxsjvainccqwrmndilhr');
             console.log('2. 进入 SQL Editor');
             console.log('3. 复制以下 SQL 并执行:');
             console.log('');
