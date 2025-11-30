@@ -1131,10 +1131,15 @@
         const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7));
 
         // Supabase helper functions
-        const supabaseRequest = async (method, table, data = null, id = null) => {
-          const url = id ? 
-            `${SUPABASE_URL}/rest/v1/${table}?id=eq.${id}` : 
-            `${SUPABASE_URL}/rest/v1/${table}`;
+        const supabaseRequest = async (method, table, data = null, id = null, query = '') => {
+          let url = `${SUPABASE_URL}/rest/v1/${table}`;
+          
+          // 添加查询条件
+          if (query) {
+            url += `?${query}`;
+          } else if (id) {
+            url += `?id=eq.${id}`;
+          }
           
           const options = {
             method,
@@ -1142,7 +1147,7 @@
               'apikey': SUPABASE_ANON_KEY,
               'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
               'Content-Type': 'application/json',
-              'Prefer': 'return=representation'
+              'Prefer': method === 'GET' ? '' : 'return=representation'
             }
           };
 
@@ -1191,12 +1196,43 @@
           }
         };
 
+        // 一键初始化数据库
+        const quickInitDatabase = async () => {
+          setError('');
+          try {
+            // 尝试插入一条测试记录来触发表创建
+            const testRecord = {
+              tracking_number: 'INIT_TEST_' + Date.now(),
+              amount: 0.01,
+              record_type: 'compensation',
+              is_paid: false,
+              record_date: new Date().toISOString().split('T')[0],
+              note: '初始化测试记录'
+            };
+
+            await supabaseRequest('POST', 'express_compensation_records', testRecord);
+            
+            // 删除测试记录
+            await supabaseRequest('DELETE', 'express_compensation_records', null, null, 'tracking_number=eq.' + testRecord.tracking_number);
+            
+            // 重新检查数据库状态
+            await checkDatabaseConnection();
+            
+          } catch (err) {
+            if (err.message.includes('PGRST205') || err.message.includes('Could not find')) {
+              setError('自动初始化失败。请手动在Supabase SQL Editor中执行 supabase_schema.sql 文件内容。');
+            } else {
+              setError(`初始化失败: ${err.message}`);
+            }
+          }
+        };
+
         // Supabase API functions
         const fetchRecords = async () => {
           setLoading(true);
           setError('');
           try {
-            const data = await supabaseRequest('GET', 'express_compensation_records');
+            const data = await supabaseRequest('GET', 'express_compensation_records', null, null, 'order=created_at.desc');
             
             // 转换数据格式以匹配现有的前端逻辑
             const parsedRecords = data.map(record => ({
@@ -1365,25 +1401,32 @@
                  </div>
 
                  <div className="space-y-4">
+                   {/* 一键初始化按钮 */}
+                   <div className="text-center">
+                     <button
+                       onClick={quickInitDatabase}
+                       className="w-full py-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-medium text-lg mb-4"
+                     >
+                       🚀 一键初始化数据库
+                     </button>
+                   </div>
+
                    <div className="bg-slate-50 p-4 rounded-lg">
-                     <h4 className="text-sm font-medium text-slate-700 mb-2">初始化方法：</h4>
+                     <h4 className="text-sm font-medium text-slate-700 mb-2">手动初始化方法：</h4>
                      <ol className="text-sm text-slate-600 space-y-2 list-decimal list-inside">
-                       <li>在浏览器控制台中运行以下JavaScript代码：</li>
-                       <li>或者复制 supabase_init.js 文件中的代码到控制台执行</li>
-                       <li>初始化完成后刷新此页面</li>
+                       <li>复制以下代码到浏览器控制台：</li>
                      </ol>
                    </div>
 
                    <div className="bg-slate-900 text-slate-100 p-4 rounded-lg overflow-x-auto">
                      <code className="text-xs">
-                       {`// 在浏览器控制台运行<br>
-fetch('supabase_init.js').then(r => r.text()).then(code => eval(code));`}
+                       {`fetch('quick-init.js').then(r => r.text()).then(code => eval(code));`}
                      </code>
                    </div>
 
                    <div className="bg-blue-50 border-l-4 border-blue-500 p-4">
                      <p className="text-sm text-blue-800">
-                       或者您也可以在 Supabase Dashboard → SQL Editor 中手动创建表结构。
+                       或者在 Supabase Dashboard → SQL Editor 中手动执行 supabase_schema.sql 文件内容。
                      </p>
                    </div>
 
