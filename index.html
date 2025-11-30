@@ -1437,7 +1437,7 @@
                    <div className="text-center">
                      <button
                        onClick={quickInitDatabase}
-                       className="w-full py-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-medium text-lg mb-4"
+                       className="w-full py-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-medium text-lg mb-4 focus:outline-none"
                      >
                        🚀 一键初始化数据库
                      </button>
@@ -1464,7 +1464,7 @@
 
                    <button
                      onClick={checkDatabaseConnection}
-                     className="w-full py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition font-medium"
+                     className="w-full py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition font-medium focus:outline-none"
                    >
                      重新检查数据库
                    </button>
@@ -1529,7 +1529,7 @@
             {/* Action Buttons */}
             <button
               onClick={() => setShowForm(!showForm)}
-              className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition font-medium flex items-center"
+              className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition font-medium flex items-center focus:outline-none"
             >
               <span className="mr-2">+</span> 添加记录
             </button>
@@ -1544,9 +1544,9 @@
                   <button
                     type="button"
                     onClick={() => setFormData({ ...formData, type: 'compensation' })}
-                    className={`py-3 px-6 rounded-lg font-medium transition-all ${formData.type === 'compensation'
-                      ? 'bg-blue-600 text-white shadow-md'
-                      : 'bg-white text-slate-600 border-2 border-slate-200 hover:border-blue-300'
+                    className={`py-3 px-6 rounded-lg font-medium transition-colors ${formData.type === 'compensation'
+                      ? 'bg-blue-600 text-white shadow-md focus:outline-none'
+                      : 'bg-white text-slate-600 border-2 border-slate-200 hover:border-blue-300 focus:outline-none'
                       }`}
                   >
                     收到赔偿（收入）
@@ -1554,9 +1554,9 @@
                   <button
                     type="button"
                     onClick={() => setFormData({ ...formData, type: 'advance' })}
-                    className={`py-3 px-6 rounded-lg font-medium transition-all ${formData.type === 'advance'
-                      ? 'bg-blue-600 text-white shadow-md'
-                      : 'bg-white text-slate-600 border-2 border-slate-200 hover:border-blue-300'
+                    className={`py-3 px-6 rounded-lg font-medium transition-colors ${formData.type === 'advance'
+                      ? 'bg-blue-600 text-white shadow-md focus:outline-none'
+                      : 'bg-white text-slate-600 border-2 border-slate-200 hover:border-blue-300 focus:outline-none'
                       }`}
                   >
                     支付提前揽收费用（支出）
@@ -1619,13 +1619,13 @@
                   <button
                     onClick={createRecord}
                     disabled={!formData.trackingNumber || (formData.type === 'compensation' && !formData.amount)}
-                    className="flex-1 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-slate-300 transition font-medium"
+                    className="flex-1 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-slate-300 transition font-medium focus:outline-none"
                   >
                     + 记一笔
                   </button>
                   <button
                     onClick={() => setShowForm(false)}
-                    className="px-6 py-3 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition font-medium"
+                    className="px-6 py-3 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition font-medium focus:outline-none"
                   >
                     取消
                   </button>
@@ -1725,7 +1725,7 @@
                             </div>
                             <button
                               onClick={() => deleteRecord(record.id)}
-                              className="px-3 py-1 bg-red-100 text-red-700 rounded text-sm font-medium hover:bg-red-200 transition"
+                              className="px-3 py-1 bg-red-100 text-red-700 rounded text-sm font-medium hover:bg-red-200 transition focus:outline-none"
                             >
                               删除
                             </button>
