@@ -1581,20 +1581,20 @@
                   <button
                     type="button"
                     onClick={() => setFormData({ ...formData, isPaid: !formData.isPaid })}
-                    className={`relative inline-flex items-center h-8 rounded-full transition-colors focus:outline-none px-1 w-24 ${formData.isPaid ? 'bg-emerald-600' : 'bg-slate-300'
+                    className={`relative inline-flex items-center h-9 rounded-full transition-colors focus:outline-none px-1 w-24 ${formData.isPaid ? 'bg-emerald-500' : 'bg-slate-300'
                       }`}
                   >
                     <span
-                      className={`inline-block w-6 h-6 transform bg-white rounded-full transition-transform shadow-sm ${formData.isPaid ? 'translate-x-16' : 'translate-x-0'
+                      className={`inline-block w-7 h-7 transform bg-white rounded-full transition-transform shadow-sm ${formData.isPaid ? 'translate-x-14' : 'translate-x-0'
                         }`}
                     />
-                    <span className={`absolute text-xs font-bold text-white pointer-events-none transition-opacity ${formData.isPaid ? 'left-3 opacity-100' : 'left-3 opacity-0'
+                    <span className={`absolute text-sm font-bold text-white pointer-events-none transition-opacity ${formData.isPaid ? 'left-3 opacity-100' : 'left-3 opacity-0'
                       }`}>
-                      已结算
+                      已付
                     </span>
-                    <span className={`absolute text-xs font-bold text-slate-600 pointer-events-none transition-opacity ${!formData.isPaid ? 'right-3 opacity-100' : 'right-3 opacity-0'
+                    <span className={`absolute text-sm font-bold text-slate-500 pointer-events-none transition-opacity ${!formData.isPaid ? 'right-3 opacity-100' : 'right-3 opacity-0'
                       }`}>
-                      未结算
+                      未付
                     </span>
                   </button>
                 </div>
@@ -1693,19 +1693,18 @@
                             <button
                               type="button"
                               onClick={() => updateRecordStatus(record.id, !record.isPaid)}
-                              className={`relative inline-flex items-center h-7 rounded-full transition-colors focus:outline-none px-1 w-20 ${record.isPaid ? 'bg-emerald-600' : 'bg-slate-300'
+                              className={`relative inline-flex items-center h-8 rounded-full transition-colors focus:outline-none px-1 w-20 ${record.isPaid ? 'bg-emerald-500' : 'bg-slate-300'
                                 }`}
                             >
                               <span
-                                className={`inline-block w-5 h-5 transform bg-white rounded-full transition-transform shadow-sm ${record.isPaid ? 'translate-x-13' : 'translate-x-0'
+                                className={`inline-block w-6 h-6 transform bg-white rounded-full transition-transform shadow-sm ${record.isPaid ? 'translate-x-11' : 'translate-x-0'
                                   }`}
-                                style={{ transform: record.isPaid ? 'translateX(3.25rem)' : 'translateX(0)' }}
                               />
-                              <span className={`absolute text-[10px] font-bold text-white pointer-events-none transition-opacity ${record.isPaid ? 'left-2 opacity-100' : 'left-2 opacity-0'
+                              <span className={`absolute text-xs font-bold text-white pointer-events-none transition-opacity ${record.isPaid ? 'left-2.5 opacity-100' : 'left-2.5 opacity-0'
                                 }`}>
                                 已付
                               </span>
-                              <span className={`absolute text-[10px] font-bold text-slate-600 pointer-events-none transition-opacity ${!record.isPaid ? 'right-2 opacity-100' : 'right-2 opacity-0'
+                              <span className={`absolute text-xs font-bold text-slate-500 pointer-events-none transition-opacity ${!record.isPaid ? 'right-2.5 opacity-100' : 'right-2.5 opacity-0'
                                 }`}>
                                 未付
                               </span>
