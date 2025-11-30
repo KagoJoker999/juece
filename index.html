@@ -1613,26 +1613,12 @@
                   </div>
                 </div>
 
-                {/* Payment Status - Toggle Switch */}
-                <div className="flex items-center justify-between mt-6 p-4 bg-slate-50 rounded-lg">
-                  <span className="text-sm font-medium text-slate-700">支付状态</span>
+                {/* Payment Status - 默认未结算，隐藏手动选择 */}
+                <div className="mt-6 p-4 bg-slate-50 rounded-lg">
                   <div className="flex items-center gap-3">
-                    <span className={`text-sm font-medium ${!formData.isPaid ? 'text-slate-700' : 'text-slate-400'}`}>
-                      未结算
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => setFormData({ ...formData, isPaid: !formData.isPaid })}
-                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${formData.isPaid ? 'bg-emerald-600' : 'bg-slate-300'
-                        }`}
-                    >
-                      <span
-                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${formData.isPaid ? 'translate-x-6' : 'translate-x-1'
-                          }`}
-                      />
-                    </button>
-                    <span className={`text-sm font-medium ${formData.isPaid ? 'text-emerald-600' : 'text-slate-400'}`}>
-                      已结算
+                    <span className="text-sm font-medium text-slate-700">支付状态：</span>
+                    <span className="text-sm font-medium text-slate-500">
+                      默认未结算
                     </span>
                   </div>
                 </div>
