@@ -1127,8 +1127,8 @@
         // Search states
         const [searchTerm, setSearchTerm] = useState('');
         const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7));
-        const [syncCountdown, setSyncCountdown] = useState(30);
-        const [nextSyncTime, setNextSyncTime] = useState(new Date(Date.now() + 30000).toLocaleTimeString());
+        const [syncCountdown, setSyncCountdown] = useState(5);
+        const [nextSyncTime, setNextSyncTime] = useState(new Date(Date.now() + 5000).toLocaleTimeString());
 
         useEffect(() => {
           const token = localStorage.getItem('github_token');
@@ -1139,27 +1139,27 @@
             fetchRecords();
 
             // 倒计时功能
-            let countdown = 30;
+            let countdown = 5;
             setSyncCountdown(countdown);
-            setNextSyncTime(new Date(Date.now() + 30000).toLocaleTimeString());
+            setNextSyncTime(new Date(Date.now() + 5000).toLocaleTimeString());
 
             const countdownInterval = setInterval(() => {
               countdown -= 1;
               setSyncCountdown(countdown);
               if (countdown <= 0) {
-                countdown = 30;
+                countdown = 5;
                 setSyncCountdown(countdown);
-                setNextSyncTime(new Date(Date.now() + 30000).toLocaleTimeString());
+                setNextSyncTime(new Date(Date.now() + 5000).toLocaleTimeString());
               }
             }, 1000);
 
-            // 定时轮询，每30秒自动刷新一次
+            // 定时轮询，每5秒自动刷新一次
             const interval = setInterval(() => {
               fetchRecords();
-              countdown = 30;
+              countdown = 5;
               setSyncCountdown(countdown);
-              setNextSyncTime(new Date(Date.now() + 30000).toLocaleTimeString());
-            }, 30000);
+              setNextSyncTime(new Date(Date.now() + 5000).toLocaleTimeString());
+            }, 5000);
 
             return () => {
               clearInterval(interval);
