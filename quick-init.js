@@ -1,79 +1,69 @@
-// 快速Supabase数据库初始化脚本
-// 请复制下面的完整代码并在浏览器控制台中运行
-
-const SUPABASE_URL = 'https://ktkcyuvoqbgcvszppguc.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt0a2N5dXZvcWJnY3ZzenBwZ3VjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ1MjEzMDQsImV4cCI6MjA4MDA5NzMwNH0.j7Q136ASZe84LZR_SSSMax4n5P-YO8qeSua3BOkJInU';
+// 快速初始化数据库脚本
+// 在浏览器控制台运行以下代码：
+// fetch('quick-init.js').then(r => r.text()).then(code => eval(code));
 
 async function initSupabaseDatabase() {
-    console.log('🚀 开始初始化Supabase数据库...');
+    console.log('🔄 开始初始化数据库...');
     
+    const SUPABASE_URL = 'https://xjjzgxqrxddbqsdcqeqa.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhqamFneGFxcnhkZGJxc2RjcWVxYSIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzM0MDcwODkwLCJleHAiOjIwNDk2NDY4OTB9.sG5pP6Lq8o8e2wQ2aWq2pN8lY3vj7qC9rM1b4vZ6y5m';
+    
+    const headers = {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json'
+    };
+
     try {
-        // 检查表是否已存在
-        console.log('1️⃣ 检查数据库表是否存在...');
-        const checkResponse = await fetch(`${SUPABASE_URL}/rest/v1/express_compensation_records?limit=1`, {
-            method: 'GET',
+        // 尝试创建一条测试记录来触发表创建
+        const testData = {
+            tracking_number: 'TEST' + Date.now(),
+            amount: 1.00,
+            record_type: 'compensation',
+            record_date: new Date().toISOString().split('T')[0],
+            note: '初始化测试记录'
+        };
+
+        console.log('📝 尝试创建测试记录...');
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/express_compensation_records`, {
+            method: 'POST',
             headers: {
-                'apikey': SUPABASE_ANON_KEY,
-                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-                'Content-Type': 'application/json'
-            }
+                ...headers,
+                'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify(testData)
         });
 
-        if (checkResponse.ok) {
-            console.log('✅ 数据库表已存在！');
-            return true;
-        } else if (checkResponse.status === 404) {
-            console.log('⚠️ 表不存在，正在尝试创建...');
+        if (response.ok) {
+            // 获取刚创建的记录的ID，然后删除它
+            console.log('✅ 测试记录创建成功，正在清理...');
+            const id = response.headers.get('content-location')?.split('/').pop();
             
-            // 尝试插入一条记录来触发表创建
-            const createResponse = await fetch(`${SUPABASE_URL}/rest/v1/express_compensation_records`, {
-                method: 'POST',
-                headers: {
-                    'apikey': SUPABASE_ANON_KEY,
-                    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-                    'Content-Type': 'application/json',
-                    'Prefer': 'return=minimal'
-                },
-                body: JSON.stringify({
-                    tracking_number: 'INIT_' + Date.now(),
-                    amount: 0.01,
-                    record_type: 'compensation',
-                    is_paid: false,
-                    record_date: new Date().toISOString().split('T')[0],
-                    note: '初始化测试记录'
-                })
-            });
-
-            if (createResponse.ok) {
-                console.log('✅ 数据库初始化成功！');
-                
-                // 删除测试记录
-                await fetch(`${SUPABASE_URL}/rest/v1/express_compensation_records?tracking_number=eq.INIT_${Date.now()}`, {
+            if (id) {
+                await fetch(`${SUPABASE_URL}/rest/v1/express_compensation_records?id=eq.${id}`, {
                     method: 'DELETE',
-                    headers: {
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-                        'Content-Type': 'application/json'
-                    }
+                    headers: headers
                 });
-                
-                return true;
-            } else {
-                const errorData = await createResponse.json();
-                throw new Error(errorData.message || '创建表失败');
+                console.log('✅ 清理完成');
             }
+            
+            console.log('🎉 数据库表已创建！请刷新页面重试。');
+            return true;
         } else {
-            throw new Error(`HTTP ${checkResponse.status}: ${await checkResponse.text()}`);
+            throw new Error(`创建失败: ${response.status}`);
         }
+
     } catch (error) {
-        console.error('❌ 初始化失败:', error.message);
-        console.log('');
-        console.log('📋 手动初始化步骤：');
-        console.log('1. 打开 https://supabase.com 并登录您的项目');
-        console.log('2. 进入 SQL Editor');
-        console.log('3. 复制并执行以下SQL：');
-        console.log('');
-        console.log(`CREATE TABLE IF NOT EXISTS express_compensation_records (
+        console.error('❌ 自动创建失败:', error.message);
+        
+        if (error.message.includes('Could not find the table')) {
+            console.log('\n🔧 手动初始化步骤:');
+            console.log('1. 访问 Supabase Dashboard: https://supabase.com/dashboard/project/xjjzgxqrxddbqsdcqeqa');
+            console.log('2. 进入 SQL Editor');
+            console.log('3. 复制以下 SQL 并执行:');
+            console.log('');
+            console.log('```sql');
+            console.log(`CREATE TABLE IF NOT EXISTS express_compensation_records (
     id BIGSERIAL PRIMARY KEY,
     tracking_number VARCHAR(255) NOT NULL,
     amount DECIMAL(10,2) NOT NULL,
@@ -96,19 +86,15 @@ CREATE POLICY "Allow public read access" ON express_compensation_records FOR SEL
 CREATE POLICY "Allow public insert access" ON express_compensation_records FOR INSERT WITH CHECK (true);
 CREATE POLICY "Allow public update access" ON express_compensation_records FOR UPDATE USING (true);
 CREATE POLICY "Allow public delete access" ON express_compensation_records FOR DELETE USING (true);`);
-        console.log('');
-        console.log('4. 执行完成后，刷新页面重试');
+            console.log('');
+            console.log('4. 执行完成后，刷新页面重试');
+        }
         return false;
     }
 }
 
-// 自动执行初始化
-initSupabaseDatabase().then(success => {
-    if (success) {
-        console.log('🎉 数据库初始化完成！请刷新页面使用应用。');
-        alert('✅ 数据库初始化成功！请刷新页面。');
-    } else {
-        console.log('❌ 请按照上述步骤手动初始化数据库');
-        alert('❌ 初始化失败，请查看控制台输出并按照步骤手动创建表');
-    }
-});
+// 导出函数供外部调用
+window.initSupabaseDatabase = initSupabaseDatabase;
+console.log('📋 数据库初始化脚本已加载');
+console.log('🚀 运行 initSupabaseDatabase() 开始初始化，或运行以下代码:');
+console.log('fetch(\'quick-init.js\').then(r => r.text()).then(code => eval(code));');
