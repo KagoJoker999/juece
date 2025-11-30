@@ -1507,14 +1507,14 @@
               <Card className="p-6">
                 <h3 className="font-bold text-slate-800 mb-4">新增记录</h3>
 
-                {/* Type Selection - Static Buttons */}
+                {/* Type Selection - Fixed Size Buttons */}
                 <div className="grid grid-cols-2 gap-3 mb-6">
                   <button
                     type="button"
                     onClick={() => setFormData({ ...formData, type: 'compensation' })}
-                    className={`py-3 px-6 rounded-lg font-medium border-2 ${formData.type === 'compensation'
-                      ? 'bg-blue-600 text-white border-blue-600'
-                      : 'bg-white text-slate-600 border-slate-200 hover:border-blue-300'
+                    className={`py-3 px-6 rounded-lg font-medium transition-colors h-12 flex items-center justify-center ${formData.type === 'compensation'
+                      ? 'bg-blue-600 text-white shadow-md'
+                      : 'bg-white text-slate-600 border-2 border-slate-200 hover:border-blue-300'
                       }`}
                   >
                     收到赔偿（收入）
@@ -1522,12 +1522,12 @@
                   <button
                     type="button"
                     onClick={() => setFormData({ ...formData, type: 'advance' })}
-                    className={`py-3 px-6 rounded-lg font-medium border-2 ${formData.type === 'advance'
-                      ? 'bg-blue-600 text-white border-blue-600'
-                      : 'bg-white text-slate-600 border-slate-200 hover:border-blue-300'
+                    className={`py-3 px-6 rounded-lg font-medium transition-colors h-12 flex items-center justify-center ${formData.type === 'advance'
+                      ? 'bg-blue-600 text-white shadow-md'
+                      : 'bg-white text-slate-600 border-2 border-slate-200 hover:border-blue-300'
                       }`}
                   >
-                    支付快递费赔偿（支出）
+                    支付快递费赔偿
                   </button>
                 </div>
 
@@ -1569,47 +1569,48 @@
                     </div>
                   )}
 
-                  <div className="md:col-span-2">
+                  <div className="col-span-2">
                     <label className="block text-sm font-medium text-slate-700 mb-2">备注</label>
                     <input
                       type="text"
                       value={formData.note}
                       onChange={(e) => setFormData({ ...formData, note: e.target.value })}
                       placeholder="可选备注信息..."
-                      className="w-full border border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-teal-500 text-base"
+                      className="w-full border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-teal-500"
                     />
                   </div>
                 </div>
 
-                <div className="flex gap-3 mt-6">
+                <div className="flex items-center justify-between mt-6">
                   {/* Payment Status - Toggle Switch */}
                   <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg">
                     <span className="text-sm font-medium text-slate-700">支付状态</span>
                     <div className="flex items-center gap-2">
-                      <span className={`text-sm font-medium ${!formData.isPaid ? 'text-slate-700' : 'text-slate-400'}`}>
+                      <span className={`text-xs font-medium ${!formData.isPaid ? 'text-slate-700' : 'text-slate-400'}`}>
                         未结算
                       </span>
                       <button
                         type="button"
                         onClick={() => setFormData({ ...formData, isPaid: !formData.isPaid })}
-                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${formData.isPaid ? 'bg-emerald-600' : 'bg-slate-300'
+                        className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${formData.isPaid ? 'bg-emerald-600' : 'bg-slate-300'
                           }`}
                       >
                         <span
-                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${formData.isPaid ? 'translate-x-6' : 'translate-x-1'
+                          className={`inline-block h-3 w-3 transform rounded-full bg-white transition-transform ${formData.isPaid ? 'translate-x-5' : 'translate-x-1'
                             }`}
                         />
                       </button>
-                      <span className={`text-sm font-medium ${formData.isPaid ? 'text-emerald-600' : 'text-slate-400'}`}>
+                      <span className={`text-xs font-medium ${formData.isPaid ? 'text-emerald-600' : 'text-slate-400'}`}>
                         已结算
                       </span>
                     </div>
                   </div>
-
+                  
+                  {/* Submit Button */}
                   <button
                     onClick={createRecord}
                     disabled={!formData.trackingNumber || (formData.type === 'compensation' && !formData.amount)}
-                    className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-slate-300 transition font-medium"
+                    className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-slate-300 transition font-medium"
                   >
                     + 记一笔
                   </button>
