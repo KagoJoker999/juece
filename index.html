@@ -1115,6 +1115,7 @@
         const [loading, setLoading] = useState(false);
         const [error, setError] = useState('');
         const [lastUpdated, setLastUpdated] = useState(null);
+        const [syncError, setSyncError] = useState(false);
 
         // Form states
         const [showForm, setShowForm] = useState(false);
@@ -1137,10 +1138,10 @@
             setIsConfigured(true);
             fetchRecords();
 
-            // 定时轮询，每30秒自动刷新一次
+            // 定时轮询，每5秒自动刷新一次
             const interval = setInterval(() => {
               fetchRecords();
-            }, 30000);
+            }, 5000);
 
             // 页面可见性变化时立即刷新
             const handleVisibilityChange = () => {
@@ -1189,8 +1190,11 @@
 
             setRecords(parsedRecords);
             setLastUpdated(new Date());
+            setSyncError(false);
           } catch (err) {
-            setError(err.message);
+            console.error('Fetch error:', err);
+            setSyncError(true);
+            // 不覆盖主要错误信息，仅设置同步错误状态
           } finally {
             setLoading(false);
           }
@@ -1245,6 +1249,9 @@
             // 乐观更新：直接插入新记录到前端列表
             setRecords(prev => [newRecord, ...prev]);
 
+            // 后台同步
+            fetchRecords().catch(console.error);
+
           } catch (err) {
             setError(err.message);
           }
@@ -1281,6 +1288,9 @@
             // 乐观更新：直接更新本地状态
             setRecords(prev => prev.map(r => r.id === recordId ? { ...r, isPaid } : r));
 
+            // 后台同步
+            fetchRecords().catch(console.error);
+
           } catch (err) {
             setError(err.message);
           }
@@ -1307,6 +1317,9 @@
 
             // 乐观更新：直接从本地移除
             setRecords(prev => prev.filter(r => r.id !== recordId));
+
+            // 后台同步
+            fetchRecords().catch(console.error);
 
           } catch (err) {
             setError(err.message);
@@ -1581,18 +1594,18 @@
                   <button
                     type="button"
                     onClick={() => setFormData({ ...formData, isPaid: !formData.isPaid })}
-                    className={`relative inline-flex items-center h-9 rounded-full transition-colors focus:outline-none px-1 w-24 ${formData.isPaid ? 'bg-emerald-500' : 'bg-slate-300'
+                    className={`relative inline-flex items-center h-9 rounded-full transition-colors focus:outline-none px-1 w-20 ${formData.isPaid ? 'bg-emerald-500' : 'bg-slate-300'
                       }`}
                   >
                     <span
-                      className={`inline-block w-7 h-7 transform bg-white rounded-full transition-transform shadow-sm ${formData.isPaid ? 'translate-x-14' : 'translate-x-0'
+                      className={`inline-block w-7 h-7 transform bg-white rounded-full transition-transform shadow-sm ${formData.isPaid ? 'translate-x-11' : 'translate-x-0'
                         }`}
                     />
-                    <span className={`absolute text-sm font-bold text-white pointer-events-none transition-opacity ${formData.isPaid ? 'left-3 opacity-100' : 'left-3 opacity-0'
+                    <span className={`absolute text-sm font-bold text-white pointer-events-none transition-opacity ${formData.isPaid ? 'left-2.5 opacity-100' : 'left-2.5 opacity-0'
                       }`}>
                       已付
                     </span>
-                    <span className={`absolute text-sm font-bold text-slate-500 pointer-events-none transition-opacity ${!formData.isPaid ? 'right-3 opacity-100' : 'right-3 opacity-0'
+                    <span className={`absolute text-sm font-bold text-slate-500 pointer-events-none transition-opacity ${!formData.isPaid ? 'right-2.5 opacity-100' : 'right-2.5 opacity-0'
                       }`}>
                       未付
                     </span>
@@ -1643,8 +1656,8 @@
                   记录列表 ({filteredRecords.length})
                 </h3>
                 {lastUpdated && (
-                  <span className="text-xs text-slate-400">
-                    最后更新: {lastUpdated.toLocaleTimeString()}
+                  <span className={`text-xs ${syncError ? 'text-red-500 font-bold' : 'text-slate-400'}`}>
+                    {syncError ? '更新失败，稍后再试' : `最后更新: ${lastUpdated.toLocaleTimeString()}`}
                   </span>
                 )}
               </div>
@@ -1693,18 +1706,18 @@
                             <button
                               type="button"
                               onClick={() => updateRecordStatus(record.id, !record.isPaid)}
-                              className={`relative inline-flex items-center h-8 rounded-full transition-colors focus:outline-none px-1 w-20 ${record.isPaid ? 'bg-emerald-500' : 'bg-slate-300'
+                              className={`relative inline-flex items-center h-8 rounded-full transition-colors focus:outline-none px-1 w-16 ${record.isPaid ? 'bg-emerald-500' : 'bg-slate-300'
                                 }`}
                             >
                               <span
-                                className={`inline-block w-6 h-6 transform bg-white rounded-full transition-transform shadow-sm ${record.isPaid ? 'translate-x-11' : 'translate-x-0'
+                                className={`inline-block w-6 h-6 transform bg-white rounded-full transition-transform shadow-sm ${record.isPaid ? 'translate-x-8' : 'translate-x-0'
                                   }`}
                               />
-                              <span className={`absolute text-xs font-bold text-white pointer-events-none transition-opacity ${record.isPaid ? 'left-2.5 opacity-100' : 'left-2.5 opacity-0'
+                              <span className={`absolute text-xs font-bold text-white pointer-events-none transition-opacity ${record.isPaid ? 'left-2 opacity-100' : 'left-2 opacity-0'
                                 }`}>
                                 已付
                               </span>
-                              <span className={`absolute text-xs font-bold text-slate-500 pointer-events-none transition-opacity ${!record.isPaid ? 'right-2.5 opacity-100' : 'right-2.5 opacity-0'
+                              <span className={`absolute text-xs font-bold text-slate-500 pointer-events-none transition-opacity ${!record.isPaid ? 'right-2 opacity-100' : 'right-2 opacity-0'
                                 }`}>
                                 未付
                               </span>
