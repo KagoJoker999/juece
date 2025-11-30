@@ -1106,6 +1106,18 @@
       };
 
       // --- Express Compensation Module ---
+      const NotificationToast = ({ message, type, onClose }) => {
+        if (!message) return null;
+
+        return (
+          <div className={`fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg transform transition-all duration-300 flex items-center gap-2 ${type === 'success' ? 'bg-emerald-500 text-white' : 'bg-red-500 text-white'
+            }`}>
+            <span>{type === 'success' ? '✅' : '⚠️'}</span>
+            <span className="font-medium">{message}</span>
+          </div>
+        );
+      };
+
       const ExpressCompensationModule = () => {
         const [githubToken, setGithubToken] = useState(localStorage.getItem('github_token') || '');
         const [repoOwner, setRepoOwner] = useState(localStorage.getItem('repo_owner') || '');
@@ -1116,6 +1128,7 @@
         const [error, setError] = useState('');
         const [lastUpdated, setLastUpdated] = useState(null);
         const [syncError, setSyncError] = useState(false);
+        const [notification, setNotification] = useState(null);
 
         // Navigation state
         const [activeSubTab, setActiveSubTab] = useState('add');
@@ -1144,13 +1157,13 @@
         // 切换到列表页时刷新数据
         useEffect(() => {
           if (activeSubTab === 'list' && isConfigured) {
-            fetchRecords();
+            fetchRecords(true); // 静默刷新，避免闪烁
           }
         }, [activeSubTab, isConfigured]);
 
         // GitHub API functions
-        const fetchRecords = async () => {
-          setLoading(true);
+        const fetchRecords = async (isBackground = false) => {
+          if (!isBackground) setLoading(true);
           setError('');
           try {
             const response = await fetch(
@@ -1187,7 +1200,7 @@
             // 2秒后自动恢复错误提示
             setTimeout(() => setSyncError(false), 2000);
           } finally {
-            setLoading(false);
+            if (!isBackground) setLoading(false);
           }
         };
 
@@ -1229,6 +1242,9 @@
 
             const newIssue = await response.json();
             const newRecord = {
+              id: newIssue.number,
+              ...record,
+              labels: labels
             };
 
             setFormData({ trackingNumber: '', amount: '', type: 'compensation', isPaid: false });
@@ -1236,16 +1252,24 @@
             // 乐观更新：直接插入新记录到前端列表
             setRecords(prev => [newRecord, ...prev]);
 
-            // 提示成功 (可选，这里简单处理，用户可能连续添加)
-            // alert('添加成功'); 
+            // 显示成功提示
+            setNotification({ message: '添加成功', type: 'success' });
+            setTimeout(() => setNotification(null), 3000);
+
+            // 后台静默同步
+            fetchRecords(true).catch(console.error);
 
           } catch (err) {
             setError(err.message);
+            setNotification({ message: `添加失败: ${err.message}`, type: 'error' });
+            setTimeout(() => setNotification(null), 5000);
           }
         };
 
         const updateRecordStatus = async (recordId, isPaid) => {
           const record = records.find(r => r.id === recordId);
+          if (!record) return;
+
           const updatedRecord = { ...record, isPaid };
           const labels = [
             'express-compensation',
@@ -1275,11 +1299,16 @@
             // 乐观更新：直接更新本地状态
             setRecords(prev => prev.map(r => r.id === recordId ? { ...r, isPaid } : r));
 
-            // 后台同步
-            fetchRecords().catch(console.error);
+            setNotification({ message: '状态更新成功', type: 'success' });
+            setTimeout(() => setNotification(null), 3000);
+
+            // 后台静默同步
+            fetchRecords(true).catch(console.error);
 
           } catch (err) {
             setError(err.message);
+            setNotification({ message: `更新失败: ${err.message}`, type: 'error' });
+            setTimeout(() => setNotification(null), 5000);
           }
         };
 
@@ -1305,11 +1334,16 @@
             // 乐观更新：直接从本地移除
             setRecords(prev => prev.filter(r => r.id !== recordId));
 
-            // 后台同步
-            fetchRecords().catch(console.error);
+            setNotification({ message: '记录删除成功', type: 'success' });
+            setTimeout(() => setNotification(null), 3000);
+
+            // 后台静默同步
+            fetchRecords(true).catch(console.error);
 
           } catch (err) {
             setError(err.message);
+            setNotification({ message: `删除失败: ${err.message}`, type: 'error' });
+            setTimeout(() => setNotification(null), 5000);
           }
         };
 
@@ -1480,8 +1514,8 @@
               <button
                 onClick={() => setActiveSubTab('add')}
                 className={`py-3 rounded-lg font-bold text-lg transition-all flex items-center justify-center ${activeSubTab === 'add'
-                    ? 'bg-teal-600 text-white shadow-md'
-                    : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200'
+                  ? 'bg-teal-600 text-white shadow-md'
+                  : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200'
                   }`}
               >
                 <span className="mr-2">+</span> 添加记录
@@ -1489,8 +1523,8 @@
               <button
                 onClick={() => setActiveSubTab('list')}
                 className={`py-3 rounded-lg font-bold text-lg transition-all flex items-center justify-center ${activeSubTab === 'list'
-                    ? 'bg-teal-600 text-white shadow-md'
-                    : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200'
+                  ? 'bg-teal-600 text-white shadow-md'
+                  : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200'
                   }`}
               >
                 <span className="mr-2">📋</span> 查看记录
@@ -1655,11 +1689,20 @@
                     <h3 className="font-bold text-slate-800">
                       记录列表 ({filteredRecords.length})
                     </h3>
-                    {lastUpdated && (
-                      <span className={`text-xs ${syncError ? 'text-red-500 font-bold' : 'text-slate-400'}`}>
-                        {syncError ? '更新失败，稍后再试' : `最后更新: ${lastUpdated.toLocaleTimeString()}`}
-                      </span>
-                    )}
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => fetchRecords(false)}
+                        className="p-1 text-slate-400 hover:text-teal-600 transition-colors"
+                        title="手动刷新"
+                      >
+                        <RefreshCw size={14} />
+                      </button>
+                      {lastUpdated && (
+                        <span className={`text-xs ${syncError ? 'text-red-500 font-bold' : 'text-slate-400'}`}>
+                          {syncError ? '更新失败，稍后再试' : `最后更新: ${lastUpdated.toLocaleTimeString()}`}
+                        </span>
+                      )}
+                    </div>
                   </div>
 
                   {loading ? (
