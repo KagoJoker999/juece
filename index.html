@@ -1194,7 +1194,8 @@
           } catch (err) {
             console.error('Fetch error:', err);
             setSyncError(true);
-            // 不覆盖主要错误信息，仅设置同步错误状态
+            // 2秒后自动恢复错误提示
+            setTimeout(() => setSyncError(false), 2000);
           } finally {
             setLoading(false);
           }
@@ -1515,9 +1516,18 @@
             {/* Action Buttons */}
             <button
               onClick={() => setShowForm(!showForm)}
-              className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition font-medium flex items-center"
+              className={`px-4 py-2 rounded-lg transition font-medium flex items-center ${showForm
+                  ? 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                  : 'bg-teal-600 text-white hover:bg-teal-700'
+                }`}
             >
-              <span className="mr-2">+</span> 添加记录
+              {showForm ? (
+                '点击取消'
+              ) : (
+                <>
+                  <span className="mr-2">+</span> 添加记录
+                </>
+              )}
             </button>
 
             {/* Add Record Form */}
@@ -1588,43 +1598,39 @@
                   )}
                 </div>
 
-                {/* Payment Status - Toggle Switch */}
-                <div className="flex items-center justify-between mt-6 p-4 bg-slate-50 rounded-lg">
-                  <span className="text-sm font-medium text-slate-700">支付状态</span>
-                  <button
-                    type="button"
-                    onClick={() => setFormData({ ...formData, isPaid: !formData.isPaid })}
-                    className={`relative inline-flex items-center h-9 rounded-full transition-colors focus:outline-none px-1 w-20 ${formData.isPaid ? 'bg-emerald-500' : 'bg-slate-300'
-                      }`}
-                  >
-                    <span
-                      className={`inline-block w-7 h-7 transform bg-white rounded-full transition-transform shadow-sm ${formData.isPaid ? 'translate-x-11' : 'translate-x-0'
+                {/* Payment Status and Submit Button - Compact Layout */}
+                <div className="flex items-center gap-4 mt-6">
+                  {/* Payment Status Switch */}
+                  <div className="flex items-center bg-slate-50 rounded-lg px-4 py-2 shrink-0 h-[52px]">
+                    <span className="text-sm font-medium text-slate-700 mr-3">支付状态</span>
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, isPaid: !formData.isPaid })}
+                      className={`relative inline-flex items-center h-9 rounded-full transition-colors focus:outline-none px-1 w-20 ${formData.isPaid ? 'bg-emerald-500' : 'bg-slate-300'
                         }`}
-                    />
-                    <span className={`absolute text-sm font-bold text-white pointer-events-none transition-opacity ${formData.isPaid ? 'left-2.5 opacity-100' : 'left-2.5 opacity-0'
-                      }`}>
-                      已付
-                    </span>
-                    <span className={`absolute text-sm font-bold text-slate-500 pointer-events-none transition-opacity ${!formData.isPaid ? 'right-2.5 opacity-100' : 'right-2.5 opacity-0'
-                      }`}>
-                      未付
-                    </span>
-                  </button>
-                </div>
+                    >
+                      <span
+                        className={`inline-block w-7 h-7 transform bg-white rounded-full transition-transform shadow-sm ${formData.isPaid ? 'translate-x-11' : 'translate-x-0'
+                          }`}
+                      />
+                      <span className={`absolute text-sm font-bold text-white pointer-events-none transition-opacity ${formData.isPaid ? 'left-2.5 opacity-100' : 'left-2.5 opacity-0'
+                        }`}>
+                        已付
+                      </span>
+                      <span className={`absolute text-sm font-bold text-slate-500 pointer-events-none transition-opacity ${!formData.isPaid ? 'right-2.5 opacity-100' : 'right-2.5 opacity-0'
+                        }`}>
+                        未付
+                      </span>
+                    </button>
+                  </div>
 
-                <div className="flex gap-3 mt-6">
+                  {/* Submit Button */}
                   <button
                     onClick={createRecord}
                     disabled={!formData.trackingNumber || (formData.type === 'compensation' && !formData.amount)}
-                    className="flex-1 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-slate-300 transition font-medium"
+                    className="flex-1 h-[52px] bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-slate-300 transition font-medium text-lg"
                   >
                     + 记一笔
-                  </button>
-                  <button
-                    onClick={() => setShowForm(false)}
-                    className="px-6 py-3 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition font-medium"
-                  >
-                    取消
                   </button>
                 </div>
               </Card>
