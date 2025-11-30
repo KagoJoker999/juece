@@ -1128,7 +1128,23 @@
 
         // Search states
         const [searchTerm, setSearchTerm] = useState('');
-        const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7));
+        
+        // 北京时间工具函数
+        const getBeijingDate = () => {
+          // 获取北京时间 (UTC+8)
+          const now = new Date();
+          const beijingTime = new Date(now.getTime() + 8 * 60 * 60 * 1000);
+          return beijingTime.toISOString().split('T')[0]; // YYYY-MM-DD
+        };
+
+        const getBeijingMonth = () => {
+          // 获取北京时间的年月 (YYYY-MM)
+          const now = new Date();
+          const beijingTime = new Date(now.getTime() + 8 * 60 * 60 * 1000);
+          return beijingTime.toISOString().slice(0, 7);
+        };
+
+        const [selectedMonth, setSelectedMonth] = useState(getBeijingMonth());
 
         // Supabase helper functions
         const supabaseRequest = async (method, table, data = null, id = null, query = '') => {
@@ -1201,12 +1217,16 @@
           setError('');
           try {
             // 尝试插入一条测试记录来触发表创建
+            // 获取北京时间 (UTC+8)
+            const now = new Date();
+            const beijingTime = new Date(now.getTime() + 8 * 60 * 60 * 1000);
+            
             const testRecord = {
               tracking_number: 'INIT_TEST_' + Date.now(),
               amount: 0.01,
               record_type: 'compensation',
               is_paid: false,
-              record_date: new Date().toISOString().split('T')[0],
+              record_date: beijingTime.toISOString().split('T')[0],
               note: '初始化测试记录'
             };
 
@@ -1255,12 +1275,17 @@
 
         const createRecord = async () => {
           const amount = formData.type === 'advance' ? -3 : parseFloat(formData.amount);
+          
+          // 获取北京时间 (UTC+8)
+          const now = new Date();
+          const beijingTime = new Date(now.getTime() + 8 * 60 * 60 * 1000);
+          
           const recordData = {
             tracking_number: formData.trackingNumber,
             amount: amount,
             record_type: formData.type,
             is_paid: formData.isPaid,
-            record_date: new Date().toISOString().split('T')[0],
+            record_date: beijingTime.toISOString().split('T')[0],
             note: formData.note || null
           };
 
@@ -1334,7 +1359,10 @@
         });
 
         // Statistics
-        const currentMonth = new Date().toISOString().slice(0, 7);
+        // 获取北京时间的年月
+        const now = new Date();
+        const beijingTime = new Date(now.getTime() + 8 * 60 * 60 * 1000);
+        const currentMonth = beijingTime.toISOString().slice(0, 7);
         const currentMonthRecords = records.filter(r => r.date.startsWith(currentMonth));
         const unpaidTotal = currentMonthRecords
           .filter(r => !r.isPaid)
@@ -1356,7 +1384,11 @@
           const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
           const link = document.createElement('a');
           link.href = URL.createObjectURL(blob);
-          link.download = `快递赔偿记录_${new Date().toISOString().slice(0, 10)}.csv`;
+          
+          // 获取北京时间的日期用于文件名
+          const now = new Date();
+          const beijingTime = new Date(now.getTime() + 8 * 60 * 60 * 1000);
+          link.download = `快递赔偿记录_${beijingTime.toISOString().slice(0, 10)}.csv`;
           link.click();
         };
 

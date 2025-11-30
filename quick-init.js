@@ -15,12 +15,16 @@ async function initSupabaseDatabase() {
     };
 
     try {
+        // 获取北京时间 (UTC+8)
+        const now = new Date();
+        const beijingTime = new Date(now.getTime() + 8 * 60 * 60 * 1000);
+        
         // 尝试创建一条测试记录来触发表创建
         const testData = {
             tracking_number: 'TEST' + Date.now(),
             amount: 1.00,
             record_type: 'compensation',
-            record_date: new Date().toISOString().split('T')[0],
+            record_date: beijingTime.toISOString().split('T')[0],
             note: '初始化测试记录'
         };
 
