@@ -1128,7 +1128,6 @@
         const [searchTerm, setSearchTerm] = useState('');
         const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7));
 
-
         useEffect(() => {
           const token = localStorage.getItem('github_token');
           const owner = localStorage.getItem('repo_owner');
@@ -1136,6 +1135,13 @@
           if (token && owner && repo) {
             setIsConfigured(true);
             fetchRecords();
+
+            // 定时轮询，每30秒自动刷新一次
+            const interval = setInterval(() => {
+              fetchRecords();
+            }, 30000);
+
+            return () => clearInterval(interval);
           }
         }, []);
 
@@ -1619,23 +1625,9 @@
 
             {/* Records List */}
             <Card className="p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="font-bold text-slate-800">
-                  记录列表 ({filteredRecords.length})
-                </h3>
-                {/* 手动数据库同步按钮 */}
-                <button
-                  onClick={fetchRecords}
-                  disabled={loading}
-                  className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-                >
-                  <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
-                  {loading ? '同步中...' : '手动同步'}
-                </button>
-              </div>
-              <div className="text-xs text-slate-500 bg-slate-50 p-2 rounded mb-4">
-                ⚠️ 在下次数据库同步之前，当前页面上的更改可能不会在云端数据库中反映
-              </div>
+              <h3 className="font-bold text-slate-800 mb-4">
+                记录列表 ({filteredRecords.length})
+              </h3>
 
               {loading ? (
                 <div className="text-center py-8 text-slate-500">加载中...</div>
