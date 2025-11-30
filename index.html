@@ -1219,9 +1219,19 @@
 
             if (!response.ok) throw new Error('创建记录失败');
 
+            const newIssue = await response.json();
+            const newRecord = {
+              id: newIssue.number,
+              ...record,
+              labels: labels
+            };
+
             setShowForm(false);
             setFormData({ trackingNumber: '', amount: '', type: 'compensation', isPaid: false });
-            await fetchRecords(); // 自动刷新
+
+            // 乐观更新：直接插入新记录到前端列表
+            setRecords(prev => [newRecord, ...prev]);
+
           } catch (err) {
             setError(err.message);
           }
@@ -1254,7 +1264,10 @@
             );
 
             if (!response.ok) throw new Error('更新失败');
-            await fetchRecords(); // 自动刷新
+
+            // 乐观更新：直接更新本地状态
+            setRecords(prev => prev.map(r => r.id === recordId ? { ...r, isPaid } : r));
+
           } catch (err) {
             setError(err.message);
           }
@@ -1278,7 +1291,10 @@
             );
 
             if (!response.ok) throw new Error('删除失败');
-            await fetchRecords(); // 自动刷新
+
+            // 乐观更新：直接从本地移除
+            setRecords(prev => prev.filter(r => r.id !== recordId));
+
           } catch (err) {
             setError(err.message);
           }
@@ -1659,6 +1675,7 @@
                                 未付
                               </span>
                               <button
+                                type="button"
                                 onClick={() => updateRecordStatus(record.id, !record.isPaid)}
                                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${record.isPaid ? 'bg-emerald-600' : 'bg-slate-300'
                                   }`}
