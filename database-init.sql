@@ -85,7 +85,14 @@ SELECT
 FROM express_compensation_records;
 
 -- 显示表结构
-\d express_compensation_records;
+SELECT 
+    column_name,
+    data_type,
+    is_nullable,
+    column_default
+FROM information_schema.columns 
+WHERE table_name = 'express_compensation_records' 
+ORDER BY ordinal_position;
 
 -- 完成提示
 SELECT 
