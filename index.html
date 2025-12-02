@@ -104,10 +104,10 @@
       const [isSopExpanded, setIsSopExpanded] = useState(true);
       const [isDailyExpanded, setIsDailyExpanded] = useState(true);
       const [checklist, setChecklist] = useState({
-        scanMorning: false,
-        check10am: false,
-        scanAfternoon: false,
-        check4pm: false,
+        scanReturn: false,
+        checkWorkbench: false,
+        customerGroup: false,
+        oversoldWarning: false,
       });
 
       const toggleCheck = (key) => {
@@ -442,17 +442,21 @@
                 <Clock size={16} className="mr-2" /> 今日必做 (日巡)
               </h3>
               <div className="space-y-2">
-                <div className="w-full text-left p-3 rounded-lg bg-blue-50 hover:bg-blue-100 transition flex justify-between items-center group shadow-sm border border-blue-100">
+                <div onClick={() => toggleCheck('scanReturn')} className="w-full cursor-pointer text-left p-3 rounded-lg bg-blue-50 hover:bg-blue-100 transition flex justify-between items-center group shadow-sm border border-blue-100">
                   <span className="font-semibold text-blue-800">扫码退货</span>
+                  <input type="checkbox" checked={checklist.scanReturn} onChange={() => toggleCheck('scanReturn')} className="w-5 h-5 cursor-pointer" />
                 </div>
-                <div className="w-full text-left p-3 rounded-lg bg-emerald-50 hover:bg-emerald-100 transition flex justify-between items-center group shadow-sm border border-emerald-100">
+                <div onClick={() => toggleCheck('checkWorkbench')} className="w-full cursor-pointer text-left p-3 rounded-lg bg-emerald-50 hover:bg-emerald-100 transition flex justify-between items-center group shadow-sm border border-emerald-100">
                   <span className="font-semibold text-emerald-800">售后工作台检查</span>
+                  <input type="checkbox" checked={checklist.checkWorkbench} onChange={() => toggleCheck('checkWorkbench')} className="w-5 h-5 cursor-pointer" />
                 </div>
-                <div className="w-full text-left p-3 rounded-lg bg-amber-50 hover:bg-amber-100 transition flex justify-between items-center group shadow-sm border border-amber-100">
+                <div onClick={() => toggleCheck('customerGroup')} className="w-full cursor-pointer text-left p-3 rounded-lg bg-amber-50 hover:bg-amber-100 transition flex justify-between items-center group shadow-sm border border-amber-100">
                   <span className="font-semibold text-amber-800">客户群处理</span>
+                  <input type="checkbox" checked={checklist.customerGroup} onChange={() => toggleCheck('customerGroup')} className="w-5 h-5 cursor-pointer" />
                 </div>
-                <div className="w-full text-left p-3 rounded-lg bg-purple-50 hover:bg-purple-100 transition flex justify-between items-center group shadow-sm border border-purple-100">
+                <div onClick={() => toggleCheck('oversoldWarning')} className="w-full cursor-pointer text-left p-3 rounded-lg bg-purple-50 hover:bg-purple-100 transition flex justify-between items-center group shadow-sm border border-purple-100">
                   <span className="font-semibold text-purple-800">超卖订单预警</span>
+                  <input type="checkbox" checked={checklist.oversoldWarning} onChange={() => toggleCheck('oversoldWarning')} className="w-5 h-5 cursor-pointer" />
                 </div>
 
               </div>
@@ -471,7 +475,7 @@
                   className="w-full text-left p-3 rounded-lg bg-red-50 hover:bg-red-100 transition flex justify-between items-center group shadow-sm border border-red-100"
                 >
                   <div className="flex flex-col">
-                    <span className="font-semibold text-red-800">恶意买家</span>
+                    <span className="font-semibold text-red-800">😠 恶意买家</span>
                     <span className="text-xs text-red-600">核实拉黑 / 升级处理</span>
                   </div>
                   <ExternalLink size={16} className="text-red-500 group-hover:translate-x-0.5 transition" />
@@ -483,7 +487,7 @@
                   className="w-full text-left p-3 rounded-lg bg-amber-50 hover:bg-amber-100 transition flex justify-between items-center group shadow-sm border border-amber-100"
                 >
                   <div className="flex flex-col">
-                    <span className="font-semibold text-amber-800">超期售后 (1个月+)</span>
+                    <span className="font-semibold text-amber-800">📅 超期售后 (1个月+)</span>
                     <span className="text-xs text-amber-600">需提供签收时间证明截图</span>
                   </div>
                   <ExternalLink size={16} className="text-amber-500 group-hover:translate-x-0.5 transition" />
@@ -651,7 +655,7 @@
               </div>
               <ol className="list-decimal list-inside space-y-3 text-sm text-slate-700">
                 <li className="p-2 bg-slate-50 rounded">进入 ERP<span className="font-bold text-blue-600">「订单-售后（极速版）」</span></li>
-                <li className="p-2 bg-slate-50 rounded">通过<span className="font-bold text-blue-600">售后单号</span>或线上单号搜索</li>
+                <li className="p-2 bg-slate-50 rounded">通过<span className="font-bold text-blue-600">「售后单号」</span>或线上单号搜索</li>
                 <li className="p-2 bg-slate-50 rounded">勾选订单，点击<span className="font-bold text-blue-600">「确认」</span></li>
                 <li className="p-2 bg-slate-50 rounded">系统自动生成发货单</li>
               </ol>
@@ -1142,7 +1146,7 @@
 
         // Search states
         const [searchTerm, setSearchTerm] = useState('');
-        
+
         // 北京时间工具函数
         const getBeijingDate = () => {
           // 获取北京时间 (UTC+8)
@@ -1163,14 +1167,14 @@
         // Supabase helper functions
         const supabaseRequest = async (method, table, data = null, id = null, query = '') => {
           let url = `${SUPABASE_URL}/rest/v1/${table}`;
-          
+
           // 添加查询条件
           if (query) {
             url += `?${query}`;
           } else if (id) {
             url += `?id=eq.${id}`;
           }
-          
+
           const options = {
             method,
             headers: {
@@ -1186,18 +1190,18 @@
           }
 
           const response = await fetch(url, options);
-          
+
           if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
             throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
           }
-          
+
           return response.json();
         };
 
         useEffect(() => {
           checkDatabaseConnection();
-          
+
           // 定时轮询，每30秒自动刷新一次
           const interval = setInterval(() => {
             fetchRecords();
@@ -1234,7 +1238,7 @@
             // 获取北京时间 (UTC+8)
             const now = new Date();
             const beijingTime = new Date(now.getTime() + 8 * 60 * 60 * 1000);
-            
+
             const testRecord = {
               tracking_number: 'INIT_TEST_' + Date.now(),
               amount: 0.01,
@@ -1245,13 +1249,13 @@
             };
 
             await supabaseRequest('POST', 'express_compensation_records', testRecord);
-            
+
             // 删除测试记录
             await supabaseRequest('DELETE', 'express_compensation_records', null, null, 'tracking_number=eq.' + testRecord.tracking_number);
-            
+
             // 重新检查数据库状态
             await checkDatabaseConnection();
-            
+
           } catch (err) {
             if (err.message.includes('PGRST205') || err.message.includes('Could not find')) {
               setError('自动初始化失败。请手动在Supabase SQL Editor中执行 supabase_schema.sql 文件内容。');
@@ -1267,7 +1271,7 @@
           setError('');
           try {
             const data = await supabaseRequest('GET', 'express_compensation_records', null, null, 'order=created_at.desc');
-            
+
             // 转换数据格式以匹配现有的前端逻辑
             const parsedRecords = data.map(record => ({
               id: record.id,
@@ -1289,11 +1293,11 @@
 
         const createRecord = async () => {
           const amount = formData.type === 'advance' ? -3 : parseFloat(formData.amount);
-          
+
           // 获取北京时间 (UTC+8)
           const now = new Date();
           const beijingTime = new Date(now.getTime() + 8 * 60 * 60 * 1000);
-          
+
           const recordData = {
             tracking_number: formData.trackingNumber,
             amount: amount,
@@ -1305,7 +1309,7 @@
 
           try {
             const newRecord = await supabaseRequest('POST', 'express_compensation_records', recordData);
-            
+
             const formattedRecord = {
               id: newRecord[0].id,
               trackingNumber: newRecord[0].tracking_number,
@@ -1334,7 +1338,7 @@
 
           try {
             await supabaseRequest('PATCH', 'express_compensation_records', recordData, recordId);
-            
+
             // 乐观更新：直接更新本地状态
             setRecords(prev => prev.map(r => r.id === recordId ? { ...r, isPaid } : r));
 
@@ -1348,7 +1352,7 @@
 
           try {
             await supabaseRequest('DELETE', 'express_compensation_records', null, recordId);
-            
+
             // 乐观更新：直接从本地移除
             setRecords(prev => prev.filter(r => r.id !== recordId));
 
@@ -1398,7 +1402,7 @@
           const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
           const link = document.createElement('a');
           link.href = URL.createObjectURL(blob);
-          
+
           // 获取北京时间的日期用于文件名
           const now = new Date();
           const beijingTime = new Date(now.getTime() + 8 * 60 * 60 * 1000);
@@ -1407,88 +1411,88 @@
         };
 
         // Configuration UI - 显示数据库状态
-         if (databaseStatus === 'checking') {
-           return (
-             <div className="max-w-2xl mx-auto space-y-6">
-               <Card className="p-6">
-                 <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center">
-                   <Truck size={20} className="mr-2 text-teal-600" /> 快递赔偿账本
-                 </h2>
-                 <div className="text-center py-8">
-                   <div className="animate-spin w-6 h-6 border-2 border-teal-600 border-t-transparent rounded-full mx-auto mb-4"></div>
-                   <p className="text-slate-600">正在检查数据库连接...</p>
-                 </div>
-               </Card>
-             </div>
-           );
-         }
+        if (databaseStatus === 'checking') {
+          return (
+            <div className="max-w-2xl mx-auto space-y-6">
+              <Card className="p-6">
+                <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center">
+                  <Truck size={20} className="mr-2 text-teal-600" /> 快递赔偿账本
+                </h2>
+                <div className="text-center py-8">
+                  <div className="animate-spin w-6 h-6 border-2 border-teal-600 border-t-transparent rounded-full mx-auto mb-4"></div>
+                  <p className="text-slate-600">正在检查数据库连接...</p>
+                </div>
+              </Card>
+            </div>
+          );
+        }
 
-         if (databaseStatus === 'missing') {
-           return (
-             <div className="max-w-2xl mx-auto space-y-6">
-               <Card className="p-6">
-                 <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center">
-                   <Truck size={20} className="mr-2 text-teal-600" /> 快递赔偿账本 - 数据库初始化
-                 </h2>
+        if (databaseStatus === 'missing') {
+          return (
+            <div className="max-w-2xl mx-auto space-y-6">
+              <Card className="p-6">
+                <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center">
+                  <Truck size={20} className="mr-2 text-teal-600" /> 快递赔偿账本 - 数据库初始化
+                </h2>
 
-                 <div className="bg-amber-50 border-l-4 border-amber-500 p-4 mb-6">
-                   <div className="flex items-center">
-                     <div className="mr-3">
-                       <svg className="w-5 h-5 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
-                         <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                       </svg>
-                     </div>
-                     <div>
-                       <p className="text-sm text-amber-800">
-                         数据库表不存在，需要初始化。
-                       </p>
-                     </div>
-                   </div>
-                 </div>
+                <div className="bg-amber-50 border-l-4 border-amber-500 p-4 mb-6">
+                  <div className="flex items-center">
+                    <div className="mr-3">
+                      <svg className="w-5 h-5 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-sm text-amber-800">
+                        数据库表不存在，需要初始化。
+                      </p>
+                    </div>
+                  </div>
+                </div>
 
-                 <div className="space-y-4">
-                   {/* 一键初始化按钮 */}
-                   <div className="text-center">
-                     <button
-                       onClick={quickInitDatabase}
-                       className="w-full py-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-medium text-lg mb-4 focus:outline-none"
-                     >
-                       🚀 一键初始化数据库
-                     </button>
-                   </div>
+                <div className="space-y-4">
+                  {/* 一键初始化按钮 */}
+                  <div className="text-center">
+                    <button
+                      onClick={quickInitDatabase}
+                      className="w-full py-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-medium text-lg mb-4 focus:outline-none"
+                    >
+                      🚀 一键初始化数据库
+                    </button>
+                  </div>
 
-                   <div className="bg-slate-50 p-4 rounded-lg">
-                     <h4 className="text-sm font-medium text-slate-700 mb-2">手动初始化方法：</h4>
-                     <ol className="text-sm text-slate-600 space-y-2 list-decimal list-inside">
-                       <li>复制以下代码到浏览器控制台：</li>
-                     </ol>
-                   </div>
+                  <div className="bg-slate-50 p-4 rounded-lg">
+                    <h4 className="text-sm font-medium text-slate-700 mb-2">手动初始化方法：</h4>
+                    <ol className="text-sm text-slate-600 space-y-2 list-decimal list-inside">
+                      <li>复制以下代码到浏览器控制台：</li>
+                    </ol>
+                  </div>
 
-                   <div className="bg-slate-900 text-slate-100 p-4 rounded-lg overflow-x-auto">
-                     <code className="text-xs">
-                       {`fetch('quick-init.js').then(r => r.text()).then(code => eval(code));`}
-                     </code>
-                   </div>
+                  <div className="bg-slate-900 text-slate-100 p-4 rounded-lg overflow-x-auto">
+                    <code className="text-xs">
+                      {`fetch('quick-init.js').then(r => r.text()).then(code => eval(code));`}
+                    </code>
+                  </div>
 
-                   <div className="bg-blue-50 border-l-4 border-blue-500 p-4">
-                     <p className="text-sm text-blue-800">
-                       或者在 Supabase Dashboard → SQL Editor 中手动执行 supabase_schema.sql 文件内容。
-                     </p>
-                   </div>
+                  <div className="bg-blue-50 border-l-4 border-blue-500 p-4">
+                    <p className="text-sm text-blue-800">
+                      或者在 Supabase Dashboard → SQL Editor 中手动执行 supabase_schema.sql 文件内容。
+                    </p>
+                  </div>
 
-                   <button
-                     onClick={checkDatabaseConnection}
-                     className="w-full py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition font-medium focus:outline-none"
-                   >
-                     重新检查数据库
-                   </button>
-                 </div>
-               </Card>
-             </div>
-           );
-         }
-  
-          // Main UI
+                  <button
+                    onClick={checkDatabaseConnection}
+                    className="w-full py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition font-medium focus:outline-none"
+                  >
+                    重新检查数据库
+                  </button>
+                </div>
+              </Card>
+            </div>
+          );
+        }
+
+        // Main UI
         return (
           <div className="max-w-6xl mx-auto space-y-6">
             {/* Header with export button */}
