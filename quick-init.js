@@ -4,10 +4,10 @@
 
 async function initSupabaseDatabase() {
     console.log('🔄 开始初始化数据库...');
-    
-    const SUPABASE_URL = 'https://zxsjvainccqwrmndilhr.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4c2p2YWluY2Nxd3JtbmRpbGhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ1MjQ1MDksImV4cCI6MjA4MDEwMDUwOX0.f33OG29IJ-QEhtCqwK8Rvd3jhF1rqA64sACTf28jDpk';
-    
+
+    const SUPABASE_URL = 'https://ugadhdhwixrejzfcwugj.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVnYWRoZGh3aXhyZWp6ZmN3dWdqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYyMzU3NTgsImV4cCI6MjA4MTgxMTc1OH0.XQp5pvoM-nSGfLZB9ZGfxJCkU3GbeiWrBohA_XchS54';
+
     const headers = {
         'apikey': SUPABASE_ANON_KEY,
         'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
@@ -18,7 +18,7 @@ async function initSupabaseDatabase() {
         // 获取北京时间 (UTC+8)
         const now = new Date();
         const beijingTime = new Date(now.getTime() + 8 * 60 * 60 * 1000);
-        
+
         // 尝试创建一条测试记录来触发表创建
         const testData = {
             tracking_number: 'TEST' + Date.now(),
@@ -42,7 +42,7 @@ async function initSupabaseDatabase() {
             // 获取刚创建的记录的ID，然后删除它
             console.log('✅ 测试记录创建成功，正在清理...');
             const id = response.headers.get('content-location')?.split('/').pop();
-            
+
             if (id) {
                 await fetch(`${SUPABASE_URL}/rest/v1/express_compensation_records?id=eq.${id}`, {
                     method: 'DELETE',
@@ -50,7 +50,7 @@ async function initSupabaseDatabase() {
                 });
                 console.log('✅ 清理完成');
             }
-            
+
             console.log('🎉 数据库表已创建！请刷新页面重试。');
             return true;
         } else {
@@ -59,10 +59,10 @@ async function initSupabaseDatabase() {
 
     } catch (error) {
         console.error('❌ 自动创建失败:', error.message);
-        
+
         if (error.message.includes('Could not find the table')) {
             console.log('\n🔧 手动初始化步骤:');
-            console.log('1. 访问 Supabase Dashboard: https://supabase.com/dashboard/project/zxsjvainccqwrmndilhr');
+            console.log('1. 访问 Supabase Dashboard: https://supabase.com/dashboard/project/ugadhdhwixrejzfcwugj');
             console.log('2. 进入 SQL Editor');
             console.log('3. 复制以下 SQL 并执行:');
             console.log('');

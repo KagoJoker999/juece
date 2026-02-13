@@ -1,8 +1,8 @@
 // Supabase数据库初始化脚本
 // 在浏览器控制台中运行此脚本来初始化数据库表
 
-const SUPABASE_URL = 'https://zxsjvainccqwrmndilhr.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4c2p2YWluY2Nxd3JtbmRpbGhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ1MjQ1MDksImV4cCI6MjA4MDEwMDUwOX0.f33OG29IJ-QEhtCqwK8Rvd3jhF1rqA64sACTf28jDpk';
+const SUPABASE_URL = 'https://ugadhdhwixrejzfcwugj.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVnYWRoZGh3aXhyZWp6ZmN3dWdqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYyMzU3NTgsImV4cCI6MjA4MTgxMTc1OH0.XQp5pvoM-nSGfLZB9ZGfxJCkU3GbeiWrBohA_XchS54';
 
 // 创建表的SQL
 const CREATE_TABLE_SQL = `

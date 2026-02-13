@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据迁移工具</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .status {
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-weight: 500;
+        }
+
+        .status.info {
+            background: #e3f2fd;
+            color: #1976d2;
+            border: 1px solid #bbdefb;
+        }
+
+        .status.success {
+            background: #e8f5e8;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+
+        .status.error {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+
+        .status.warning {
+            background: #fff3e0;
+            color: #e65100;
+            border: 1px solid #ffe0b2;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin: 10px 0;
+        }
+
+        .btn-primary {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #45a049;
+        }
+
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: #2196F3;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #1976D2;
+        }
+
+        .log-area {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            margin: 15px 0;
+        }
+
+        .log-area .success {
+            color: #4ec9b0;
+        }
+
+        .log-area .error {
+            color: #f44747;
+        }
+
+        .log-area .warn {
+            color: #cca700;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🔄 数据迁移工具</h1>
+        <p style="text-align:center;color:#666;">将快递赔偿数据从旧数据库迁移到 zhibo 数据库</p>
+
+        <div id="status" class="status info">点击下方按钮开始迁移</div>
+
+        <button id="migrateBtn" class="btn-primary" onclick="startMigration()">
+            🚀 开始迁移数据
+        </button>
+
+        <div id="logArea" class="log-area" style="display:none;"></div>
+
+        <a href="index.html"
+            style="display:block;text-align:center;margin-top:20px;color:#2196F3;text-decoration:none;">← 返回主页</a>
+    </div>
+
+    <script>
+        // 旧数据库
+        const OLD_URL = 'https://zxsjvainccqwrmndilhr.supabase.co';
+        const OLD_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4c2p2YWluY2Nxd3JtbmRpbGhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ1MjQ1MDksImV4cCI6MjA4MDEwMDUwOX0.f33OG29IJ-QEhtCqwK8Rvd3jhF1rqA64sACTf28jDpk';
+
+        // 新数据库 (zhibo)
+        const NEW_URL = 'https://ugadhdhwixrejzfcwugj.supabase.co';
+        const NEW_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVnYWRoZGh3aXhyZWp6ZmN3dWdqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYyMzU3NTgsImV4cCI6MjA4MTgxMTc1OH0.XQp5pvoM-nSGfLZB9ZGfxJCkU3GbeiWrBohA_XchS54';
+
+        const TABLE = 'express_compensation_records';
+
+        function log(msg, type = '') {
+            const area = document.getElementById('logArea');
+            area.style.display = 'block';
+            const span = document.createElement('span');
+            if (type) span.className = type;
+            span.textContent = msg + '\n';
+            area.appendChild(span);
+            area.scrollTop = area.scrollHeight;
+        }
+
+        function setStatus(msg, type) {
+            const el = document.getElementById('status');
+            el.className = 'status ' + type;
+            el.textContent = msg;
+        }
+
+        async function supabaseFetch(baseUrl, key, method, query = '', data = null) {
+            const url = `${baseUrl}/rest/v1/${TABLE}${query ? '?' + query : ''}`;
+            const options = {
+                method,
+                headers: {
+                    'apikey': key,
+                    'Authorization': `Bearer ${key}`,
+                    'Content-Type': 'application/json',
+                    'Prefer': method === 'GET' ? '' : 'return=representation'
+                }
+            };
+            if (data && (method === 'POST' || method === 'PATCH')) {
+                options.body = JSON.stringify(data);
+            }
+            const response = await fetch(url, options);
+            if (!response.ok) {
+                const err = await response.json().catch(() => ({}));
+                throw new Error(err.message || `HTTP ${response.status}`);
+            }
+            return response.json();
+        }
+
+        async function startMigration() {
+            const btn = document.getElementById('migrateBtn');
+            btn.disabled = true;
+            btn.textContent = '⏳ 迁移中...';
+
+            try {
+                // 步骤1: 从旧数据库读取所有数据
+                log('📖 正在从旧数据库读取数据...');
+                setStatus('正在读取旧数据库...', 'info');
+
+                let oldRecords;
+                try {
+                    oldRecords = await supabaseFetch(OLD_URL, OLD_KEY, 'GET', 'order=id.asc');
+                } catch (err) {
+                    log('❌ 读取旧数据库失败: ' + err.message, 'error');
+                    setStatus('读取旧数据库失败', 'error');
+                    btn.disabled = false;
+                    btn.textContent = '🚀 重试迁移';
+                    return;
+                }
+
+                log(`✅ 读取到 ${oldRecords.length} 条记录`, 'success');
+
+                if (oldRecords.length === 0) {
+                    log('ℹ️ 旧数据库中没有数据，无需迁移', 'warn');
+                    setStatus('旧数据库为空，无需迁移', 'warning');
+                    btn.disabled = false;
+                    btn.textContent = '🚀 重试迁移';
+                    return;
+                }
+
+                // 显示读取到的数据概况
+                log(`--- 数据概况 ---`);
+                oldRecords.forEach(r => {
+                    log(`  [${r.record_date}] ${r.tracking_number} | ${r.record_type} | ${r.amount}元 | ${r.is_paid ? '已付' : '未付'}`);
+                });
+                log('');
+
+                // 步骤2: 检查新数据库连接
+                log('🔗 正在检查新数据库连接...');
+                setStatus('正在检查新数据库...', 'info');
+
+                try {
+                    await supabaseFetch(NEW_URL, NEW_KEY, 'GET', 'limit=1');
+                    log('✅ 新数据库连接正常', 'success');
+                } catch (err) {
+                    log('❌ 新数据库连接失败: ' + err.message, 'error');
+                    log('💡 请先在 zhibo 数据库中执行 supabase_schema_zhibo.sql 建表', 'warn');
+                    setStatus('新数据库连接失败，请先建表', 'error');
+                    btn.disabled = false;
+                    btn.textContent = '🚀 重试迁移';
+                    return;
+                }
+
+                // 步骤3: 写入新数据库
+                log('📝 正在写入新数据库...');
+                setStatus('正在写入数据...', 'info');
+
+                // 移除 id、created_at、updated_at，让新数据库自动生成
+                const cleanRecords = oldRecords.map(r => ({
+                    tracking_number: r.tracking_number,
+                    amount: r.amount,
+                    record_type: r.record_type,
+                    is_paid: r.is_paid,
+                    record_date: r.record_date,
+                    note: r.note
+                }));
+
+                let successCount = 0;
+                let failCount = 0;
+
+                // 逐条插入以确保每条都成功
+                for (let i = 0; i < cleanRecords.length; i++) {
+                    try {
+                        await supabaseFetch(NEW_URL, NEW_KEY, 'POST', '', cleanRecords[i]);
+                        successCount++;
+                        log(`  ✅ [${i + 1}/${cleanRecords.length}] ${cleanRecords[i].tracking_number}`, 'success');
+                    } catch (err) {
+                        failCount++;
+                        log(`  ❌ [${i + 1}/${cleanRecords.length}] ${cleanRecords[i].tracking_number}: ${err.message}`, 'error');
+                    }
+                }
+
+                log('');
+                log(`=== 迁移完成 ===`);
+                log(`成功: ${successCount} 条`, 'success');
+                if (failCount > 0) {
+                    log(`失败: ${failCount} 条`, 'error');
+                    setStatus(`迁移完成，成功 ${successCount} 条，失败 ${failCount} 条`, 'warning');
+                } else {
+                    log('🎉 全部数据迁移成功！', 'success');
+                    setStatus(`✅ 迁移完成！共 ${successCount} 条记录`, 'success');
+                }
+
+            } catch (err) {
+                log('❌ 迁移过程出错: ' + err.message, 'error');
+                setStatus('迁移失败: ' + err.message, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '🔄 重新迁移';
+            }
+        }
+    </script>
+</body>
+
+</html>
