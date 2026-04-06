@@ -628,9 +628,14 @@
       const RefundsModule = () => (
         <div className="max-w-5xl mx-auto space-y-6">
           <Card className="p-6">
-            <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center">
+            <h2 className="text-xl font-bold text-slate-800 mb-4 flex items-center">
               <Search size={20} className="mr-2 text-blue-600" /> 仅退款处理 SOP
             </h2>
+
+            <div className="mb-5 text-sm text-slate-600 bg-slate-50 p-3 rounded border border-slate-200">
+              <span className="font-bold text-slate-700">操作路径：</span>
+              <span>抖店</span> <span className="text-slate-400 mx-1">---</span> <span className="font-bold text-blue-600">售后工作台</span>
+            </div>
 
             <div className="space-y-6">
               {/* 抖店工作台处理流程 */}
@@ -711,8 +716,7 @@
                 <p className="text-sm text-slate-500 mt-1">系统提示“无此单”或扫不出来时：</p>
                 <div className="mt-2 text-sm bg-slate-100 p-3 rounded">
                   1. 尝试手动输入单号查询。<br />
-                  2. 使用“无信息件绑定订单”功能。<br />
-                  3. 如仍无法解决，进行“售后问题登记”（拍照/留档）。
+                  2. 如仍无法找到，则直接寻找该产品并手动入库。（需要库存管理人员协助完成）
                 </div>
               </div>
             </div>
