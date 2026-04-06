@@ -24,6 +24,8 @@
   <!-- 引入 Babel CDN，用于在浏览器中编译 JSX -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
+  <!-- 修复 lucide-react UMD 对 React 的依赖查找 (UMD 查找 global.react 小写) -->
+  <script>window.react = window.React;</script>
   <!-- 引入 Lucide React CDN -->
   <script src="https://unpkg.com/lucide-react@0.344.0/dist/umd/lucide-react.js"></script>
 </head>
