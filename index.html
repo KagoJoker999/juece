@@ -734,8 +734,11 @@
               <div className="text-sm text-slate-600 mb-4">
                 指通过抖店官方申请的售后单，已自动同步至ERP。
               </div>
+              <div className="mb-4 text-sm text-slate-600 bg-slate-50 p-3 rounded border border-slate-200">
+                <div className="mb-1"><span className="font-bold text-slate-700">操作前提：</span>客服已经让客人在抖店填写或同意过售后单。</div>
+                <div><span className="font-bold text-slate-700">操作路径：</span><span>ERP 系统</span> <span className="text-slate-400 mx-1">---</span> <span>订单</span> <span className="text-slate-400 mx-1">---</span> <span className="font-bold text-blue-600">售后（极速版）</span></div>
+              </div>
               <ol className="list-decimal list-inside space-y-3 text-sm text-slate-700">
-                <li className="p-2 bg-slate-50 rounded">进入 ERP<span className="font-bold text-blue-600">「订单-售后（极速版）」</span></li>
                 <li className="p-2 bg-slate-50 rounded">通过<span className="font-bold text-blue-600">「售后单号」</span>或线上单号搜索</li>
                 <li className="p-2 bg-slate-50 rounded">勾选订单，点击<span className="font-bold text-blue-600">「确认」</span></li>
                 <li className="p-2 bg-slate-50 rounded">系统自动生成发货单</li>
@@ -748,13 +751,17 @@
               <div className="text-sm text-slate-600 mb-4">
                 指通过客服群答应售后,或错发等系统无法满足的售后单,需要在ERP中手动创建。
               </div>
+              <div className="mb-4 text-sm text-slate-600 bg-slate-50 p-3 rounded border border-slate-200">
+                <div className="mb-1"><span className="font-bold text-slate-700">操作前提：</span>客人已经接受处理方式。</div>
+                <div><span className="font-bold text-slate-700">操作路径：</span><span>ERP 系统</span> <span className="text-slate-400 mx-1">---</span> <span>订单</span> <span className="text-slate-400 mx-1">---</span> <span className="font-bold text-orange-600">售后（极速版）</span></div>
+              </div>
               <ol className="list-decimal list-inside space-y-3 text-sm text-slate-700">
                 <li className="p-2 bg-slate-50 rounded">ERP 点击<span className="font-bold">「手工创建售后单」</span></li>
                 <li className="p-2 bg-slate-50 rounded">输入<span className="font-bold">原线上订单号</span>关联信息</li>
                 <li className="p-2 bg-slate-50 rounded">类型选择：<span className="font-bold">补发</span> 或 <span className="font-bold">换货</span></li>
                 <li className="p-2 bg-slate-50 rounded">添加对应商品及数量</li>
                 <li className="p-2 bg-orange-50 rounded border border-orange-200">
-                  <span className="text-orange-700 font-bold">关键：</span>创建后需将新快递号手动发到客服群，客户在抖店看不到。
+                  <span className="text-orange-700 font-bold">关键：</span>创建后需将新快递号手动发到客服群，并要求将新的快递单号发给客户。
                 </li>
               </ol>
             </Card>
