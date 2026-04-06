@@ -346,8 +346,8 @@
 
           const scenarios = [
             { id: 'returnRefund', name: '退货退款', val: returnToFactory ? -12 : (0 - c - 7), formula: returnToFactory ? '固定 -12 (可退回厂家)' : `0 - 成本(${c}) - 7` },
-            { id: 'resend', name: '补发', val: 0 - c, formula: `0 - 成本(${c})` },
-            { id: 'refundOnly', name: '仅退款', val: 0 - c, formula: `0 - 成本(${c})` },
+            { id: 'resend', name: '补发', val: p - 2 * c, formula: `售价(${p}) - 成本×2(${c * 2})` },
+            { id: 'refundOnly', name: '仅退款', val: 0 - (p / 2), formula: `0 - 售价/2(${(p / 2).toFixed(2)})` },
             { id: 'exchange', name: '换货', val: p - (c + 12), formula: `售价(${p}) - (成本(${c}) + 12)` },
           ];
 
