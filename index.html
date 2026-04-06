@@ -2222,61 +2222,7 @@
                 <FileText size={18} className="mr-3" /> 错发处理
               </button>
 
-              {/* SOP 流程指引 - 可折叠 */}
-              <div
-                className="flex items-center justify-between px-4 pt-4 pb-2 cursor-pointer hover:bg-slate-50 rounded transition select-none"
-                onClick={() => setIsSopExpanded(!isSopExpanded)}
-              >
-                <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">SOP 流程指引</div>
-                {isSopExpanded ? <ChevronDown size={14} className="text-slate-400" /> : <ChevronRight size={14} className="text-slate-400" />}
-              </div>
 
-              {isSopExpanded && (
-                <div className="space-y-1">
-                  <button
-                    onClick={() => { setActiveTab('refunds'); setIsMobileMenuOpen(false); }}
-                    className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'refunds' ? 'bg-white text-blue-600 border-l-4 border-blue-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
-                  >
-                    <Search size={18} className="mr-3" /> 仅退款 / 拦截
-                  </button>
-                  <button
-                    onClick={() => { setActiveTab('returns'); setIsMobileMenuOpen(false); }}
-                    className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'returns' ? 'bg-white text-emerald-600 border-l-4 border-emerald-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
-                  >
-                    <Package size={18} className="mr-3" /> 退货扫码
-                  </button>
-                  <button
-                    onClick={() => { setActiveTab('replace'); setIsMobileMenuOpen(false); }}
-                    className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'replace' ? 'bg-white text-purple-600 border-l-4 border-purple-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
-                  >
-                    <RefreshCw size={18} className="mr-3" /> 补发 / 换货
-                  </button>
-                  <button
-                    onClick={() => { setActiveTab('changeExpress'); setIsMobileMenuOpen(false); }}
-                    className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'changeExpress' ? 'bg-white text-pink-600 border-l-4 border-pink-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
-                  >
-                    <RefreshCw size={18} className="mr-3" /> 换快递号
-                  </button>
-                  <button
-                    onClick={() => { setActiveTab('overdue'); setIsMobileMenuOpen(false); }}
-                    className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'overdue' ? 'bg-white text-amber-600 border-l-4 border-amber-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
-                  >
-                    <Clock size={18} className="mr-3" /> 超期售后
-                  </button>
-                  <button
-                    onClick={() => { setActiveTab('blacklist'); setIsMobileMenuOpen(false); }}
-                    className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'blacklist' ? 'bg-white text-red-600 border-l-4 border-red-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
-                  >
-                    <UserX size={18} className="mr-3" /> 客户拉黑
-                  </button>
-                  <button
-                    onClick={() => { setActiveTab('manual'); setIsMobileMenuOpen(false); }}
-                    className={`w-full text-left px-4 py-3 rounded-lg font-medium flex items-center transition ${activeTab === 'manual' ? 'bg-white text-orange-600 border-l-4 border-orange-600 shadow-sm' : 'text-slate-600 hover:bg-white hover:shadow-sm'}`}
-                  >
-                    <AlertCircle size={18} className="mr-3" /> 操作技巧
-                  </button>
-                </div>
-              )}
             </nav>
 
             {/* Content Area */}
