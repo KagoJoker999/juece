@@ -195,8 +195,13 @@
         return (
           <div className="max-w-3xl mx-auto space-y-6">
             <Card className="p-6">
-              <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center">
-                <Calculator size={20} className="mr-2 text-blue-600" /> 售后决策计算器
+              <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center flex-wrap gap-3">
+                <span className="flex items-center">
+                  <Calculator size={20} className="mr-2 text-blue-600" /> 售后决策计算器
+                </span>
+                <span className="text-sm px-2.5 py-1 bg-red-50 text-red-600 border border-red-200 rounded-md font-medium flex items-center">
+                  <AlertTriangle size={16} className="mr-1" /> 超过50元商品，需联系淼判断。
+                </span>
               </h2>
 
               <div className="mb-8">
