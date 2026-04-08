@@ -652,18 +652,18 @@
                     </label>
                   </div>
                 </div>
-                <div className="w-full text-left p-3 rounded-lg bg-amber-50 border border-amber-100 shadow-sm flex flex-col justify-between">
+                <div className="w-full text-left p-3 rounded-lg bg-amber-50 border border-amber-100 shadow-sm flex flex-col">
                   <span className="font-semibold text-amber-800 mb-2">客户群处理</span>
-                  <div className="flex flex-col space-y-2 mt-auto">
+                  <div className="flex flex-col space-y-2">
                     <label className="flex items-center space-x-2 text-sm text-amber-700 cursor-pointer hover:bg-amber-100 p-1 -ml-1 rounded transition">
                       <input type="checkbox" checked={checklist.customerGroup_anytime || false} onChange={() => toggleCheck('customerGroup_anytime')} className="w-4 h-4 cursor-pointer rounded border-amber-300 text-amber-600 focus:ring-amber-500" />
                       <span>随时回复</span>
                     </label>
                   </div>
                 </div>
-                <div className="w-full text-left p-3 rounded-lg bg-purple-50 border border-purple-100 shadow-sm flex flex-col justify-between">
+                <div className="w-full text-left p-3 rounded-lg bg-purple-50 border border-purple-100 shadow-sm flex flex-col">
                   <span className="font-semibold text-purple-800 mb-2">超卖订单预警</span>
-                  <div className="flex flex-col space-y-2 mt-auto">
+                  <div className="flex flex-col space-y-2">
                     <label className="flex items-center space-x-2 text-sm text-purple-700 cursor-pointer hover:bg-purple-100 p-1 -ml-1 rounded transition">
                       <input type="checkbox" checked={checklist.oversoldWarning_daily || false} onChange={() => toggleCheck('oversoldWarning_daily')} className="w-4 h-4 cursor-pointer rounded border-purple-300 text-purple-600 focus:ring-purple-500" />
                       <span>每日一次</span>
