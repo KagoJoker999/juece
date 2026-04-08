@@ -657,7 +657,11 @@
                   <div className="flex flex-col space-y-2">
                     <label className="flex items-center space-x-2 text-sm text-amber-700 cursor-pointer hover:bg-amber-100 p-1 -ml-1 rounded transition">
                       <input type="checkbox" checked={checklist.customerGroup_anytime || false} onChange={() => toggleCheck('customerGroup_anytime')} className="w-4 h-4 cursor-pointer rounded border-amber-300 text-amber-600 focus:ring-amber-500" />
-                      <span>随时回复</span>
+                      <span>在班随时回复</span>
+                    </label>
+                    <label className="flex items-center space-x-2 text-sm text-amber-700 cursor-pointer hover:bg-amber-100 p-1 -ml-1 rounded transition">
+                      <input type="checkbox" checked={checklist.customerGroup_afterwork || false} onChange={() => toggleCheck('customerGroup_afterwork')} className="w-4 h-4 cursor-pointer rounded border-amber-300 text-amber-600 focus:ring-amber-500" />
+                      <span>下班30分钟回复</span>
                     </label>
                   </div>
                 </div>
